@@ -9,8 +9,8 @@
 
 ## Tasks:
 
-Map **(Simon)**  
-Player **(Ricky)**  
-Orders List **(Mouhamed)**
-Cards/deck **(Haytham)**  
-Game Engine
+- Map **(Simon)**  
+- Player **(Ricky)**  
+- Orders List **(Mouhamed)**
+- Cards/deck **(Haytham)**  
+- Game Engine
