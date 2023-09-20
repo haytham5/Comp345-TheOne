@@ -11,7 +11,7 @@ Card::Card(string t) {
 
 void Card::play()
 {
-    cout << "Playing card of type " << getType();
+    cout << "Playing card of type " << getType() << "." << endl;
 }
 
 string Card::getType() const

@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <string>
+
+#include "../Deck/Deck.h"
 using namespace std;
 
 class Card {

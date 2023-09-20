@@ -2,8 +2,9 @@
 #include <cctype>
 #include <cstdlib>
 #include <string>
-#include "Card.h"
+#include "Card/Card.h"
 #include "CardsDriver.h"
+#include "Deck/Deck.h"
 using namespace std;
 
 int main() {

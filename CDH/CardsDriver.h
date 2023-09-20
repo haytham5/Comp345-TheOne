@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <string>
-#include "Card.h"
+#include "Card/Card.h"
 using namespace std;
 
 void testCards();

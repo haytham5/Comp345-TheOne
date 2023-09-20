@@ -8,6 +8,9 @@
                 "-fdiagnostics-color=always",
                 "-g",
                 "${fileDirname}\\**.cpp",
+                "${fileDirname}\\Card\\**.cpp",
+                "${fileDirname}\\Deck\\**.cpp",
+                //"${fileDirname}\\Hand\\**.cpp",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],
@@ -31,6 +34,9 @@
                 "-fdiagnostics-color=always",
                 "-g",
                 "${fileDirname}\\**.cpp",
+                "${fileDirname}\\Card\\**.cpp",
+                "${fileDirname}\\Deck\\**.cpp",
+                //"${fileDirname}\\Hand\\**.cpp",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],
