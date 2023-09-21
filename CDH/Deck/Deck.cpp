@@ -41,3 +41,8 @@ void Deck::print()
     }
 
 }
+
+int Deck::size()
+{
+    return deck.size();
+}

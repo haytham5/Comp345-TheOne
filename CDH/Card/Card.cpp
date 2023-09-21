@@ -12,6 +12,8 @@ Card::Card(string t) {
 void Card::play()
 {
     cout << "Playing card of type " << getType() << "." << endl;
+
+    //TODO ADD IT TO PLAYER ORDER
 }
 
 string Card::getType() const

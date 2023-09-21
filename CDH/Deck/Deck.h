@@ -14,6 +14,7 @@ class Deck {
         void putBack(Card* card);
         Card* draw();
         void print();
+        int size();
     private:
         vector<Card*> deck;
 

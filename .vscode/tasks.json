@@ -10,7 +10,7 @@
                 "${fileDirname}\\**.cpp",
                 "${fileDirname}\\Card\\**.cpp",
                 "${fileDirname}\\Deck\\**.cpp",
-                //"${fileDirname}\\Hand\\**.cpp",
+                "${fileDirname}\\Hand\\**.cpp",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],
@@ -36,7 +36,7 @@
                 "${fileDirname}\\**.cpp",
                 "${fileDirname}\\Card\\**.cpp",
                 "${fileDirname}\\Deck\\**.cpp",
-                //"${fileDirname}\\Hand\\**.cpp",
+                "${fileDirname}\\Hand\\**.cpp",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],
