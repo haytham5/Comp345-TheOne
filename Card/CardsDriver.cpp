@@ -2,11 +2,7 @@
 #include <cctype>
 #include <cstdlib>
 #include <string>
-#include "Card/Card.h"
-#include "Deck/Deck.h"
-#include "Hand/Hand.h"
-#include "CardsDriver.h"
-
+#include "Card.h"
 using namespace std;
 
 void testCards() {
@@ -57,4 +53,11 @@ void testCards() {
     cout << endl << "DECK SIZE AFTER DRAWING CARD" << endl << d.size();
 
     cout << endl << "HAND SIZE AFTER DRAWING CARD" << endl << h.size();
+}
+
+int main() {
+    
+    testCards();
+
+    return 0;
 }

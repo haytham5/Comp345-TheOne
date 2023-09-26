@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/hayth/Documents/GitHub/Comp345A1/CDH",
-      "program": "c:/Users/hayth/Documents/GitHub/Comp345A1/CDH/build/Debug/outDebug",
+      "cwd": "c:/Users/hayth/Documents/GitHub/Comp345A1/CDH/CardDEP",
+      "program": "c:/Users/hayth/Documents/GitHub/Comp345A1/CDH/CardDEP/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
