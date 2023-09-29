@@ -7,13 +7,22 @@
 
 using namespace std;
 class Territory {
-  public:
-    Territory();
-    Territory(const string& name, const string& continent, const string& owner, const int armies);
+  private:
     string name;
     string continent;
-    string owner;
+    string player;
     int armies;
+  public:
+    Territory();
+    Territory(const string& name, const string& continent, const string& player, const int armies);
+    string getName() const;
+    void setName(const string& name);
+    string getContinent() const;
+    void setContinent(const string& continent);
+    string getPlayer() const;
+    void setPlayer(const stirng& player);
+    int getArmies() const;
+    void setArmies(const int armies) const;
 };
 
 class Map {
@@ -28,7 +37,6 @@ class Map {
     bool addEdge(const string& territory1, const string& territory2);
     bool setContinent(const string& territory, const string& continent);
     bool validate() const;
-    // Other methods for map operations
 
     friend class MapLoader;
 };
