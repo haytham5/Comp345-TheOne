@@ -6,12 +6,12 @@
 Territory::Territory(){
 }
 
-Territory::Territory(const string& name, const string& continent)
-  : name(name), continent(continent), player("Unassigned"), armies(0) {
+Territory::Territory(const string& name, const int locationX, const int locationY, const string& continent)
+  : name(name), locationX(locationX), locationY(locationY), continent(continent), player("Unassigned"), armies(0) {
 }
 
-Territory::Territory(const string& name, const string& continent, const string& player, int armies)
-  : name(name), continent(continent), player(player), armies(armies) {
+Territory::Territory(const string& name, const int locationX, const int locationY, const string& continent, const string& player, int armies)
+  : name(name), locationX(locationX), locationY(locationY), continent(continent), player(player), armies(armies) {
 }
 
 Territory::Territory(const Territory& territory)
@@ -27,6 +27,22 @@ string Territory::getName() const {
 
 void Territory::setName(const string& name) {
   this->name = name;
+}
+
+int Territory::getLocationX() const {
+  return this->locationX;
+}
+
+void Territory::setLocationX(const int locationX){
+  this->locationX = locationX;
+}
+
+int Territory::getLocationY() const {
+  return this->locationY;
+}
+
+void Territory::setLocationY(const int locationY){
+  this->locationY = locationY;
 }
 
 string Territory::getContinent() const {
@@ -78,9 +94,13 @@ Map::Map()
  : territories(), adjacencyList() {
 }
 
+Map::Map(int gridSizeX, int gridSizeY)
+ : territoryGrid(gridSizeX, vector<Territory*>(gridSizeY, nullptr)), territories(), adjacencyList() {
+}
+
 Map::Map(const Map& map) {
   for (const auto& pair : map.territories) {
-    this->territories[pair.first] = Territory(pair.second);
+    this->territories[pair.first] = new Territory(*pair.second);
   }
 
   //TODO : Test if deep copies properly
@@ -94,22 +114,45 @@ Map::Map(const Map& map) {
 }
 
 Map::~Map() {
+  for (auto row : territoryGrid) {
+    for (Territory* territoryPtr : row) {
+      delete territoryPtr;
+    }
+  }
+  territoryGrid.clear();
+  territories.clear();
 }
 
-bool Map::addTerritory(const string& name, const string& continent, const string& player, int armies){
-  auto iter = territories.find(name);
+bool Map::addTerritory(const string& name, const int locationX, const int locationY, const string& continent){
+  auto iter = this->territories.find(name);
 
-  if (iter != territories.end()) {
+  if (iter != this->territories.end()) {
     cout << "Territory with name " << name << " already exists." << endl;
     return false;
   }
-  Territory newTerritory = Territory(name, continent);
-  this->territories[name] = newTerritory;
-  cout << "Territory " << name << " added successfully." << endl;
+  if (locationX >= 0 && locationX < this->territoryGrid.size() && locationY >= 0 && locationY < this->territoryGrid[0].size()) {
+    if (this->territoryGrid[locationX][locationY] != nullptr) {
+      cout << "Cannot add territory at coordinates (" << locationX << ", " << locationY << ") as it overlaps with existing territory " << this->territoryGrid[locationX][locationY]->getName() << endl;
+      return false;
+    }
+    Territory* newTerritory = new Territory(name, locationX, locationY, continent);
+    this->territoryGrid[locationX][locationY] = newTerritory;
+    this->territories[name] = newTerritory;
+    cout << "Territory " << name << " added successfully at coordinates (" << locationX << ", " << locationY << ")." << std::endl;
+    return true;
+  } else {
+    cout << "Invalid coordinates (" << locationX << ", " << locationY << ")." << std::endl;
+    return false;
+  }
   return true;
 }
 
 bool Map::addEdge(const string& territory1, const string& territory2){
+  if (territory1 == territory2) {
+    cout << "Cannot add edge between " << territory1 << " and " << territory2 << " as they are the same territory." << endl;
+    return false;
+  }
+  // TODO: validate that the edge does not already exist
   this->adjacencyList[territory1].push_back(territory2);
   this->adjacencyList[territory2].push_back(territory1);
   return true;
@@ -123,12 +166,12 @@ vector<string> Map::getTerritories() const {
   return territoryNames;
 }
 
-Territory Map::getTerritory(const string& name) const {
+Territory* Map::getTerritory(const string& name) const {
   auto it = this->territories.find(name);
   if (it != this->territories.end()) {
-      return it->second;
+    return it->second;
   } else {
-      throw std::out_of_range("Territory not found");
+    throw std::out_of_range("Territory not found");
   }
 }
 
@@ -144,17 +187,18 @@ vector<string> Map::getNeighbors(const std::string& name) const {
 bool Map::initializeTerritory(const string& name, const string& player, int armies){
   auto it = this->territories.find(name);
   if (it != this->territories.end()) {
-      it->second.setPlayer(player);
-      it->second.setArmies(armies);
-      return true;
+    it->second->setPlayer(player);
+    it->second->setArmies(armies);
+    return true;
   } else {
-      throw std::out_of_range("Territory not found");
+    throw std::out_of_range("Territory not found");
   }
 }
 
-bool Map::validate() const {
-  // TODO
-}
+// bool Map::validate() const {
+//   // TODO
+//   // Validate that all edges are pointing a real territory
+// }
 
 Map& Map::operator=(const Map& map){
   if (this != &map) {

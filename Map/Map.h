@@ -9,19 +9,25 @@ using namespace std;
 class Territory {
   private:
     string name;
+    int locationX;
+    int locationY;
     string continent;
     string player;
     int armies;
   public:
     Territory();
-      Territory(const string& name, const string& continent);
-    Territory(const string& name, const string& continent, const string& player, const int armies);
+    Territory(const string& name, const int locationX, const int locationY, const string& continent);
+    Territory(const string& name, const int locationX, const int locationY, const string& continent, const string& player, const int armies);
     Territory(const Territory& territory);
 
     ~Territory();
 
     string getName() const;
     void setName(const string& name);
+    int getLocationX() const;
+    void setLocationX(const int locationX);
+    int getLocationY() const;
+    void setLocationY(const int locationY);
     string getContinent() const;
     void setContinent(const string& continent);
     string getPlayer() const;
@@ -36,19 +42,24 @@ ostream& operator<<(std::ostream& os, const Territory& territory);
 
 class Map {
   private:
-    unordered_map<string, Territory> territories;
+    unordered_map<string, Territory*> territories;
     unordered_map<string, vector<string>> adjacencyList;
+    vector<vector<Territory*>> territoryGrid;
 
-    bool addTerritory(const string& name, const string& continent, const string& owner, int armies);
-    bool addEdge(const string& territory1, const string& territory2);
+    
   public:
+    // TODO: make private after testing
+    bool addEdge(const string& territory1, const string& territory2);
+    bool addTerritory(const string& name, const int locationX, const int locationY, const string& continent);
+
     Map();
+    Map(int gridSizeX, int gridSizeY);
     Map(const Map& map);
 
     ~Map();
     
     vector<string> getTerritories() const;
-    Territory getTerritory(const string& name) const;
+    Territory* getTerritory(const string& name) const;
     vector<string> getNeighbors(const string& name) const;
     bool initializeTerritory(const string& name, const string& player, int armies);
     bool validate() const;
