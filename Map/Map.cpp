@@ -180,16 +180,16 @@ Territory* Map::getTerritory(const string& name) const {
   if (it != this->territories.end()) {
     return it->second;
   } else {
-    throw std::out_of_range("Territory not found");
+    throw out_of_range("Territory not found");
   }
 }
 
-vector<string> Map::getNeighbors(const std::string& name) const {
-  auto it = this->adjacencyList.find(name);
+vector<string> Map::getNeighbors(const string& territoryName) const {
+  auto it = this->adjacencyList.find(territoryName);
   if (it != this->adjacencyList.end()) {
-      return it->second;
+    return it->second;
   } else {
-      throw std::out_of_range("Territory not found");
+    throw out_of_range("Territory not found");
   }
 }
 
@@ -200,7 +200,7 @@ bool Map::initializeTerritory(const string& name, const string& player, int armi
     it->second->setArmies(armies);
     return true;
   } else {
-    throw std::out_of_range("Territory not found");
+    throw out_of_range("Territory not found");
   }
 }
 
