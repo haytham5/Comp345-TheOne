@@ -157,11 +157,20 @@ bool Map::addEdge(const string& territory1, const string& territory2){
   this->adjacencyList[territory2].push_back(territory1);
   return true;
 }
-
-vector<string> Map::getTerritories() const {
-  vector<string> territoryNames;   
+vector<Territory*> Map::getTerritories() const {
+  vector<Territory*> territoryNames;   
   for (const auto& pair : territories) {
-      territoryNames.push_back(pair.first); // pair.first is the territory name
+      territoryNames.push_back(pair.second); // pair.first is the territory name
+  }
+  return territoryNames;
+}
+
+vector<Territory*> Map::getTerritories(const string& name) const {
+  vector<Territory*> territoryNames;   
+  for (const auto& pair : territories) {
+    if(pair.second->getName() == name){
+      territoryNames.push_back(pair.second); // pair.first is the territory name
+    }
   }
   return territoryNames;
 }

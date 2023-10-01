@@ -57,8 +57,8 @@ class Map {
     Map(const Map& map);
 
     ~Map();
-    
-    vector<string> getTerritories() const;
+    vector<Territory*> getTerritories() const;
+    vector<Territory*> getTerritories(const string& name) const;
     Territory* getTerritory(const string& name) const;
     vector<string> getNeighbors(const string& name) const;
     bool initializeTerritory(const string& name, const string& player, int armies);
