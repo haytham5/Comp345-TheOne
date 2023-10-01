@@ -165,7 +165,7 @@ vector<Territory*> Map::getTerritories() const {
   return territoryNames;
 }
 
-vector<Territory*> Map::getTerritories(const string& name) const {
+vector<Territory*> Map::getTerritoriesByName(const string& name) const {
   vector<Territory*> territoryNames;   
   for (const auto& pair : territories) {
     if(pair.second->getName() == name){
