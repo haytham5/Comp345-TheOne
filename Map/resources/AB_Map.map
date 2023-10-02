@@ -1,0 +1,18 @@
+[Map]
+author=Walid Ezzedine
+warn=yes
+image=ABC_Map.bmp
+wrap=no
+scroll=horizontal,vertical
+
+[Continents]
+ABCDE=6
+
+[Territories]
+A1,18,73,ABCDE
+A2,30,41,ABCDE,A1,A3
+A3,52,44,ABCDE,A2,A4,A6
+A4,63,73,ABCDE,A3,A5
+A5,40,68,ABCDE,A1,A4
+A6,90,42,ABCDE,A3,A7,A9,A10
+A7,90,74,ABCDE,A6,A8
