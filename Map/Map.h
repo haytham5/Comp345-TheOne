@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 
 using namespace std;
 class Territory {
@@ -43,17 +44,15 @@ ostream& operator<<(std::ostream& os, const Territory& territory);
 class Map {
   private:
     unordered_map<string, Territory*> territories;
-    unordered_map<string, vector<string>> adjacencyList;
-    vector<vector<Territory*>> territoryGrid;
+    unordered_map<string, vector<string> > adjacencyList;
+    vector<vector<Territory*> > territoryGrid;
 
-    
-  public:
-    // TODO: make private after testing
     bool addEdge(const string& territory1, const string& territory2);
     bool addTerritory(const string& name, const int locationX, const int locationY, const string& continent);
-
+    void dfs(const string& territoryName, unordered_set<string>& visited);
+  public:
+    
     Map();
-    Map(int gridSizeX, int gridSizeY);
     Map(const Map& map);
 
     ~Map();
@@ -62,7 +61,7 @@ class Map {
     Territory* getTerritory(const string& name) const;
     vector<string> getNeighbors(const string& name) const;
     bool initializeTerritory(const string& name, const string& player, int armies);
-    bool validate() const;
+    bool validate();
 
     Map& operator=(const Map& map);
 
@@ -76,6 +75,8 @@ class MapLoader {
   public:
     static Map loadMapFromFile(const string& filename);
     static bool isValidMapFile(const string& filename);
+    static bool testAddTerritory();
+    static bool testAddEdge();
 };
 
 #endif
