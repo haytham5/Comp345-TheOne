@@ -35,8 +35,9 @@ Deck::Deck()
     for(int i = 0; i < 52; i++) {
         Card * c = new Card(types[rand() % 5]);
         deck.push_back(c);
-        //deck.back()->print();
     }
+
+    cout << "Hand successfully created." << endl;
 }
 
 void Deck::putBack(Card *card)
@@ -70,7 +71,7 @@ Hand::Hand(Deck *d) {
         hand.push_back(deck->draw());
     }
 
-    print();
+    cout << "Hand successfully created." << endl;
 }
 
 void Hand::play(int i) {
