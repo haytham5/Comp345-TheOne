@@ -35,7 +35,7 @@ Deck::Deck()
     for(int i = 0; i < 52; i++) {
         Card * c = new Card(types[rand() % 5]);
         deck.push_back(c);
-        deck.back()->print();
+        //deck.back()->print();
     }
 }
 
