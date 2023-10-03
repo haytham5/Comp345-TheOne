@@ -7,23 +7,24 @@ using namespace std;
 #include "Card.h"
 
 Card::Card(string t) {
-    type = &t;
+    type = t;
 }
 
 void Card::play()
 {
-    cout << "Playing card of type " << getType() << "." << endl;
-
+    print();
     //TODO ADD IT TO PLAYER ORDER
 }
 
-string Card::getType() const
+string Card::getType()
 {
-    //SEGMENTATION FAULT MIGHT START AT  LINE 35
-    cout << *type;
-    return *type;
+    return type;
 }
 
+void Card::print()
+{
+    cout << "This is a card of type " << getType() << "." << endl;
+}
 
 Deck::Deck()
 {
@@ -32,10 +33,9 @@ Deck::Deck()
     string types[5] = {"bomb", "reinforcement", "blockade", "airlift", "diplomacy"};
 
     for(int i = 0; i < 52; i++) {
-        string s = types[rand() % 5];
-        Card c(types[rand() % 5]);
-        Card* cptr = &c;
-        deck.push_back(cptr);
+        Card * c = new Card(types[rand() % 5]);
+        deck.push_back(c);
+        deck.back()->print();
     }
 }
 
@@ -54,11 +54,8 @@ Card *Deck::draw()
 }
 
 void Deck::print()
-{
-    for (auto elem : deck) {
-        elem->play();
-    }
-
+{        
+    for (auto elem : deck) elem->print();
 }
 
 int Deck::size()
@@ -94,10 +91,7 @@ void Hand::draw() {
 
 
 void Hand::print() {
-    for (auto elem : hand) {
-        elem->play();
-    }
-
+    for (auto elem : hand) elem->print();
 }
 
 int Hand::size() {

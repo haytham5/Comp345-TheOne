@@ -14,10 +14,11 @@ class Card {
     public:
         Card(string type);
         void play(); 
-        string getType() const;
+        string getType();
+        void print();
 
     private:
-        string* type;
+        string type;
 };
 
 class Deck {
