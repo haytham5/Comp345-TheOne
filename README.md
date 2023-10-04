@@ -8,6 +8,7 @@
 - Luca Dallaire - 40132255 - lucadallaire
 
 
+
 ## Tasks:
 
 - Map **(Simon)**  
@@ -15,3 +16,4 @@
 - Orders List **(Mouhamed)**
 - Cards/deck **(Haytham)**  
 - Game Engine **(Luca)**
+
