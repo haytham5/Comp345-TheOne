@@ -13,7 +13,7 @@ using namespace std;
 class Card {
     public:
         Card(string type);
-        void play(); 
+        string play(); 
         string getType();
         void print();
 
@@ -36,7 +36,7 @@ class Deck {
 class Hand {
     public: 
         Hand(Deck* deck);
-        void play(int i);
+        string play(int i);
         void draw();
         void print();
         int size();

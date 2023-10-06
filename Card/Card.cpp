@@ -10,10 +10,10 @@ Card::Card(string t) {
     type = t;
 }
 
-void Card::play()
+string Card::play()
 {
     print();
-    //TODO ADD IT TO PLAYER ORDER
+    return type;
 }
 
 string Card::getType()
@@ -74,16 +74,18 @@ Hand::Hand(Deck *d) {
     cout << "Hand successfully created." << endl;
 }
 
-void Hand::play(int i) {
+string Hand::play(int i) {
     cout << endl << "Playing card #" << i << endl;
 
     Card* c = hand[i];
 
-    c->play();
+    string type = c->play();
 
     hand.erase(hand.begin() + i);
 
     deck->putBack(c);
+
+    return type;
 }
 
 void Hand::draw() {
