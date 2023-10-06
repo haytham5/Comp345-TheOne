@@ -4,8 +4,10 @@
 #include <string>
 #include <vector>
 using namespace std;
+
 #include "Card.h"
 
+// CARD CLASS
 Card::Card(string t) {
     type = t;
 }
@@ -32,17 +34,21 @@ string Card::getType()
     return type;
 }
 
+// Function to print information about the card
 void Card::print()
 {
     cout << "This is a card of type " << getType() << "." << endl;
 }
 
+// DECK CLASS
 Deck::Deck()
 {
     srand((unsigned) time(NULL));
 
+    // Array of possible card types
     string types[5] = {"Bomb", "Airlift", "Blockade", "Deploy", "Advance"};
 
+    // Create 52 cards with random types and add them to the deck
     for(int i = 0; i < 52; i++) {
         Card * c = new Card(types[rand() % 5]);
         deck.push_back(c);
@@ -62,6 +68,7 @@ Deck &Deck::operator=(const Deck &d)
     return *this;
 }
 
+// Function to put a card back into the deck
 void Deck::putBack(Card *card)
 {
     deck.insert(deck.begin(), card);
@@ -69,6 +76,7 @@ void Deck::putBack(Card *card)
     cout << "Card put back in deck." << endl;
 }
 
+// Function to draw a card from the deck
 Card *Deck::draw()
 {
     Card *c = deck.back();
@@ -76,19 +84,23 @@ Card *Deck::draw()
     return c;
 }
 
+// Function to print the contents of the deck
 void Deck::print()
 {        
     for (auto elem : deck) elem->print();
 }
 
+// Function to get the size of the deck
 int Deck::size()
 {
     return deck.size();
 }
 
+// HAND CLASS
 Hand::Hand(Deck *d) {
     deck = d;
 
+    // Draw 7 cards from the deck to initialize the hand
     for(int i = 0; i < 7; i++) {
         hand.push_back(deck->draw());
     }
@@ -113,32 +125,37 @@ string Hand::play(int i)
 {
     cout << endl << "Playing card #" << i << endl;
 
+    // Play the desired card
     Card* c = hand[i];
 
     string type = c->play();
 
+    // Remove the played card from the hand
     hand.erase(hand.begin() + i);
 
+    // Put the played card back into the deck
     deck->putBack(c);
 
     return type;
 }
 
+// Function to draw a card from the deck and add it to the hand
 void Hand::draw() {
     hand.push_back(deck->draw());
 }
 
-
+// Function to print the contents of the hand
 void Hand::print() {
     cout<<"Printing hand: "<<endl;
     for (auto elem : hand) elem->print();
 }
 
+// Function to get the size of the hand
 int Hand::size() {
     return hand.size();
 }
 
-
+// Function to test the Card, Deck, and Hand classes
 void testCards() {
     cout << endl << "CREATING CARD AND PRINTING IT:" << endl;
 
@@ -187,8 +204,8 @@ void testCards() {
 
     cout << endl << "DECK SIZE AFTER DRAWING CARD" << endl << d->size();
 
-    cout << endl << "HAND SIZE AFTER DRAWING CARD" << endl << h->size();
+    cout << endl << "HAND SIZE AFTER DRAWING CARD" << endl << h->size() << endl;
 
-    delete d; //C1 and C2 are already deleted by d
+    delete d; // C1 and C2 are already deleted by d
     delete h;
 }
