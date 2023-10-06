@@ -26,9 +26,10 @@ Player::Player(const Player& other) {
 
 //Destructor
 Player:: ~Player(){
-    delete map;
+    cout << "Deleting Player: " << endl;
     delete playerHand;
     delete orderList;
+    cout << endl;
 }
 
 string Player::getName() const{

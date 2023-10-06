@@ -14,7 +14,6 @@ void testPlayers(){
     OrdersList* player1OrderList= new OrdersList();
     OrdersList* player2OrderList= new OrdersList();
 
-
     Player player1(name1,map,hand, player1OrderList);
     Player player2(name2,map,hand2, player2OrderList);
     
@@ -112,22 +111,11 @@ void testPlayers(){
     cout<<"\nPlayer 2's order list:"<<endl;
     player2.printOrderList();
 
-    //Avoiding Memory Leaks
-    cout<< &map;
-    cout<< &hand;
-    cout<< &hand2;
-    cout<< &deck;
-    cout<< &player1OrderList;
-    cout<< &player2OrderList;
-    cout<<"hi"<<endl;
-    
+    cout << endl;
     delete map;
-    delete hand;
-    delete hand2;
+    cout << endl;
     delete deck;
-    delete player1OrderList;
-    delete player2OrderList;
-    
+    cout <<endl;
 }
 
 //Main method

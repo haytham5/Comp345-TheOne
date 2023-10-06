@@ -54,6 +54,9 @@ void testCards() {
     cout << endl << "DECK SIZE AFTER DRAWING CARD" << endl << d->size();
 
     cout << endl << "HAND SIZE AFTER DRAWING CARD" << endl << h->size();
+
+    delete d; //C1 and C2 are already deleted by d
+    delete h;
 }
 
 int main() {

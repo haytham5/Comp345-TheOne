@@ -10,6 +10,17 @@ Card::Card(string t) {
     type = t;
 }
 
+Card::Card(const Card &c)
+{
+    type = c.type;
+}
+
+Card &Card::operator=(const Card &c)
+{
+    type = c.type;
+    return *this;
+}
+
 string Card::play()
 {
     print();
@@ -37,7 +48,18 @@ Deck::Deck()
         deck.push_back(c);
     }
 
-    cout << "Hand successfully created." << endl;
+    cout << "Deck successfully created." << endl;
+}
+
+Deck::Deck(const Deck &d)
+{
+    deck = d.deck;
+}
+
+Deck &Deck::operator=(const Deck &d)
+{
+    deck = d.deck;
+    return *this;
 }
 
 void Deck::putBack(Card *card)
@@ -74,7 +96,21 @@ Hand::Hand(Deck *d) {
     cout << "Hand successfully created." << endl;
 }
 
-string Hand::play(int i) {
+Hand::Hand(const Hand &h)
+{
+    hand = h.hand;
+    deck = h.deck;
+}
+
+Hand &Hand::operator=(const Hand &h)
+{
+    hand = h.hand;
+    deck = h.deck;
+    return *this;
+}
+
+string Hand::play(int i)
+{
     cout << endl << "Playing card #" << i << endl;
 
     Card* c = hand[i];

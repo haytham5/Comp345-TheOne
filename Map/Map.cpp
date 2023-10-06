@@ -116,6 +116,7 @@ Map::Map(const Map& map) {
 }
 
 Map::~Map() {
+  cout << "Deleting Map..."<<endl;
   for (auto row : territoryGrid) {
     for (Territory* territoryPtr : row) {
       delete territoryPtr;

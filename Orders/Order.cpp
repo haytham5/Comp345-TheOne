@@ -22,6 +22,7 @@ OrdersList::OrdersList(const OrdersList& other) {
 
 // Destructor
 OrdersList::~OrdersList() {
+    cout << "Deleting Orderlist..."<<endl;
     for (Order* order : orders) {
         delete order;
     }
