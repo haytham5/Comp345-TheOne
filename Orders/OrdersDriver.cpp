@@ -1,5 +1,5 @@
 #include "Order.h"
-#include "..\Map\Map.h"
+#include "../Map/Map.h"
 #include <iostream>
 
 using namespace std;
@@ -32,7 +32,9 @@ void testOrdersLists() {
 
     // Display orders before execution
     std::cout << "\nOrders List before execution:" << std::endl;
-    std::cout << orders;
+    std::cout << orders << endl;
+
+    std::cout << "\nExecuting All orders after validation:" << endl;
 
     // Validate and execute orders
     for (Order* order : orders.getOrders()) {
@@ -44,19 +46,24 @@ void testOrdersLists() {
         }
     }
 
+
     // Show territory stats after order execution
-    std::cout << "\nTerritory stats after executing orders:" << std::endl;
+    // std::cout << "\nTerritory stats after executing orders:" << std::endl;
     //std::cout << territory1.getName() << " has " << territory1.getArmies() << " armies. Neutral: " << (territory1.isNeutral() ? "Yes" : "No") << std::endl;
-    std::cout << territory2.getName() << " has " << territory2.getArmies() << " armies." << std::endl;
+    // std::cout << territory2.getName() << " has " << territory2.getArmies() << " armies." << std::endl;
 
     // Move orders for demonstration
     std::cout << "\nMoving orders..." << std::endl;
     orders.moveOrder(0, 1);
+    
+    cout <<"\nOrders after movement (first Order placed second): " << endl;
     std::cout << orders;
 
     // Remove orders for demonstration
     std::cout << "\nRemoving orders..." << std::endl;
     orders.removeOrder(deployOrder);
+
+    cout <<"\nOrders after removal (removing second order): " << endl;
     std::cout << orders;
 
     std::cout << "===== Testing Complete =====" << std::endl;

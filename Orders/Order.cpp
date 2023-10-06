@@ -75,7 +75,8 @@ AdvanceOrder::AdvanceOrder(Territory *source, Territory *target, int armies)
 bool AdvanceOrder::validate() {
     // Logic to validate the advance order.
     // For example, the source territory must have enough armies to advance.
-    return sourceTerritory->getArmies() >= numberOfArmies;
+    //TODO: return sourceTerritory->getArmies() >= numberOfArmies;
+    return true;
 }
 
 void AdvanceOrder::execute() {
@@ -101,7 +102,8 @@ AirliftOrder::AirliftOrder(Territory *source, Territory *target, int armies)
 
 bool AirliftOrder::validate() {
     // Logic to validate the airlift order.
-    return sourceTerritory->getArmies() >= numberOfArmies;
+    //TODO: return sourceTerritory->getArmies() >= numberOfArmies;
+    return true;
 }
 
 void AirliftOrder::execute() {
@@ -127,7 +129,8 @@ BlockadeOrder::BlockadeOrder(Territory *target)
 
 bool BlockadeOrder::validate() {
     // Logic to validate the blockade order.
-    return targetTerritory->getPlayer() == NEUTRAL;
+    //TODO: return targetTerritory->getPlayer() == NEUTRAL;
+    return true;
 }
 
 void BlockadeOrder::execute() {
@@ -154,7 +157,8 @@ DeployOrder::DeployOrder(Territory *target, int armies)
 bool DeployOrder::validate() {
     // Here you would implement the validation logic for a Deploy order.
     // This is just a mock implementation.
-    return targetTerritory != nullptr && numberOfArmies > 0;
+    //return targetTerritory != nullptr && numberOfArmies > 0;
+    return true;
 }
 
 void DeployOrder::execute() {
@@ -180,7 +184,8 @@ BombOrder::BombOrder(Territory *target)
 
 bool BombOrder::validate()  {
 // Simple validation: Target territory must have armies.
-    return targetTerritory->getArmies() > 0;
+    //TODO: return targetTerritory->getArmies() > 0;
+    return true;
 }
 
 void BombOrder::execute()  {
