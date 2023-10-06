@@ -5,6 +5,7 @@
 #include "GameEngine.h"
 using namespace std;
 
+//test for game engine in part 5 of assignment 1
 void testGameEngine()
 {
     GameEngine *engine = new GameEngine();

@@ -9,21 +9,25 @@ using namespace std;
 
 typedef GameEngine::GameState GS;
 
+//default constructor
 GameEngine::GameEngine()
 {
     this->state = START;
 }
 
+//return current state of the game
 GameEngine::GameState GameEngine::getGameState()
 {
     return state;
 }
 
+//function to transition to next state
 void GameEngine::transition(GS state)
 {
     this->state = state;
 }
 
+//execute the state change based on which state the game is currrently in
 void GameEngine::executeStateChange(string command)
 {
 
@@ -78,6 +82,7 @@ void GameEngine::executeStateChange(string command)
     cout << "You are now in the state: " << stateToString() << "\n";
 }
 
+//function to covert enum to string
 std::string GameEngine::stateToString()
 {
     switch (state)
