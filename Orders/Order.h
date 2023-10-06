@@ -3,6 +3,8 @@
 #include <vector>
 #include "../Map/Map.h"  // Assuming Territory is in a separate file named Territory.h
 
+void testOrdersList();
+
 class Order {
 protected:
     std::string description;

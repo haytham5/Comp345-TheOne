@@ -9,6 +9,8 @@
 
 using namespace std;
 
+void testPlayers();
+
 class Player{
  public:
 
@@ -20,6 +22,12 @@ class Player{
     
     //Copy constructor
     Player(const Player& other);
+
+    //Operator
+    Player& operator = (const Player& other);
+
+    //Ostream
+    friend ostream & operator << (ostream &out, const Player &object);
 
     //Destructor
     ~Player();

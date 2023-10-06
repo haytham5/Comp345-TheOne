@@ -7,8 +7,7 @@
 
 using namespace std;
 
-//TODO: MAKE DESTRUCTORS
-//MAKE EACH DATA VARIABLE A POINTER
+void testCards();
 
 class Card {
     public:

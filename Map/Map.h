@@ -3,10 +3,12 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 #include <unordered_map>
 #include <unordered_set>
 
 using namespace std;
+
 class Territory {
   private:
     string name;
@@ -70,7 +72,6 @@ class Map {
 //the operator<< overload for Map
 ostream& operator<<(std::ostream& os, const Map& map);
 
-
 class MapLoader {
   public:
     static Map loadMapFromFile(const string& filename);
@@ -79,4 +80,5 @@ class MapLoader {
     static bool testAddEdge();
 };
 
+bool testLoadMaps();
 #endif
