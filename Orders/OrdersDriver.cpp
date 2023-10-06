@@ -1,11 +1,8 @@
-#include "DeployOrder.h"
-#include "AdvanceOrder.h"
-#include "BombOrder.h"
-#include "BlockadeOrder.h"
-#include "AirliftOrder.h"
-//#include "NegotiateOrder.h"
-#include "OrdersList.h"
+#include "Order.h"
+#include "..\Map\Map.h"
 #include <iostream>
+
+using namespace std;
 
 void testOrdersLists() {
     std::cout << "===== Testing Orders Lists =====" << std::endl;
@@ -49,7 +46,7 @@ void testOrdersLists() {
 
     // Show territory stats after order execution
     std::cout << "\nTerritory stats after executing orders:" << std::endl;
-    std::cout << territory1.getName() << " has " << territory1.getArmies() << " armies. Neutral: " << (territory1.isNeutral() ? "Yes" : "No") << std::endl;
+    //std::cout << territory1.getName() << " has " << territory1.getArmies() << " armies. Neutral: " << (territory1.isNeutral() ? "Yes" : "No") << std::endl;
     std::cout << territory2.getName() << " has " << territory2.getArmies() << " armies." << std::endl;
 
     // Move orders for demonstration
