@@ -77,7 +77,7 @@ void GameEngine::executeStateChange(string command)
     }
     else
     {
-        cout << "Error: Invalid command";
+        cout << "Error: Invalid command" << endl;
     }
     cout << "You are now in the state: " << stateToString() << "\n";
 }
@@ -108,4 +108,28 @@ std::string GameEngine::stateToString()
     default:
         return "Error reading state.\n";
     }
+}
+
+void testGameEngine()
+{
+    GameEngine *engine = new GameEngine();
+    cout << "The game is currently in the " << engine->stateToString() << " state\n";
+
+    string state = engine->stateToString();
+    while (true)
+    {
+        string state = engine->stateToString();
+        if (state == "END")
+        {
+            break;
+        }
+        else
+        {
+            string command;
+            cout << "Enter command to trigger state change: ";
+            cin >> command;
+            engine->executeStateChange(command);
+        }
+    }
+    cout << "Game Over";
 }

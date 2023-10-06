@@ -116,6 +116,7 @@ Map::Map(const Map& map) {
 }
 
 Map::~Map() {
+  cout << "Deleting Map..."<<endl;
   for (auto row : territoryGrid) {
     for (Territory* territoryPtr : row) {
       delete territoryPtr;
@@ -216,7 +217,7 @@ vector<string> Map::getNeighbors(const string& territoryName) const {
   if (it != this->adjacencyList.end()) {
     return it->second;
   } else {
-    return {};
+    return vector<string>();
   }
 }
 
@@ -375,3 +376,16 @@ bool MapLoader::testAddEdge(){
 }
 
 
+bool testLoadMaps(){
+  bool valid = true;
+  valid = valid && MapLoader::isValidMapFile("Map/resources/ABC_Map.map");
+  valid = valid && MapLoader::isValidMapFile("Map/resources/Asia.map");
+  valid = valid && !MapLoader::isValidMapFile("Map/resources/ABC_MapInvalid.map"); //Invalid Map
+  if(valid){
+    std::cout << "All test passed!" << endl;
+    return true;
+  }
+
+  cout << "Tests failed!" << endl;
+  return false;
+}

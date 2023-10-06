@@ -33,3 +33,6 @@ private:
     //state of the game
     GameState state;
 };
+
+//test for game engine in part 5 of assignment 1
+void testGameEngine();
