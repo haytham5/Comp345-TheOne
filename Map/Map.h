@@ -47,8 +47,6 @@ class Map {
     unordered_map<string, vector<string> > adjacencyList;
     vector<vector<Territory*> > territoryGrid;
 
-    bool addEdge(const string& territory1, const string& territory2);
-    bool addTerritory(const string& name, const int locationX, const int locationY, const string& continent);
     void dfs(const string& territoryName, unordered_set<string>& visited);
   public:
     
@@ -56,6 +54,8 @@ class Map {
     Map(const Map& map);
 
     ~Map();
+    bool addEdge(const string& territory1, const string& territory2);
+    bool addTerritory(const string& name, const int locationX, const int locationY, const string& continent);
     vector<Territory*> getTerritories() const;
     vector<Territory*> getTerritoriesByName(const string& name) const;
     Territory* getTerritory(const string& name) const;
