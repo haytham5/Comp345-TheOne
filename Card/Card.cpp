@@ -30,7 +30,7 @@ Deck::Deck()
 {
     srand((unsigned) time(NULL));
 
-    string types[5] = {"bomb", "reinforcement", "blockade", "airlift", "diplomacy"};
+    string types[5] = {"Bomb", "Airlift", "Blockade", "Deploy", "Advance"};
 
     for(int i = 0; i < 52; i++) {
         Card * c = new Card(types[rand() % 5]);

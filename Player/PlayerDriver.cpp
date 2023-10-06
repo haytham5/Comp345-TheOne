@@ -92,11 +92,24 @@ void testPlayers(){
     //TODO: Print out orderlist and test issueOrder()
 
     //Calling issue order player 1 and player 2 to add orders to their orderlist
-    player1.issueOrder(player1.hand->play(0));
-    player1.issueOrder("Bomb");
-    player2.issueOrder("");
+    player1.issueOrder(player1.getPlayerHand()->play(0));
+    player1.issueOrder(player1.getPlayerHand()->play(1));
+    player2.issueOrder(player1.getPlayerHand()->play(0));
+    player2.issueOrder(player1.getPlayerHand()->play(1));
 
-        
+    //Print out player 1's and 2's orderLists
+    cout<<"\nPlayer 1's order list:"<<endl;
+    player1.printOrderList();
+    cout<<"\nPlayer 2's order list:"<<endl;
+    player2.printOrderList();
+
+    //Avoiding Memory Leaks
+    delete map;
+    delete hand;
+    delete hand2;
+    delete deck;
+    delete player1OrderList;
+    delete player2OrderList;
 }
 
 //Main method

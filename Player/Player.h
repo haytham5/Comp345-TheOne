@@ -36,6 +36,8 @@ class Player{
     //Setter for playerHand
     void setPlayerHand(Hand* hand);
 
+    void printOrderList();
+    
     //Getter for playerTerritories
     vector<Territory*> getPlayerTerritories() const;
 

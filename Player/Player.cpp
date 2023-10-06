@@ -21,14 +21,14 @@ Player::Player(const Player& other) {
     this->playerName = other.playerName;
     this->map = new Map(*other.map);
     this->playerHand = other.playerHand;
-    this->orderList= new OrderList(*other.orderList);
+    this->orderList= new OrdersList(*other.orderList);
 }
 
 //Destructor
 Player:: ~Player(){
     delete map;
     delete playerHand;
-    
+    delete orderList;
 }
 
 string Player::getName() const{
@@ -45,6 +45,12 @@ Hand* Player::getPlayerHand() const {
 
 void Player::setPlayerHand(Hand* hand) {
     playerHand = hand;
+}
+
+void Player::printOrderList(){
+    for(auto elem: orderList){
+        cout<<elem->getDescription()<<endl;
+    }
 }
 
 vector<Territory*> Player::getPlayerTerritories() const{
