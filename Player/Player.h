@@ -3,9 +3,9 @@
 
 #include<string>
 #include<vector>
-#include"Map.h"
-//#include"Orders.h"
-#include"Card.h"
+#include "../Map/Map.h"
+#include "../Orders/Order.h"
+#include "../Card/Card.h"
 
 using namespace std;
 
@@ -16,10 +16,13 @@ class Player{
     Player();
 
    //Parameterized constructor
-    Player(const string& name, Map* gameMap, Hand* hand/*, vector<Order*> orderList*/);
+    Player(const string& name, Map* gameMap, Hand* hand, OrdersList* orderList);
     
     //Copy constructor
     Player(const Player& other);
+
+    //Destructor
+    ~Player();
 
     //Getter for playerName
     string getName() const;
@@ -45,13 +48,13 @@ class Player{
     void addPlayerTerritories(Territory* territory);
     
     //issueOrder() function declaration
-    //void issueOrder(Order* order);
+    void issueOrder(string type);
 
  private:
    vector<Territory*> playerTerritories;
     Hand* playerHand;
     string playerName;
-    //vector<Order*> orderList;
+    OrdersList* orderList;
     Map* map;
 
 };

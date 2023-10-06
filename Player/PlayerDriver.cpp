@@ -11,13 +11,14 @@ void testPlayers(){
     Deck* deck=new Deck();
     Hand* hand=new Hand(deck);
     Hand* hand2=new Hand(deck);
+    OrdersList* player1OrderList= new OrdersList();
+    OrdersList* player2OrderList= new OrdersList();
 
-    //TODO ORDERLIST
 
-    Player player1(name1,map,hand/*, add orderList here*/);
-    Player player2(name2,map,hand2/*, add orderList here*/);
+    Player player1(name1,map,hand, player1OrderList);
+    Player player2(name2,map,hand2, player2OrderList);
     
-    //Adding territories to map (THIS IS PRIVATE ON GITHUB)
+    //Adding territories to map
     map->addTerritory("TerritoryA", 0, 0, "Continent1");
     map->addTerritory("TerritoryB", 1, 0, "Continent1");
     map->addTerritory("TerritoryC", 2, 0, "Continent2");
@@ -89,13 +90,12 @@ void testPlayers(){
     player2.getPlayerHand()->print();
 
     //TODO: Print out orderlist and test issueOrder()
-    //Creating order objects (NEEDED???)
-    //Order* order1 = new Order();
-    //Order* order2 = new Order();
 
-    //Testing issuing orders
-    //player1.issueOrder(order1);
-    //player2.issueOrder(order2);
+    //Calling issue order player 1 and player 2 to add orders to their orderlist
+    player1.issueOrder(player1.hand->play(0));
+    player1.issueOrder("Bomb");
+    player2.issueOrder("");
+
         
 }
 

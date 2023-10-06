@@ -2,24 +2,33 @@
 using namespace std;
 //Default constructor
 Player::Player(){
-
+    this->playerName="";
+    this->map=nullptr;
+    this->playerHand=nullptr;
+    this->orderList=nullptr;
 }
 
 //Parameterized constructor
-Player::Player(const string& name, Map* gameMap, Hand* hand/*, vector<Order*> orderList*/){
+Player::Player(const string& name, Map* gameMap, Hand* hand, OrdersList* orderList){
     this->playerName=name;
     this->map=gameMap;
-    //this->playerTerritories=new vector<Territory*>;//gameMap->getTerritoriesByName(name);
     this->playerHand=hand;
-    //this->orderList=orderList;
+    this->orderList=orderList;
 }
 
-//Copy constructor (CHECK)
+//Copy constructor
 Player::Player(const Player& other) {
     this->playerName = other.playerName;
     this->map = new Map(*other.map);
     this->playerHand = other.playerHand;
-    //TODO COPY ORDERLIST AS WELL
+    this->orderList= new OrderList(*other.orderList);
+}
+
+//Destructor
+Player:: ~Player(){
+    delete map;
+    delete playerHand;
+    
 }
 
 string Player::getName() const{
@@ -72,7 +81,27 @@ void Player::addPlayerTerritories(Territory *territory)
     playerTerritories.push_back(territory);
 }
 
+void Player::issueOrder(string type){
+    Order* order;
 
-//void Player::issueOrder(Order* order){
-    //TODO
-//}
+    if(type=="Deploy"){
+        order=new DeployOrder();
+    }
+    else if(type=="Bomb"){
+        order= new BombOrder();
+    }
+    else if(type=="Advance"){
+        order= new AdvanceOrder();
+    }
+    else if(type=="Airlift"){
+        order= new AirliftOrder();
+    }
+    else if(type=="Blockade"){
+        order=new BlockadeOrder();
+    }
+    else{
+        return;
+    }
+
+    orderList->addOrder(order);
+}
