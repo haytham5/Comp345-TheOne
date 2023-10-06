@@ -48,7 +48,7 @@ void Player::setPlayerHand(Hand* hand) {
 }
 
 void Player::printOrderList(){
-    for(auto elem: orderList){
+    for(auto elem: orderList->getOrders()){
         cout<<elem->getDescription()<<endl;
     }
 }

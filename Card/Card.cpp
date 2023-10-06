@@ -94,6 +94,7 @@ void Hand::draw() {
 
 
 void Hand::print() {
+    cout<<"Printing hand: "<<endl;
     for (auto elem : hand) elem->print();
 }
 

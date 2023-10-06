@@ -89,13 +89,22 @@ void testPlayers(){
     cout<<"\n"<<player2.getName()<<"'s hand:"<<endl;
     player2.getPlayerHand()->print();
 
-    //TODO: Print out orderlist and test issueOrder()
-
     //Calling issue order player 1 and player 2 to add orders to their orderlist
+    cout<<"\nPlayer 1 is playing: "<<endl;
     player1.issueOrder(player1.getPlayerHand()->play(0));
+     cout<<"\n"<<player1.getName()<<"'s hand:"<<endl;
+    player1.getPlayerHand()->print();
     player1.issueOrder(player1.getPlayerHand()->play(1));
-    player2.issueOrder(player1.getPlayerHand()->play(0));
-    player2.issueOrder(player1.getPlayerHand()->play(1));
+    cout<<"\n"<<player1.getName()<<"'s hand:"<<endl;
+    player1.getPlayerHand()->print();
+
+    cout<<"\nPlayer 2 is playing: "<<endl;
+    player2.issueOrder(player2.getPlayerHand()->play(0));
+    cout<<"\n"<<player2.getName()<<"'s hand:"<<endl;
+    player2.getPlayerHand()->print();
+    player2.issueOrder(player2.getPlayerHand()->play(1));
+    cout<<"\n"<<player2.getName()<<"'s hand:"<<endl;
+    player2.getPlayerHand()->print();
 
     //Print out player 1's and 2's orderLists
     cout<<"\nPlayer 1's order list:"<<endl;
@@ -104,12 +113,21 @@ void testPlayers(){
     player2.printOrderList();
 
     //Avoiding Memory Leaks
+    cout<< &map;
+    cout<< &hand;
+    cout<< &hand2;
+    cout<< &deck;
+    cout<< &player1OrderList;
+    cout<< &player2OrderList;
+    cout<<"hi"<<endl;
+    
     delete map;
     delete hand;
     delete hand2;
     delete deck;
     delete player1OrderList;
     delete player2OrderList;
+    
 }
 
 //Main method

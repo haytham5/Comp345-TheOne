@@ -216,7 +216,7 @@ vector<string> Map::getNeighbors(const string& territoryName) const {
   if (it != this->adjacencyList.end()) {
     return it->second;
   } else {
-    return {};
+    return vector<string>();
   }
 }
 
