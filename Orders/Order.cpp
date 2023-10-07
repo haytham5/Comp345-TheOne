@@ -2,8 +2,15 @@
 #include <iostream>
 #define NEUTRAL "Unassigned"
 
-std::string Order::getDescription() const { 
-    return description; 
+Order &Order::operator=(const Order &other)
+ {
+    description = other.description;
+    isExecuted = other.isExecuted;
+    return *this;
+}
+std::string Order::getDescription() const
+{
+    return description;
 }
 
 bool Order::hasExecuted() const { 
@@ -51,6 +58,12 @@ void OrdersList::moveOrder(int fromIndex, int toIndex) {
     std::iter_swap(orders.begin() + fromIndex, orders.begin() + toIndex);
 }
 
+OrdersList &OrdersList::operator=(const OrdersList &other)
+{
+    orders = other.orders;
+    return *this;
+}
+
 const std::vector<Order*>& OrdersList::getOrders() const {
     return orders;
 }
@@ -62,6 +75,49 @@ std::ostream& operator<<(std::ostream& os, const OrdersList& ordersList) {
     return os;
 }
 
+ostream &operator<<(ostream &out, const DeployOrder &object)
+{
+    out << object.description << "; Executed: " << 
+    object.isExecuted << "; Target Territory: " << 
+    object.targetTerritory << "; Number of Armies: " <<
+    object.numberOfArmies << endl;
+    return out;
+}
+
+ostream &operator<<(ostream &out, const AdvanceOrder &object)
+{
+    out << object.description << "; Executed: " << 
+    object.isExecuted << "; Target Territory: " << 
+    object.targetTerritory << "; Source Territory : " << 
+    object.sourceTerritory << "; Number of Armies: " <<
+    object.numberOfArmies << endl;
+    return out;
+}
+
+ostream &operator<<(ostream &out, const AirliftOrder &object)
+{
+    out << object.description << "; Executed: " << 
+    object.isExecuted << "; Target Territory: " << 
+    object.targetTerritory << "; Source Territory : " << 
+    object.sourceTerritory << "; Number of Armies: " <<
+    object.numberOfArmies << endl;
+    return out;
+}
+
+ostream &operator<<(ostream &out, const BlockadeOrder &object)
+{
+    out << object.description << "; Executed: " << 
+    object.isExecuted << "; Target Territory: " << 
+    object.targetTerritory << "; Source Territory : " << endl;
+    return out;
+}
+ostream &operator<<(ostream &out, const BombOrder &object)
+{
+    out << object.description << "; Executed: " << 
+    object.isExecuted << "; Target Territory: " << 
+    object.targetTerritory << "; Source Territory : " << endl;
+    return out;
+}
 AdvanceOrder::AdvanceOrder()
 {
     description = "Advance";
@@ -71,6 +127,16 @@ AdvanceOrder::AdvanceOrder(Territory *source, Territory *target, int armies)
     : sourceTerritory(source), targetTerritory(target), numberOfArmies(armies)
 {
     description = "Advance " + std::to_string(armies) + " from " + source->getName() + " to " + target->getName();
+}
+
+AdvanceOrder &AdvanceOrder::operator=(const AdvanceOrder &other)
+{
+    description = other.description;
+    isExecuted = other.isExecuted;
+    targetTerritory = other.targetTerritory;
+    sourceTerritory = other.sourceTerritory;
+    numberOfArmies = other.numberOfArmies;
+    return *this;
 }
 
 bool AdvanceOrder::validate() {
@@ -101,6 +167,16 @@ AirliftOrder::AirliftOrder(Territory *source, Territory *target, int armies)
     description = "Airlift " + std::to_string(armies) + " from " + source->getName() + " to " + target->getName();
 }
 
+AirliftOrder &AirliftOrder::operator=(const AirliftOrder &other)
+{
+    description = other.description;
+    isExecuted = other.isExecuted;
+    targetTerritory = other.targetTerritory;
+    sourceTerritory = other.sourceTerritory;
+    numberOfArmies = other.numberOfArmies;
+    return *this;
+}
+
 bool AirliftOrder::validate() {
     // Logic to validate the airlift order.
     //TODO: return sourceTerritory->getArmies() >= numberOfArmies;
@@ -126,6 +202,14 @@ BlockadeOrder::BlockadeOrder(Territory *target)
     : targetTerritory(target)
 {
     description = "Blockade " + target->getName();
+}
+
+BlockadeOrder &BlockadeOrder::operator=(const BlockadeOrder &other)
+{
+    description = other.description;
+    isExecuted = other.isExecuted;
+    targetTerritory = other.targetTerritory;
+    return *this;
 }
 
 bool BlockadeOrder::validate() {
@@ -155,6 +239,15 @@ DeployOrder::DeployOrder(Territory *target, int armies)
     description = "Deploy " + std::to_string(armies) + " to " + target->getName();
 }
 
+DeployOrder &DeployOrder::operator=(const DeployOrder &other)
+{
+    description = other.description;
+    isExecuted = other.isExecuted;
+    targetTerritory = other.targetTerritory;
+    numberOfArmies = other.numberOfArmies;
+    return *this;
+}
+
 bool DeployOrder::validate() {
     // Here you would implement the validation logic for a Deploy order.
     // This is just a mock implementation.
@@ -181,6 +274,14 @@ BombOrder::BombOrder()
 BombOrder::BombOrder(Territory *target)
 {
     description = "Bomb " + target->getName();
+}
+
+BombOrder &BombOrder::operator=(const BombOrder &other)
+{
+    description = other.description;
+    isExecuted = other.isExecuted;
+    targetTerritory = other.targetTerritory;
+    return *this;
 }
 
 bool BombOrder::validate()  {
@@ -262,3 +363,8 @@ void testOrdersList() {
     std::cout << "===== Testing Complete =====" << std::endl;
 }
 
+ostream &operator<<(ostream &out, const Order &object)
+{
+    out << object.description << "; Executed: " << object.isExecuted << endl;
+    return out;
+}
