@@ -115,6 +115,14 @@ std::string GameEngine::stateToString()
     }
 }
 
+GameEngine& GameEngine::operator=(const GameEngine& gameEngine) {
+  if (this != &gameEngine) {
+    GameEngine temp(gameEngine);
+    swap(*this, temp);
+  }
+  return *this;
+}
+
 void testGameEngine()
 {
     GameEngine *engine = new GameEngine();
