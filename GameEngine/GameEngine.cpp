@@ -124,7 +124,7 @@ GameEngine& GameEngine::operator=(const GameEngine& gameEngine) {
 }
 
 ostream& operator<<(ostream& os, const GameEngine& gameEngine) {
-  os << "Current Game State" << gameEngine.getGameState() << endl;
+  os << "Current Game State: " << gameEngine.getGameState() << endl;
   return os;
 }
 
