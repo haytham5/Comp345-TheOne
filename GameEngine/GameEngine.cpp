@@ -15,6 +15,11 @@ GameEngine::GameEngine()
     this->state = START;
 }
 
+//copy constructor
+GameEngine::GameEngine(GameEngine& gameEngine){
+    this->state = gameEngine.getGameState();
+}
+
 //return current state of the game
 GameEngine::GameState GameEngine::getGameState()
 {
@@ -108,6 +113,19 @@ std::string GameEngine::stateToString()
     default:
         return "Error reading state.\n";
     }
+}
+
+GameEngine& GameEngine::operator=(const GameEngine& gameEngine) {
+  if (this != &gameEngine) {
+    GameEngine temp(gameEngine);
+    swap(*this, temp);
+  }
+  return *this;
+}
+
+ostream& operator<<(ostream& os, const GameEngine& gameEngine) {
+  os << "Current Game State: " << gameEngine.getGameState() << endl;
+  return os;
 }
 
 void testGameEngine()
