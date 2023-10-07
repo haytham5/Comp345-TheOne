@@ -12,6 +12,10 @@ Card::Card(string t) {
     type = t;
 }
 
+Card::~Card()
+{
+}
+
 Card::Card(const Card &c)
 {
     type = c.type;
@@ -55,6 +59,15 @@ Deck::Deck()
     }
 
     cout << "Deck successfully created." << endl;
+}
+
+Deck::~Deck()
+ {
+    cout << "Deleting Deck..." << endl;
+    for (auto elem : deck) {
+        elem = NULL;
+        delete elem;
+    }
 }
 
 Deck::Deck(const Deck &d)
@@ -106,6 +119,15 @@ Hand::Hand(Deck *d) {
     }
 
     cout << "Hand successfully created." << endl;
+}
+
+Hand::~Hand()
+ {
+    cout << "Deleting Hand..." << endl;
+    for (auto elem : hand) {
+        elem = NULL;
+        delete elem;
+    }
 }
 
 Hand::Hand(const Hand &h)
@@ -208,4 +230,26 @@ void testCards() {
 
     delete d; // C1 and C2 are already deleted by d
     delete h;
+}
+
+ostream &operator<<(ostream &out, const Card &object)
+ {
+    out << "This is a card of type " << object.type << "." << endl;
+    return out;
+}
+
+ostream &operator<<(ostream &out, const Deck &object)
+{
+    out << "Deck Contents: " << endl;
+    for (auto elem : object.deck)
+        out << *elem;
+    return out;
+}
+
+ostream &operator<<(ostream &out, const Hand &object)
+{
+    out << "Hand Contents: " << endl;
+    for (auto elem : object.hand)
+        out << *elem;
+    return out;
 }

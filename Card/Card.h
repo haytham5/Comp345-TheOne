@@ -17,7 +17,7 @@ public:
     Card(string type);
 
     // Destructor
-    ~Card() {};
+    ~Card();
 
     // Copy constructor
     Card(const Card& c);
@@ -35,10 +35,7 @@ public:
     void print();
 
     // Ostream
-    friend ostream& operator<<(ostream& out, const Card& object) {
-        out << "This is a card of type " << object.type << "." << endl;
-        return out;
-    }
+    friend ostream& operator<<(ostream& out, const Card& object);
 
 private:
     string type;
@@ -51,13 +48,7 @@ public:
     Deck();
 
     // Destructor 
-    ~Deck() {
-        cout << "Deleting Deck..." << endl;
-        for (auto elem : deck) {
-            elem = NULL;
-            delete elem;
-        }
-    }
+    ~Deck();
 
     // Copy constructor 
     Deck(const Deck& d);
@@ -78,12 +69,7 @@ public:
     int size();
 
     // Ostream
-    friend ostream& operator<<(ostream& out, const Deck& object) {
-        out << "Deck Contents: " << endl;
-        for (auto elem : object.deck)
-            out << *elem;
-        return out;
-    }
+    friend ostream& operator<<(ostream& out, const Deck& object);
 
 private:
     vector<Card*> deck;
@@ -96,13 +82,7 @@ public:
     Hand(Deck* deck);
 
     // Destructor
-    ~Hand() {
-        cout << "Deleting Hand..." << endl;
-        for (auto elem : hand) {
-            elem = NULL;
-            delete elem;
-        }
-    }
+    ~Hand();
 
     // Copy constructor
     Hand(const Hand& h);
@@ -123,13 +103,7 @@ public:
     int size();
 
     // Ostream
-    friend ostream& operator<<(ostream& out, const Hand& object) {
-        out << "Hand Contents: " << endl;
-        for (auto elem : object.hand)
-            out << *elem;
-        return out;
-    }
-
+    friend ostream& operator<<(ostream& out, const Hand& object);
 private:
     Deck* deck;
     vector<Card*> hand;
