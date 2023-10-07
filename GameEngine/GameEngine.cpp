@@ -15,6 +15,11 @@ GameEngine::GameEngine()
     this->state = START;
 }
 
+//copy constructor
+GameEngine::GameEngine(GameEngine& gameEngine){
+    this->state = gameEngine.getGameState();
+}
+
 //return current state of the game
 GameEngine::GameState GameEngine::getGameState()
 {
