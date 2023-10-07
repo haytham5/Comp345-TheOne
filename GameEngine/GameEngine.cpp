@@ -123,6 +123,11 @@ GameEngine& GameEngine::operator=(const GameEngine& gameEngine) {
   return *this;
 }
 
+ostream& operator<<(ostream& os, const GameEngine& gameEngine) {
+  os << "Current Game State" << gameEngine.getGameState() << endl;
+  return os;
+}
+
 void testGameEngine()
 {
     GameEngine *engine = new GameEngine();
