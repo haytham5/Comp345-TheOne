@@ -5,7 +5,7 @@
 - Ricardo Caucci - 40248182 - Ricky2203
 - Mouhamed Boubacar Diane - 40089430 - MomooDiane
 - Luca Dallaire - 40132255 - lucadallaire
-- 
+
 ## A1 Tasks:
 - Map **(Simon)**  
 - Player **(Ricky)**  
