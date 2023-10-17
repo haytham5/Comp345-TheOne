@@ -14,7 +14,7 @@
 - Game Engine **(Luca)**
 
 ## A2 Tasks:
-- Command processor and command adapter 
+- Command processor and command adapter **(Haytham)**  
 - Game startup phase 
 - Game play: main game loop 
 - Order execution implementation 
