@@ -18,5 +18,5 @@
 - Game startup phase 
 - Game play: main game loop 
 - Order execution implementation 
-- Game log observer: commands and orders 
+- Game log observer: commands and orders **(Ricky)** 
 
