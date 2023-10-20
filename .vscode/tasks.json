@@ -3,15 +3,15 @@
         {
             "type": "cppbuild",
             "label": "C/C++: g++.exe build active file",
-            "command": "C:\\msys64\\ucrt64\\bin\\g++.exe",
+            "command": "C:\\msys64\\mingw64\\bin\\g++.exe",
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${fileDirname}\\Card\\Card.cpp",
-                "${fileDirname}\\Map\\Map.cpp",
-                "${fileDirname}\\Orders\\Order.cpp",
-                "${fileDirname}\\Player\\Player.cpp",
-                "${fileDirname}\\GameEngine\\GameEngine.cpp",
+                // "${fileDirname}\\Card\\Card.cpp",
+                // "${fileDirname}\\Map\\Map.cpp",
+                // "${fileDirname}\\Orders\\Order.cpp",
+                // "${fileDirname}\\Player\\Player.cpp",
+                "${fileDirname}\\..\\GameEngine\\GameEngine.cpp",
                 "${fileDirname}\\**.cpp",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"

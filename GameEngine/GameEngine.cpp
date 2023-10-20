@@ -6,6 +6,7 @@
 #include <map>
 using namespace std;
 #include "GameEngine.h"
+#include "../CommandProcessing/CommandProcessing.h"
 
 typedef GameEngine::GameState GS;
 
@@ -13,6 +14,7 @@ typedef GameEngine::GameState GS;
 GameEngine::GameEngine()
 {
     this->state = START;
+    this->processor = new CommandProcessor();
 }
 
 //copy constructor
@@ -33,57 +35,12 @@ void GameEngine::transition(GS state)
 }
 
 //execute the state change based on which state the game is currrently in
-void GameEngine::executeStateChange(string command)
+void GameEngine::executeStateChange(string stateChange)
 {
+    GS state = stringToState(stateChange);
 
-    if (command == "loadmap" && (state == START || state == MAP_LOADED))
-    {
-        transition(MAP_LOADED);
-    }
-    else if (command == "validatemap" && state == MAP_LOADED)
-    {
-        transition(MAP_VALIDATED);
-    }
-    else if (command == "addplayer" && (state == MAP_VALIDATED || state == PLAYERS_ADDED))
-    {
-        transition(PLAYERS_ADDED);
-    }
-    else if (command == "assigncountries" && state == PLAYERS_ADDED)
-    {
-        transition(ASSIGN_REINFORCEMENT);
-    }
-    else if (command == "issueorder" && (state == ASSIGN_REINFORCEMENT || state == ISSUE_ORDERS))
-    {
-        transition(ISSUE_ORDERS);
-    }
-    else if (command == "endissueorder" && state == ISSUE_ORDERS)
-    {
-        transition(EXECUTE_ORDERS);
-    }
-    else if (command == "execorder" && state == EXECUTE_ORDERS)
-    {
-        transition(EXECUTE_ORDERS);
-    }
-    else if (command == "endexecorder" && state == EXECUTE_ORDERS)
-    {
-        transition(ASSIGN_REINFORCEMENT);
-    }
-    else if (command == "win" && state == EXECUTE_ORDERS)
-    {
-        transition(WIN);
-    }
-    else if (command == "play" && state == WIN)
-    {
-        transition(START);
-    }
-    else if (command == "end")
-    {
-        transition(END);
-    }
-    else
-    {
-        cout << "Error: Invalid command" << endl;
-    }
+    transition(state);
+
     cout << "You are now in the state: " << stateToString() << "\n";
 }
 
@@ -100,6 +57,8 @@ std::string GameEngine::stateToString()
         return "MAP_VALIDATED";
     case PLAYERS_ADDED:
         return "PLAYERS_ADDED";
+    case GAME_START:
+        return "GAME_START";
     case ASSIGN_REINFORCEMENT:
         return "ASSIGN_REINFORCEMENT";
     case ISSUE_ORDERS:
@@ -115,39 +74,97 @@ std::string GameEngine::stateToString()
     }
 }
 
-GameEngine& GameEngine::operator=(const GameEngine& gameEngine) {
-  if (this != &gameEngine) {
-    GameEngine temp(gameEngine);
-    swap(*this, temp);
-  }
+//function to covert string to enum
+GameEngine::GameState GameEngine::stringToState(string s)
+{
+    GameState gsArray[10] = {
+        START,
+        MAP_LOADED,
+        MAP_VALIDATED,
+        PLAYERS_ADDED,
+        ASSIGN_REINFORCEMENT,
+        GAME_START,
+        ISSUE_ORDERS,
+        EXECUTE_ORDERS,
+        WIN,
+        END
+    };    
+
+    string stringArray[10] = {
+        "START",
+        "MAP_LOADED",
+        "MAP_VALIDATED",
+        "PLAYERS_ADDED",
+        "ASSIGN_REINFORCEMENT",
+        "GAME_START",
+        "ISSUE_ORDERS",
+        "EXECUTE_ORDERS",
+        "WIN",
+        "END"
+    };
+
+    for(int i = 0; i < sizeof(stringArray); i++) if(stringArray[i] == s) return gsArray[i];
+
+    return END;
+}
+
+GameEngine& GameEngine::operator=(GameEngine& gameEngine) {
+  this->state = gameEngine.getGameState();
   return *this;
 }
 
-ostream& operator<<(ostream& os, const GameEngine& gameEngine) {
-  os << "Current Game State: " << gameEngine.getGameState() << endl;
+ostream& operator<<(ostream& os, GameEngine& gameEngine) {
+  os << "Current Game State: " << gameEngine.stateToString() << endl;
   return os;
 }
 
-void testGameEngine()
-{
-    GameEngine *engine = new GameEngine();
-    cout << "The game is currently in the " << engine->stateToString() << " state\n";
 
-    string state = engine->stateToString();
+void GameEngine::run()
+{
+
+    cout << "Game Started.\n" << endl;
+
     while (true)
     {
-        string state = engine->stateToString();
+        string state = stateToString();
+        processor->setState(&state);
+
+
+        //TODO: ENGINE ACTIONS BASED ON STATE (PART 2)
+        //IF LOADMAP, ASK FOR MAP FILENAME
+
+        //IF VALIDATEMAP, VALIDATE MAP
+
+        //IF ADDPLAYER, ASK FOR PLAYER NAMES, ETC...
+
+        //CHECK IF GAMESTART IS LAST COMMAND, IF SO THEN DO GAMESTART
+
+
+        //MAIN GAMEPLAYLOOP (PART 3)
+        //RUN MAINGAMEPLAYLOOP METHOD IF STATE IS CORRECT
+
+
         if (state == "END")
         {
             break;
         }
         else
         {
-            string command;
             cout << "Enter command to trigger state change: ";
-            cin >> command;
-            engine->executeStateChange(command);
+            cin >> *processor;
+            if(processor->hasNew()) {
+                executeStateChange(processor->getCommand()->getEffect());
+                processor->removeNew();
+            }
         }
     }
     cout << "Game Over";
+
+}
+
+void testGameEngine()
+{
+    GameEngine *engine = new GameEngine();
+
+    engine->run();
 }
