@@ -25,7 +25,7 @@ const string acceptedConsoleCommands[14][3] = {
 };
 
 //TODO: ADD COMMANDS FOR PLAYERS
-//const string accepted 
+//const string acceptedPlayer 
 
 // COMMAND
 Command::Command(string c, string e)
@@ -39,7 +39,6 @@ ostream &operator<<(ostream &out, const Command &object)
     out << "Command: " << object.command << " -> Effect: " << object.effect << endl;
     return out;
 }
-
 
 void Command::saveEffect(string e)
 {
@@ -56,8 +55,7 @@ string Command::getCommand()
     return command;
 }
 
-
-//COMMAND PROCESSING
+//CONSOLE COMMAND PROCESSING
 
 CommandProcessor::CommandProcessor()
 {
@@ -117,7 +115,7 @@ bool CommandProcessor::validate(string command)
 
     for(int i= 0; i < sizeof(acceptedConsoleCommands); i++) {
         //Check if console level command or game level command
-        if(command == acceptedConsoleCommands[i][0]) {
+        if(acceptedConsoleCommands[i][0].find(command) != std::string::npos) {
 
             cout << "Correct command: " << command << "." << endl;
 
@@ -140,15 +138,14 @@ void CommandProcessor::saveCommand(string s)
     cout << "SAVING COMMAND... " << endl;
     
     for(int i= 0; i < sizeof(acceptedConsoleCommands); i++) {
-        if(s == acceptedConsoleCommands[i][0]) {
+        if(acceptedConsoleCommands[i][0].find(s) != std::string::npos) {
             Command* c = new Command(s, acceptedConsoleCommands[i][2]);
             commands.push_back(c);
             cout << "Saved command: " << *commands.back() << endl;
+            newCommand = true;
             return;
         }
     }
-
-    newCommand = true;
 }
 
 void CommandProcessor::saveError(string s)

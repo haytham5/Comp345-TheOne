@@ -15,6 +15,7 @@ GameEngine::GameEngine()
 {
     this->state = START;
     this->processor = new CommandProcessor();
+    this->gameStarted = false;
 }
 
 //copy constructor
@@ -108,6 +109,38 @@ GameEngine::GameState GameEngine::stringToState(string s)
     return END;
 }
 
+bool GameEngine::executeCommand(Command *command)
+{
+    string c = command->getCommand();
+    string e = command->getEffect();
+
+    //TODO: ENGINE ACTIONS BASED ON STATE (PART 2)
+    //IF LOADMAP, ASK FOR MAP FILENAME
+
+    //IF VALIDATEMAP, VALIDATE MAP
+
+    //IF ADDPLAYER, ASK FOR PLAYER NAMES, ETC...
+
+    //RETURN FALSE IF THERE IS PROBLEM EXECUTING COMMAND
+
+
+    if(c.find("loadmap") != std::string::npos) {
+        //get Map File and try to load
+    }
+
+    if(c.find("gamestart") != std::string::npos) {
+        cout <<"GAMESTART";
+        gameStarted = true;
+    }
+
+    if(c.find("win") != std::string::npos) {
+        cout<<"WIN";
+        gameStarted = false;
+    }
+
+    return true;
+}
+
 GameEngine& GameEngine::operator=(GameEngine& gameEngine) {
   this->state = gameEngine.getGameState();
   return *this;
@@ -117,7 +150,6 @@ ostream& operator<<(ostream& os, GameEngine& gameEngine) {
   os << "Current Game State: " << gameEngine.stateToString() << endl;
   return os;
 }
-
 
 void GameEngine::run()
 {
@@ -129,33 +161,27 @@ void GameEngine::run()
         string state = stateToString();
         processor->setState(&state);
 
-
-        //TODO: ENGINE ACTIONS BASED ON STATE (PART 2)
-        //IF LOADMAP, ASK FOR MAP FILENAME
-
-        //IF VALIDATEMAP, VALIDATE MAP
-
-        //IF ADDPLAYER, ASK FOR PLAYER NAMES, ETC...
-
-        //CHECK IF GAMESTART IS LAST COMMAND, IF SO THEN DO GAMESTART
-
-
-        //MAIN GAMEPLAYLOOP (PART 3)
-        //RUN MAINGAMEPLAYLOOP METHOD IF STATE IS CORRECT
-
-
         if (state == "END")
         {
             break;
         }
         else
         {
+            if(gameStarted)  {
+                //MAIN GAMEPLAYLOOP (PART 3)
+                //Run through Players collection and call each playerprocessor
+                //EXAMPLE: 
+                // cout << "Player 1, enter your command: ";
+            }
+
             cout << "Enter command to trigger state change: ";
             cin >> *processor;
             if(processor->hasNew()) {
-                executeStateChange(processor->getCommand()->getEffect());
+                if(executeCommand(processor->getCommand()))
+                    executeStateChange(processor->getCommand()->getEffect());
                 processor->removeNew();
             }
+
         }
     }
     cout << "Game Over";

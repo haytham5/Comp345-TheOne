@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include "../CommandProcessing/CommandProcessing.h"
+//#include "../Player/Player.h"
 
 using namespace std;
 
@@ -34,21 +35,33 @@ public:
     GameState getGameState();
     //Transition states
     void transition(GameEngine::GameState);
+    
+    //function to convert states to string
     std::string stateToString();
     
+    //Function to convert string to state
     GameState stringToState(string s);
-    //function to convert states to string
+
+    //Executes command, if command needs to be executed
+    bool executeCommand(Command* command);
+
+    //Changes state
     void executeStateChange(string stateChange);
 
     GameEngine& operator=(GameEngine& gameEngine);
 
     friend ostream& operator<<(ostream& os, GameEngine& gameEngine);
 private:
+    //Game started
+    bool gameStarted;
+
     //state of the game
     GameState state;
 
     //Processor
     CommandProcessor* processor;
+
+    //vector<*Player> players;
 };
 
 //test for game engine in part 5 of assignment 1
