@@ -1,9 +1,15 @@
-#include "CommandProcessing.h"
 #include <iostream>
 #include <string>
 #include <algorithm>
 #include <vector>
 #include <string>
+#include <stdexcept>
+#include <fstream>
+#include <sstream>
+
+#include "CommandProcessing.h"
+#include "../GameEngine/GameEngine.h"
+#include "../Player/Player.h"
 
 using namespace std;
 
@@ -24,8 +30,33 @@ const string acceptedConsoleCommands[14][3] = {
     {"quit", "WIN", "END"}
 };
 
-//TODO: ADD COMMANDS FOR PLAYERS
-//const string acceptedPlayer 
+const string acceptedPlayerCommands[7][2] = {
+    {"Reinforce", "ASSIGN_REINFORCEMENT"},
+    {"Advance", "ISSUE_ORDERS"},
+    {"Deploy", "ISSUE_ORDERS"},
+    {"Airlift", "ISSUE_ORDERS"},
+    {"Bomb", "ISSUE_ORDERS"},
+    {"Blockade", "ISSUE_ORDERS"},
+    {"Negotiate", "ISSUE_ORDERS"}
+};
+
+
+void testCommandProcessor()
+{
+    cout << "TESTING PLAYER COMMANDS: " << endl;
+
+    Player* p = new Player();
+    p->setName("test");
+
+    p->testState("ISSUE_ORDERS");
+
+    p->play();
+
+    cout << "TESTING FILE PROCESSOR AND CONSOLE COMMANDS: " << endl;
+    GameEngine *engine = new GameEngine();
+    
+    engine->run();
+}
 
 // COMMAND
 Command::Command(string c, string e)
@@ -33,6 +64,7 @@ Command::Command(string c, string e)
     command = c;
     this->saveEffect(e);
 }
+
 
 ostream &operator<<(ostream &out, const Command &object)
 {
@@ -59,6 +91,13 @@ string Command::getCommand()
 
 CommandProcessor::CommandProcessor()
 {
+    this->type = 'c';
+    newCommand = false;
+}
+
+CommandProcessor::CommandProcessor(char type)
+{
+    this->type = type;
     newCommand = false;
 }
 
@@ -101,59 +140,119 @@ void CommandProcessor::readCommmand(string s)
     cout << "READING COMMAND... " << endl;
     cout << "Passed command: " << s << endl;
 
-    // Validate
-    if(validate(s)) 
-        // If true save
-        saveCommand(s);
-
-    else saveError(s);
+    saveCommand(s, validate(s));
 }
 
-bool CommandProcessor::validate(string command)
+//VALIDATE COMMANDS
+string CommandProcessor::validate(string command)
 {
     cout << "VALIDATING COMMAND... " << endl;
 
-    for(int i= 0; i < sizeof(acceptedConsoleCommands); i++) {
+    //CONSOLE COMMAND VALIDATION
+    if(type == 'c') {
+        cout << "Scanning console commands... ";
+        for(int i= 0; i < sizeof(acceptedConsoleCommands); i++) {
         //Check if console level command or game level command
-        if(acceptedConsoleCommands[i][0].find(command) != std::string::npos) {
+            if(acceptedConsoleCommands[i][0] == command) {
 
-            cout << "Correct command: " << command << "." << endl;
+                cout << "Correct Console command: " << command << "." << endl;
 
-            if(acceptedConsoleCommands[i][1] == *state) {
-                cout << "Correct state " << *state << ". Validated." << endl;
-                return true;
+                if(acceptedConsoleCommands[i][1] == *state) {
+                    cout << "Correct state " << *state << ". Validated." << endl;
+                    return acceptedConsoleCommands[i][2];
+                }
             }
+        }
+    }
 
-            if(i >= 8) return true;
+    //PLAYER COMMAND VALIDATION
+    else {
+        cout << "Scanning player commands... ";
+
+        for(int i= 0; i < sizeof(acceptedPlayerCommands); i++) {
+            if(acceptedPlayerCommands[i][0] == command) {
+
+                cout << "Correct Player command: " << command << "." << endl;
+
+                if(acceptedPlayerCommands[i][1] == *state) {
+                    cout << "Correct state " << *state << ". Validated." << endl;
+                    return acceptedPlayerCommands[i][0];
+                }
+            }
         }
     }
 
     cout << "Command invalid." << endl;
 
-    return false;
+    return "";
 }
 
-void CommandProcessor::saveCommand(string s)
+void CommandProcessor::saveCommand(string command, string effect)
 {
-    cout << "SAVING COMMAND... " << endl;
-    
-    for(int i= 0; i < sizeof(acceptedConsoleCommands); i++) {
-        if(acceptedConsoleCommands[i][0].find(s) != std::string::npos) {
-            Command* c = new Command(s, acceptedConsoleCommands[i][2]);
-            commands.push_back(c);
-            cout << "Saved command: " << *commands.back() << endl;
-            newCommand = true;
-            return;
-        }
+    if(effect.length() > 0) {
+        cout << "SAVING COMMAND... " << endl;
+
+        Command* c = new Command(command, effect);
+        commands.push_back(c);
+        cout << "Saved Console command: " << *commands.back() << endl;
+        newCommand = true;
+    }
+
+    else {
+        cout << "SAVING ERROR... " << endl;
+
+        commands.push_back(new Command(command, "ERROR: Invalid Command"));
+
+        cout << *commands.back() << endl;
     }
 }
 
-void CommandProcessor::saveError(string s)
+//FILE COMMAND ADAPTER
+
+FileCommandProcessorAdapter::FileCommandProcessorAdapter(const string& filename)
 {
-    cout << "SAVING ERROR... " << endl;
+    fileEmptyFlag = false;
 
-    commands.push_back(new Command(s, "ERROR: Invalid Command"));
+    ifstream file(filename);
 
-    cout << *commands.back() << endl;
+    if (!file.is_open()) {
+        throw runtime_error("Error: Unable to open file " + filename);
+    }
+
+    string line;
+
+    while(getline(file, line)) {
+        fileCollection.push_back(line);
+    }
+
+    file.close();
+
+    for(auto it : fileCollection) cout << it << endl;
+
+    cout << "Commands successfully saved." << endl;
+}
+
+istream& operator>>(istream& in, FileCommandProcessorAdapter& object)
+{
+    if(!object.fileEmptyFlag) cout << "Utilizing command from file..." << endl;
+    string s = "";
+
+    if(!object.fileCollection.empty()) {
+        s = *object.fileCollection.begin();
+        object.fileCollection.erase(object.fileCollection.begin());        
+    }
+    
+    else {
+        if(!object.fileEmptyFlag) {
+            cout << "File empty. Commands will require console input from now on.\n Please enter one: ";
+            object.fileEmptyFlag = true;
+        }
+        in >> s;
+    }
+    
+
+    object.readCommmand(s);
+
+    return in;
 }
 

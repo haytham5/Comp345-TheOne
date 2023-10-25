@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include "../CommandProcessing/CommandProcessing.h"
-//#include "../Player/Player.h"
+#include "../Player/Player.h"
 
 using namespace std;
 
@@ -25,6 +25,7 @@ public:
     };
     //default constructor
     GameEngine();
+    
     //copy constructor
     GameEngine(GameEngine& gameEngine);
 
@@ -61,7 +62,9 @@ private:
     //Processor
     CommandProcessor* processor;
 
-    //vector<*Player> players;
+    FileCommandProcessorAdapter* fileProcessor;
+
+    vector<Player*> players;
 };
 
 //test for game engine in part 5 of assignment 1

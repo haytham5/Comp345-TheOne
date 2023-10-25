@@ -6,6 +6,8 @@
 
 using namespace std;
 
+void testCommandProcessor();
+
 class Command {
     public:
         //Constructor
@@ -14,13 +16,13 @@ class Command {
         Command(string c, string e);
 
         //Destructor
-       // ~Command();
+        // ~Command();
 
-        //Copy Constructor
-    //    Command(const Command& c);
+        // Copy Constructor
+        // Command(const Command& c);
 
-        //Operators
-      //  Command& operator=(const Command& c);
+        // Operators
+        // Command& operator=(const Command& c);
 
         friend ostream& operator<<(ostream& out, const Command& object);
 
@@ -39,6 +41,8 @@ class CommandProcessor {
     public: 
         //Constructor
         CommandProcessor();
+
+        CommandProcessor(char type);
 
         //Destructor
     //    ~CommandProcessor();
@@ -61,7 +65,9 @@ class CommandProcessor {
 
         void removeNew();
 
-    private: 
+    protected: 
+        char type;
+
         vector<Command*> commands;
 
         string* state;
@@ -70,33 +76,30 @@ class CommandProcessor {
 
         void readCommmand(string s);
 
-        void saveCommand(string s);
+        void saveCommand(string command, string effect);
 
-        void saveError(string s);
-
-        bool validate(string effect);
+        string validate(string command);
 };
 
+class FileCommandProcessorAdapter : public CommandProcessor {
+    public:
+        FileCommandProcessorAdapter(const string& filename);
 
-//TODO: SOMETHING TO GIVE THE PLAYERS TO ISSUE COMMANDS
-// class PlayerProcessor : public CommandProcessor {
+        //Destructor
+        ~FileCommandProcessorAdapter();
 
-// }
+        //Copy Constructor
+        FileCommandProcessorAdapter(const FileCommandProcessorAdapter& c);
 
+        //Operators
+        FileCommandProcessorAdapter& operator=(const FileCommandProcessorAdapter& c);
 
-// class FileCommandProcessorAdapter : public CommandProcessor {
-//     public:
-//         FileCommandProcessorAdapter();
+        friend ostream& operator<<(ostream& out, const FileCommandProcessorAdapter& object);
 
-//         //Destructor
-//         ~FileCommandProcessorAdapter();
+        friend istream& operator>>(istream& in, FileCommandProcessorAdapter& object);
 
-//         //Copy Constructor
-//         FileCommandProcessorAdapter(const FileCommandProcessorAdapter& c);
+    private: 
+        vector<string> fileCollection;
 
-//         //Operators
-//         FileCommandProcessorAdapter& operator=(const FileCommandProcessorAdapter& c);
-
-//         friend ostream& operator<<(ostream& out, const FileCommandProcessorAdapter& object);
-
-// };
+        bool fileEmptyFlag;
+};

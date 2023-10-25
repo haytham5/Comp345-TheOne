@@ -14,10 +14,9 @@ typedef GameEngine::GameState GS;
 GameEngine::GameEngine()
 {
     this->state = START;
-    this->processor = new CommandProcessor();
+
     this->gameStarted = false;
 }
-
 //copy constructor
 GameEngine::GameEngine(GameEngine& gameEngine){
     this->state = gameEngine.getGameState();
@@ -41,8 +40,6 @@ void GameEngine::executeStateChange(string stateChange)
     GS state = stringToState(stateChange);
 
     transition(state);
-
-    cout << "You are now in the state: " << stateToString() << "\n";
 }
 
 //function to covert enum to string
@@ -124,17 +121,15 @@ bool GameEngine::executeCommand(Command *command)
     //RETURN FALSE IF THERE IS PROBLEM EXECUTING COMMAND
 
 
-    if(c.find("loadmap") != std::string::npos) {
-        //get Map File and try to load
+    if(c == "loadmap") {
+        //Ask for map filename and try to load
     }
 
-    if(c.find("gamestart") != std::string::npos) {
-        cout <<"GAMESTART";
+    if(c == "gamestart") {
         gameStarted = true;
     }
 
-    if(c.find("win") != std::string::npos) {
-        cout<<"WIN";
+    if(c == "win") {
         gameStarted = false;
     }
 
@@ -153,13 +148,43 @@ ostream& operator<<(ostream& os, GameEngine& gameEngine) {
 
 void GameEngine::run()
 {
+    cout << "!~~ WELCOME TO WARZONE ~~!" << endl;
+    cout << "--------------------------\n" << endl;
+    cout << "This application requires input.\nEnable console commands or read from file? (-command or -file)" << endl;
 
-    cout << "Game Started.\n" << endl;
+    string answer = "";
+    cin >> answer;
+
+    while(answer != "-command" && answer != "-file") {
+        cout << "Invalid command, please enter one of '-command' or '-file': ";
+        cin >> answer; 
+    }
+
+    
+    if(answer == "-command") {
+        cout << "Command line selected." << endl;
+
+        this->processor = new CommandProcessor('c');
+        this->fileProcessor = NULL;
+    }
+
+    else {
+        cout << "Enter the filename for your desired file: ";
+        cin >> answer;
+
+        this->fileProcessor = new FileCommandProcessorAdapter(answer);
+        this->processor = NULL;
+    }
+
+
+    cout << "Game Started.\n--------------" << endl;
 
     while (true)
     {
         string state = stateToString();
-        processor->setState(&state);
+        cout << "You are now in the state: " << stateToString() << "\n";
+        if(processor != NULL) processor->setState(&state);
+        else fileProcessor->setState(&state);
 
         if (state == "END")
         {
@@ -175,11 +200,23 @@ void GameEngine::run()
             }
 
             cout << "Enter command to trigger state change: ";
-            cin >> *processor;
-            if(processor->hasNew()) {
-                if(executeCommand(processor->getCommand()))
-                    executeStateChange(processor->getCommand()->getEffect());
-                processor->removeNew();
+            
+            if(processor != NULL) {
+                cin >> *processor;
+                if(processor->hasNew()) {
+                    if(executeCommand(processor->getCommand()))
+                        executeStateChange(processor->getCommand()->getEffect());
+                    processor->removeNew();
+                }
+            }
+
+            else {
+                cin >> *fileProcessor;
+                if(fileProcessor->hasNew()) {
+                    if(executeCommand(fileProcessor->getCommand()))
+                        executeStateChange(fileProcessor->getCommand()->getEffect());
+                    fileProcessor->removeNew();
+                }
             }
 
         }
