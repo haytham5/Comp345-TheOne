@@ -40,6 +40,7 @@ const string acceptedPlayerCommands[7][2] = {
     {"Negotiate", "ISSUE_ORDERS"}
 };
 
+// FREE FUNCTION
 
 void testCommandProcessor()
 {
@@ -59,51 +60,93 @@ void testCommandProcessor()
 }
 
 // COMMAND
-Command::Command(string c, string e)
+
+Command::Command()
 {
-    command = c;
-    this->saveEffect(e);
+    string c = "Empty";
+    string e = "None";
+    command = &c;
+    effect = &e;
 }
 
+Command::Command(string c, string e)
+{
+    command = &c;
+    effect = &e;
+}
+
+Command::~Command()
+{
+    delete command;
+    delete effect;
+}
+
+Command::Command(const Command &c)
+{
+    this->command = c.command;
+    this->effect = c.effect;
+}
+
+Command &Command::operator=(const Command &c)
+{
+    this->command = c.command;
+    this->effect = c.effect;
+    return *this;
+}
 
 ostream &operator<<(ostream &out, const Command &object)
 {
-    out << "Command: " << object.command << " -> Effect: " << object.effect << endl;
+    out << "Command: " << *object.command << " -> Effect: " << *object.effect << endl;
     return out;
 }
 
 void Command::saveEffect(string e)
 {
-    effect = e;
+    effect = &e;
 }
 
 string Command::getEffect()
 {
-    return effect;
+    return *effect;
 }
 
 string Command::getCommand()
 {
-    return command;
+    return *command;
 }
 
 //CONSOLE COMMAND PROCESSING
 
 CommandProcessor::CommandProcessor()
 {
-    this->type = 'c';
-    newCommand = false;
+    char t = 'c';
+    bool f = false;
+    this->type = &t;
+    this->newCommand = &f;
 }
 
 CommandProcessor::CommandProcessor(char type)
 {
-    this->type = type;
-    newCommand = false;
+    bool f = false;
+    this->type = &type;
+    this->newCommand = &f;
+}
+
+CommandProcessor::~CommandProcessor()
+{
+    delete type;
+    delete newCommand;
+    delete state;
+
+    for (auto elem : commands) {
+        elem = NULL;
+        delete elem;
+    }
 }
 
 Command* CommandProcessor::getCommand()
 {
-    Command * c = new Command("empty", "None");
+    Command * c = new Command();
     if(!commands.empty()){
         return commands.back();
     }
@@ -122,7 +165,8 @@ bool CommandProcessor::hasNew()
 
 void CommandProcessor::removeNew()
 {
-    newCommand = false;
+    bool f = false;
+    newCommand = &f;
 }
 
 istream &operator>>(istream &in, CommandProcessor &cproc)
@@ -149,7 +193,7 @@ string CommandProcessor::validate(string command)
     cout << "VALIDATING COMMAND... " << endl;
 
     //CONSOLE COMMAND VALIDATION
-    if(type == 'c') {
+    if(*type == 'c') {
         cout << "Scanning console commands... ";
         for(int i= 0; i < sizeof(acceptedConsoleCommands); i++) {
         //Check if console level command or game level command
@@ -184,27 +228,25 @@ string CommandProcessor::validate(string command)
 
     cout << "Command invalid." << endl;
 
-    return "";
+    return "ERROR: Invalid Command";
 }
 
 void CommandProcessor::saveCommand(string command, string effect)
 {
-    if(effect.length() > 0) {
+    if(effect != "ERROR: Invalid Command") {
         cout << "SAVING COMMAND... " << endl;
-
-        Command* c = new Command(command, effect);
-        commands.push_back(c);
-        cout << "Saved Console command: " << *commands.back() << endl;
-        newCommand = true;
+        *newCommand = true;
     }
 
     else {
         cout << "SAVING ERROR... " << endl;
-
-        commands.push_back(new Command(command, "ERROR: Invalid Command"));
-
-        cout << *commands.back() << endl;
     }
+
+    Command* c = new Command(command, effect);
+    commands.push_back(c);
+
+    cout << "Saved Console command: " << *commands.back() << endl;
+
 }
 
 //FILE COMMAND ADAPTER
@@ -227,7 +269,7 @@ FileCommandProcessorAdapter::FileCommandProcessorAdapter(const string& filename)
 
     file.close();
 
-    for(auto it : fileCollection) cout << it << endl;
+    // for(auto it : fileCollection) cout << it << endl;
 
     cout << "Commands successfully saved." << endl;
 }
@@ -249,7 +291,6 @@ istream& operator>>(istream& in, FileCommandProcessorAdapter& object)
         }
         in >> s;
     }
-    
 
     object.readCommmand(s);
 

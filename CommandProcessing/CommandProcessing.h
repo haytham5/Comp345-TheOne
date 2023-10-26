@@ -11,18 +11,18 @@ void testCommandProcessor();
 class Command {
     public:
         //Constructor
-       // Command();
+        Command();
 
         Command(string c, string e);
 
         //Destructor
-        // ~Command();
+        ~Command();
 
         // Copy Constructor
-        // Command(const Command& c);
+        Command(const Command& c);
 
         // Operators
-        // Command& operator=(const Command& c);
+        Command& operator=(const Command& c);
 
         friend ostream& operator<<(ostream& out, const Command& object);
 
@@ -33,8 +33,8 @@ class Command {
         string getCommand();
 
     private:
-        string command;
-        string effect;
+        string* command;
+        string* effect;
 };
 
 class CommandProcessor {
@@ -45,7 +45,7 @@ class CommandProcessor {
         CommandProcessor(char type);
 
         //Destructor
-    //    ~CommandProcessor();
+        ~CommandProcessor();
 
         //Copy Constructor
    //     CommandProcessor(const CommandProcessor& c);
@@ -66,13 +66,13 @@ class CommandProcessor {
         void removeNew();
 
     protected: 
-        char type;
+        char* type;
 
         vector<Command*> commands;
 
         string* state;
 
-        bool newCommand;
+        bool* newCommand;
 
         void readCommmand(string s);
 
