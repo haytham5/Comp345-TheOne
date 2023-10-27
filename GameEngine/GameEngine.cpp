@@ -115,16 +115,18 @@ std::string GameEngine::stateToString()
     }
 }
 
-GameEngine& GameEngine::operator=(const GameEngine& gameEngine) {
-  if (this != &gameEngine) {
-    GameEngine temp(gameEngine);
-    swap(*this, temp);
-  }
+GameEngine& GameEngine::operator=(GameEngine& gameEngine) {
+//   if (this != &gameEngine) {
+//     GameEngine temp(gameEngine);
+//     swap(*this, temp);
+//   }
+  this->state = gameEngine.getGameState();
   return *this;
 }
 
-ostream& operator<<(ostream& os, const GameEngine& gameEngine) {
-  os << "Current Game State: " << gameEngine.getGameState() << endl;
+ostream& operator<<(ostream& os, GameEngine& gameEngine) {
+  //os << "Current Game State: " << gameEngine.stateToString << endl;
+  os << "Current Game State: " << gameEngine.stateToString() << endl;
   return os;
 }
 

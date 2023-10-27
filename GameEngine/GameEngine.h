@@ -31,9 +31,9 @@ public:
     //function to convert states to string
     void executeStateChange(string command);
 
-    GameEngine& operator=(const GameEngine& gameEngine);
+    GameEngine& operator=(GameEngine& gameEngine);
 
-ostream& operator<<(std::ostream& os, const GameEngine& gameEngine);
+    friend ostream& operator<<(ostream& out, GameEngine& gameEngine);
 
 private:
     //state of the game
