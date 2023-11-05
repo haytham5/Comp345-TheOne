@@ -15,7 +15,7 @@
 
 ## A2 Tasks:
 - Command processor and command adapter **(Haytham)**  
-- Game startup phase 
+- Game startup phase **(Simon)**
 - Game play: main game loop 
 - Order execution implementation 
 - Game log observer: commands and orders **(Ricky)** 
