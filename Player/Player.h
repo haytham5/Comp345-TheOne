@@ -1,8 +1,8 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include<string>
-#include<vector>
+#include <string>
+#include <vector>
 #include "../Map/Map.h"
 #include "../Orders/Order.h"
 #include "../Card/Card.h"
@@ -11,62 +11,61 @@ using namespace std;
 
 void testPlayers();
 
-class Player{
- public:
+class Player
+{
+public:
+  // Default constructor
+  Player();
 
-   //Default constructor
-    Player();
+  // Parameterized constructor
+  Player(const string &name, Map *gameMap, Hand *hand, OrdersList *orderList);
 
-   //Parameterized constructor
-    Player(const string& name, Map* gameMap, Hand* hand, OrdersList* orderList);
-    
-    //Copy constructor
-    Player(const Player& other);
+  // Copy constructor
+  Player(const Player &other);
 
-    //Operator
-    Player& operator = (const Player& other);
+  // Operator
+  Player &operator=(const Player &other);
 
-    //Ostream
-    friend ostream & operator << (ostream &out, const Player &object);
+  // Ostream
+  friend ostream &operator<<(ostream &out, const Player &object);
 
-    //Destructor
-    ~Player();
+  // Destructor
+  ~Player();
 
-    //Getter for playerName
-    string getName() const;
+  // Getter for playerName
+  string getName() const;
 
-    //Setter for playerName
-    void setName(string name);
+  // Setter for playerName
+  void setName(string name);
 
-   //Getter for playerHand
-    Hand* getPlayerHand() const;
+  // Getter for playerHand
+  Hand *getPlayerHand() const;
 
-    //Setter for playerHand
-    void setPlayerHand(Hand* hand);
+  // Setter for playerHand
+  void setPlayerHand(Hand *hand);
 
-    void printOrderList();
-    
-    //Getter for playerTerritories
-    vector<Territory*> getPlayerTerritories() const;
+  void printOrderList();
 
-    //toDefend() function declaration
-    vector<Territory*> toDefend() const;
+  // Getter for playerTerritories
+  vector<Territory *> getPlayerTerritories() const;
 
-    //toAttack() function declaration
-    vector<Territory*> toAttack() const;
+  // toDefend() function declaration
+  vector<Territory *> toDefend() const;
 
-    void addPlayerTerritories(Territory* territory);
-    
-    //issueOrder() function declaration
-    void issueOrder(string type);
+  // toAttack() function declaration
+  vector<Territory *> toAttack() const;
 
- private:
-   vector<Territory*> playerTerritories;
-    Hand* playerHand;
-    string playerName;
-    OrdersList* orderList;
-    Map* map;
+  void addPlayerTerritories(Territory *territory);
 
+  // issueOrder() function declaration
+  void issueOrder(string type);
+
+private:
+  vector<Territory *> playerTerritories;
+  Hand *playerHand;
+  string playerName;
+  OrdersList *orderList;
+  Map *map;
 };
 
 #endif

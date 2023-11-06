@@ -1,13 +1,14 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "../Player/Player.h"
 
 using namespace std;
 
 class GameEngine
 {
 public:
-    //different states the game can be in
+    // different states the game can be in
     enum GameState
     {
         START,
@@ -20,25 +21,27 @@ public:
         WIN,
         END
     };
-    //default constructor
+    // default constructor
     GameEngine();
-    //copy constructor
-    GameEngine(GameEngine& gameEngine);
-    //function to get current state of game
+    // copy constructor
+    GameEngine(GameEngine &gameEngine);
+    // function to get current state of game
     GameState getGameState();
     void transition(GameEngine::GameState);
     std::string stateToString();
-    //function to convert states to string
+    // function to convert states to string
     void executeStateChange(string command);
+    void reinforcementPhase();
 
-    GameEngine& operator=(GameEngine& gameEngine);
+    GameEngine &operator=(GameEngine &gameEngine);
 
-    friend ostream& operator<<(ostream& out, GameEngine& gameEngine);
+    friend ostream &operator<<(ostream &out, GameEngine &gameEngine);
 
 private:
-    //state of the game
+    // state of the game
     GameState state;
+    vector<Player *> players;
 };
 
-//test for game engine in part 5 of assignment 1
+// test for game engine in part 5 of assignment 1
 void testGameEngine();
