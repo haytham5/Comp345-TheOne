@@ -65,20 +65,18 @@ Command::Command()
 {
     string c = "Empty";
     string e = "None";
-    command = &c;
-    effect = &e;
+    command = c;
+    effect = e;
 }
 
 Command::Command(string c, string e)
 {
-    command = &c;
-    effect = &e;
+    command = c;
+    effect = e;
 }
 
 Command::~Command()
 {
-    delete command;
-    delete effect;
 }
 
 Command::Command(const Command &c)
@@ -96,53 +94,41 @@ Command &Command::operator=(const Command &c)
 
 ostream &operator<<(ostream &out, const Command &object)
 {
-    out << "Command: " << *object.command << " -> Effect: " << *object.effect << endl;
+    out << "Command: " << object.command << " -> Effect: " << object.effect << endl;
     return out;
 }
 
 void Command::saveEffect(string e)
 {
-    effect = &e;
+    effect = e;
 }
 
 string Command::getEffect()
 {
-    return *effect;
+    return effect;
 }
 
 string Command::getCommand()
 {
-    return *command;
+    return command;
 }
 
 //CONSOLE COMMAND PROCESSING
 
 CommandProcessor::CommandProcessor()
 {
-    char t = 'c';
-    bool f = false;
-    this->type = &t;
-    this->newCommand = &f;
+    type = 'c';
+    newCommand = false;
 }
 
 CommandProcessor::CommandProcessor(char type)
 {
-    bool f = false;
-    this->type = &type;
-    this->newCommand = &f;
+    this->type = type;
+    newCommand = false;
 }
 
 CommandProcessor::~CommandProcessor()
-{
-    delete type;
-    delete newCommand;
-    delete state;
-
-    for (auto elem : commands) {
-        elem = NULL;
-        delete elem;
-    }
-}
+{}
 
 CommandProcessor::CommandProcessor(const CommandProcessor &c)
 {
@@ -162,16 +148,16 @@ CommandProcessor &CommandProcessor::operator=(const CommandProcessor &c)
     return *this;
 }
 
-Command* CommandProcessor::getCommand()
+Command CommandProcessor::getCommand()
 {
-    Command * c = new Command();
+    Command c;
     if(!commands.empty()){
         return commands.back();
     }
     else return c;
 }
 
-void CommandProcessor::setState(string *s)
+void CommandProcessor::setState(string s)
 {
     state = s;
 }
@@ -183,8 +169,7 @@ bool CommandProcessor::hasNew()
 
 void CommandProcessor::removeNew()
 {
-    bool f = false;
-    newCommand = &f;
+    newCommand = false;
 }
 
 ostream &operator<<(ostream &out, const CommandProcessor &object)
@@ -217,7 +202,7 @@ string CommandProcessor::validate(string command)
     cout << "VALIDATING COMMAND... " << endl;
 
     //CONSOLE COMMAND VALIDATION
-    if(*type == 'c') {
+    if(type == 'c') {
         cout << "Scanning console commands... ";
         for(int i= 0; i < sizeof(acceptedConsoleCommands); i++) {
         //Check if console level command or game level command
@@ -225,8 +210,8 @@ string CommandProcessor::validate(string command)
 
                 cout << "Correct Console command: " << command << "." << endl;
 
-                if(acceptedConsoleCommands[i][1] == *state) {
-                    cout << "Correct state " << *state << ". Validated." << endl;
+                if(acceptedConsoleCommands[i][1] == state) {
+                    cout << "Correct state " << state << ". Validated." << endl;
                     return acceptedConsoleCommands[i][2];
                 }
             }
@@ -242,8 +227,8 @@ string CommandProcessor::validate(string command)
 
                 cout << "Correct Player command: " << command << "." << endl;
 
-                if(acceptedPlayerCommands[i][1] == *state) {
-                    cout << "Correct state " << *state << ". Validated." << endl;
+                if(acceptedPlayerCommands[i][1] == state) {
+                    cout << "Correct state " << state << ". Validated." << endl;
                     return acceptedPlayerCommands[i][0];
                 }
             }
@@ -257,19 +242,22 @@ string CommandProcessor::validate(string command)
 
 void CommandProcessor::saveCommand(string command, string effect)
 {
+    
+    if(newCommand) cout << "true" << endl;
+
     if(effect != "ERROR: Invalid Command") {
         cout << "SAVING COMMAND... " << endl;
-        *newCommand = true;
+        newCommand = true;
     }
 
     else {
         cout << "SAVING ERROR... " << endl;
     }
 
-    Command* c = new Command(command, effect);
-    commands.push_back(c);
 
-    cout << "Saved Console command: " << *commands.back() << endl;
+    commands.push_back(Command(command, effect));
+
+    cout << "Saved Console command: " << commands.back() << endl;
 
 }
 
@@ -277,6 +265,7 @@ void CommandProcessor::saveCommand(string command, string effect)
 
 FileCommandProcessorAdapter::FileCommandProcessorAdapter(const string& filename)
 {
+    newCommand = false;
     fileEmptyFlag = false;
 
     ifstream file(filename);
@@ -300,14 +289,6 @@ FileCommandProcessorAdapter::FileCommandProcessorAdapter(const string& filename)
 
 FileCommandProcessorAdapter::~FileCommandProcessorAdapter()
 {
-    delete type;
-    delete newCommand;
-    delete state;
-
-    for (auto elem : commands) {
-        elem = NULL;
-        delete elem;
-    }
 }
 
 FileCommandProcessorAdapter::FileCommandProcessorAdapter(const FileCommandProcessorAdapter &c)

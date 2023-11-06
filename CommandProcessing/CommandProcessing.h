@@ -33,8 +33,8 @@ class Command {
         string getCommand();
 
     private:
-        string* command;
-        string* effect;
+        string command;
+        string effect;
 };
 
 class CommandProcessor {
@@ -57,22 +57,22 @@ class CommandProcessor {
 
         friend istream& operator>>(istream& in, CommandProcessor& object);
 
-        Command* getCommand();
+        Command getCommand();
 
-        void setState(string* s);
+        void setState(string s);
 
         bool hasNew();
 
         void removeNew();
 
     protected: 
-        char* type;
+        char type;
 
-        vector<Command*> commands;
+        vector<Command> commands;
 
-        string* state;
+        string state;
 
-        bool* newCommand;
+        bool newCommand = false;
 
         void readCommmand(string s);
 
