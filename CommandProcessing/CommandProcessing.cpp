@@ -144,6 +144,24 @@ CommandProcessor::~CommandProcessor()
     }
 }
 
+CommandProcessor::CommandProcessor(const CommandProcessor &c)
+{
+    this->type = c.type;
+    this->commands = c.commands;
+    this->state = c.state;
+    this->newCommand = c.newCommand;
+}
+
+CommandProcessor &CommandProcessor::operator=(const CommandProcessor &c)
+{
+    this->type = c.type;
+    this->commands = c.commands;
+    this->state = c.state;
+    this->newCommand = c.newCommand;
+
+    return *this;
+}
+
 Command* CommandProcessor::getCommand()
 {
     Command * c = new Command();
@@ -167,6 +185,12 @@ void CommandProcessor::removeNew()
 {
     bool f = false;
     newCommand = &f;
+}
+
+ostream &operator<<(ostream &out, const CommandProcessor &object)
+{
+    out << "The command processor is of type " << object.type << "." << endl;
+    return out;
 }
 
 istream &operator>>(istream &in, CommandProcessor &cproc)
@@ -274,7 +298,47 @@ FileCommandProcessorAdapter::FileCommandProcessorAdapter(const string& filename)
     cout << "Commands successfully saved." << endl;
 }
 
-istream& operator>>(istream& in, FileCommandProcessorAdapter& object)
+FileCommandProcessorAdapter::~FileCommandProcessorAdapter()
+{
+    delete type;
+    delete newCommand;
+    delete state;
+
+    for (auto elem : commands) {
+        elem = NULL;
+        delete elem;
+    }
+}
+
+FileCommandProcessorAdapter::FileCommandProcessorAdapter(const FileCommandProcessorAdapter &c)
+{
+    this->type = c.type;
+    this->commands = c.commands;
+    this->state = c.state;
+    this->newCommand = c.newCommand;
+    this->fileCollection = c.fileCollection;
+    this->fileEmptyFlag = c.fileEmptyFlag;
+}
+
+FileCommandProcessorAdapter &FileCommandProcessorAdapter::operator=(const FileCommandProcessorAdapter &c)
+{
+    this->type = c.type;
+    this->commands = c.commands;
+    this->state = c.state;
+    this->newCommand = c.newCommand;
+    this->fileCollection = c.fileCollection;
+    this->fileEmptyFlag = c.fileEmptyFlag;
+
+    return *this;
+}
+
+ostream &operator<<(ostream &out, const FileCommandProcessorAdapter &object)
+{
+    out << "File Command Processor Adapter is of type " << object.type << "." << endl;
+    return out;
+}
+
+istream &operator>>(istream &in, FileCommandProcessorAdapter &object)
 {
     if(!object.fileEmptyFlag) cout << "Utilizing command from file..." << endl;
     string s = "";

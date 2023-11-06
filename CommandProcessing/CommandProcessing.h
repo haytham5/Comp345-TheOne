@@ -48,12 +48,12 @@ class CommandProcessor {
         ~CommandProcessor();
 
         //Copy Constructor
-   //     CommandProcessor(const CommandProcessor& c);
+        CommandProcessor(const CommandProcessor& c);
 
         //Operators
-   //     CommandProcessor& operator=(const CommandProcessor& c);
+        CommandProcessor& operator=(const CommandProcessor& c);
 
-   //     friend ostream& operator<<(ostream& out, const CommandProcessor& object);
+        friend ostream& operator<<(ostream& out, const CommandProcessor& object);
 
         friend istream& operator>>(istream& in, CommandProcessor& object);
 
