@@ -72,6 +72,7 @@ std::string GameEngine::stateToString()
     }
 }
 
+
 //function to covert string to enum
 GameEngine::GameState GameEngine::stringToState(string s)
 {
@@ -137,6 +138,7 @@ bool GameEngine::executeCommand(Command command)
 }
 
 GameEngine& GameEngine::operator=(GameEngine& gameEngine) {
+
   this->state = gameEngine.getGameState();
   return *this;
 }
