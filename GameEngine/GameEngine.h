@@ -49,6 +49,9 @@ public:
     // Changes state
     void executeStateChange(string stateChange);
 
+    // Main game loop to cycle through the Reinforcement, Issue Orders and Order Execution Phases
+    void mainGameLoop();
+
     // Reinforcement Phase
     void reinforcementPhase();
 

@@ -250,6 +250,30 @@ void testGameEngine()
     engine->run();
 }
 
+// round robin fashion cycle through 3 phases -> reinforcement, issue orders and execute orders
+void GameEngine::mainGameLoop()
+{
+    // temporary number of players while waiting for part 2
+    int numPlayers = 5;
+
+    while (numPlayers != 1)
+    {
+        // if player territories list size is 0, they are removed from game
+        for (int i = 0; i < players.size(); i++)
+        {
+            if (players[i]->getPlayerTerritories().empty())
+            {
+                // TODO remove player
+            }
+        }
+
+        // TODO reinforcement phase skipped during first round
+        reinforcementPhase();
+        issueOrdersPhase();
+        executeOrdersPhase();
+    }
+}
+
 void GameEngine::reinforcementPhase()
 {
     // temporary creation of players while waiting for part 2 to be completed
