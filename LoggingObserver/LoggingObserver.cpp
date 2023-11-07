@@ -147,3 +147,8 @@ ostream &operator<<(ostream &os, const LogObserver &logObserver){
     os <<"LogObserver: logFileName="<< logObserver.logFileName; 
     return os;
 }
+
+//Free function
+void testLoggingObserver(){
+    
+}

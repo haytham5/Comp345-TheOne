@@ -101,7 +101,7 @@ ostream &operator<<(ostream &out, const Command &object)
 void Command::saveEffect(string e)
 {
     effect = e;
-    //Notifies observer
+    //Notifies observers
     notify(this);
 }
 

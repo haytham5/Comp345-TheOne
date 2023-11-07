@@ -4,6 +4,9 @@
 #include<fstream>
 using namespace std;
 
+//Free function
+void testLoggingObserver();
+
 //Interface (will be inherited by all classes that can be logged)
 class ILoggable{
 public:
