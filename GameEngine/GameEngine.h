@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "../CommandProcessing/CommandProcessing.h"
 #include "../Player/Player.h"
 
 using namespace std;
@@ -16,6 +17,7 @@ public:
         MAP_VALIDATED,
         PLAYERS_ADDED,
         ASSIGN_REINFORCEMENT,
+        GAME_START,
         ISSUE_ORDERS,
         EXECUTE_ORDERS,
         WIN,
@@ -23,23 +25,46 @@ public:
     };
     // default constructor
     GameEngine();
+
     // copy constructor
     GameEngine(GameEngine &gameEngine);
+
+    // Run
+    void run();
+
     // function to get current state of game
     GameState getGameState();
+    // Transition states
     void transition(GameEngine::GameState);
-    std::string stateToString();
+
     // function to convert states to string
-    void executeStateChange(string command);
-    void reinforcementPhase();
+    std::string stateToString();
+
+    // Function to convert string to state
+    GameState stringToState(string s);
+
+    // Executes command, if command needs to be executed
+    bool executeCommand(Command command);
+
+    // Changes state
+    void executeStateChange(string stateChange);
 
     GameEngine &operator=(GameEngine &gameEngine);
 
-    friend ostream &operator<<(ostream &out, GameEngine &gameEngine);
+    friend ostream &operator<<(ostream &os, GameEngine &gameEngine);
 
 private:
+    // Game started
+    bool gameStarted;
+
     // state of the game
     GameState state;
+
+    // Processor
+    CommandProcessor *processor;
+
+    FileCommandProcessorAdapter *fileProcessor;
+
     vector<Player *> players;
 };
 
