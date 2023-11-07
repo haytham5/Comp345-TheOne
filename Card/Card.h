@@ -11,7 +11,8 @@ using namespace std;
 void testCards();
 
 // Card class
-class Card {
+class Card
+{
 public:
     // Constructor
     Card(string type);
@@ -20,10 +21,10 @@ public:
     ~Card();
 
     // Copy constructor
-    Card(const Card& c);
+    Card(const Card &c);
 
     // Assignment operator
-    Card& operator=(const Card& c);
+    Card &operator=(const Card &c);
 
     // Play a card
     string play();
@@ -35,32 +36,33 @@ public:
     void print();
 
     // Ostream
-    friend ostream& operator<<(ostream& out, const Card& object);
+    friend ostream &operator<<(ostream &out, const Card &object);
 
 private:
     string type;
 };
 
 // Deck class
-class Deck {
+class Deck
+{
 public:
     // Constructor
     Deck();
 
-    // Destructor 
+    // Destructor
     ~Deck();
 
-    // Copy constructor 
-    Deck(const Deck& d);
+    // Copy constructor
+    Deck(const Deck &d);
 
-    // Assignment operator 
-    Deck& operator=(const Deck& d);
+    // Assignment operator
+    Deck &operator=(const Deck &d);
 
     // Function to put a card back into the deck
-    void putBack(Card* card);
+    void putBack(Card *card);
 
     // Function to draw a card from the deck
-    Card* draw();
+    Card *draw();
 
     // Function to print the contents of the deck
     void print();
@@ -69,26 +71,27 @@ public:
     int size();
 
     // Ostream
-    friend ostream& operator<<(ostream& out, const Deck& object);
+    friend ostream &operator<<(ostream &out, const Deck &object);
 
 private:
-    vector<Card*> deck;
+    vector<Card *> deck;
 };
 
 // Hand class
-class Hand {
+class Hand
+{
 public:
     // Constructor
-    Hand(Deck* deck);
+    Hand(Deck *deck);
 
     // Destructor
     ~Hand();
 
     // Copy constructor
-    Hand(const Hand& h);
+    Hand(const Hand &h);
 
     // Assignment operator
-    Hand& operator=(const Hand& h);
+    Hand &operator=(const Hand &h);
 
     // Function to play a card from the hand
     string play(int i);
@@ -102,11 +105,15 @@ public:
     // Function to get the size of the hand
     int size();
 
+    // vector of card pointers
+    vector<Card *> HandCards;
+
     // Ostream
-    friend ostream& operator<<(ostream& out, const Hand& object);
+    friend ostream &operator<<(ostream &out, const Hand &object);
+
 private:
-    Deck* deck;
-    vector<Card*> hand;
+    Deck *deck;
+    vector<Card *> hand;
 };
 
 #endif

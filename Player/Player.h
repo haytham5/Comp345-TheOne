@@ -21,9 +21,6 @@ public:
   // Parameterized constructor
   Player(const string &name, Map *gameMap, Hand *hand, OrdersList *orderList);
 
-  // Parameterized constructor
-  Player(const string &name, Map *gameMap, Hand *hand, OrdersList *orderList);
-
   // Parameterized constructor with processor
   Player(const string &name, Map *gameMap, Hand *hand, OrdersList *orderList, CommandProcessor *processor);
 
@@ -62,11 +59,22 @@ public:
   // toAttack() function declaration
   vector<Territory *> toAttack() const;
 
+  void addPlayerTerritories(Territory *territory);
+
+  // issueOrder() function declaration
+  void issueOrder(string type);
+
   // Test State
   void testState(string s);
 
   // Get Player Command
   void play();
+
+  // Set Player Phase
+  void setPhase(string ph);
+
+  // Get Player Phase
+  string getPhase();
 
 private:
   vector<Territory *> playerTerritories;
@@ -74,6 +82,7 @@ private:
   string playerName;
   OrdersList *orderList;
   Map *map;
+  string phase;
 
   // Processor
   CommandProcessor *processor;

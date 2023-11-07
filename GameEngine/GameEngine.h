@@ -49,6 +49,15 @@ public:
     // Changes state
     void executeStateChange(string stateChange);
 
+    // Reinforcement Phase
+    void reinforcementPhase();
+
+    // Issuing Orders Phase
+    void issueOrdersPhase();
+
+    // Orders Execution Phase
+    void executeOrdersPhase();
+
     GameEngine &operator=(GameEngine &gameEngine);
 
     friend ostream &operator<<(ostream &os, GameEngine &gameEngine);

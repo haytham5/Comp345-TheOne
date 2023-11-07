@@ -266,6 +266,7 @@ void GameEngine::reinforcementPhase()
 
     for (int i = 0; i < players.size(); i++)
     {
+        players[i]->setPhase("Reinforcement");
         cout << "Player: " << players[i]->getName() << "'s updated reinforcement pool:";
         // if the number of territories owned / 3 is less than 3, number of reinforcement army units for the player is 3
         if (((players[i]->getPlayerTerritories().size()) / 3) < 3)
@@ -283,6 +284,42 @@ void GameEngine::reinforcementPhase()
         {
             // players[i]->setReinforcementPool(players[i]->getReinforcementPool() + ((players[i]->getPlayerTerritories().size()) / 3));
             // cout << players[i]->getReinforcementPool();
+        }
+    }
+}
+
+void GameEngine::issueOrdersPhase()
+{
+    for (int i = 0; i < players.size(); i++)
+    {
+        string order;
+        string answer;
+        players[i]->setPhase("Issuing Orders");
+        string name = players[i]->getName();
+        vector<Card *> currentPlayerCards = players[i]->getPlayerHand()->HandCards;
+
+        while (answer != "NO")
+        {
+            cout << "Player: " << name << " input your order here: ";
+            cin >> order;
+
+            if (order == "advance" || order == "deploy" || order == "bomb" || order == "blockade" || order == "airlift" || order == "negotiate")
+            {
+                players[i]->issueOrder(order);
+            }
+            else
+            {
+                cout << "Invalid Order!" << endl;
+            }
+
+            cout << "Would you like to issue another order? YES or NO" << endl;
+            cin >> answer;
+            if (answer == "NO")
+            {
+                break;
+            }
+            cout << "\n"
+                 << endl;
         }
     }
 }
