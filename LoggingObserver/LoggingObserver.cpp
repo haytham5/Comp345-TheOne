@@ -2,7 +2,7 @@
 #include<iostream>
 using namespace std;
 
-//Dtream insertion operator for ILoggable class
+//Stream insertion operator for ILoggable class
 ostream &operator<<(ostream &os, const ILoggable &obj){
     // TODO: insert return statement here***************************
 }
@@ -47,16 +47,29 @@ void Subject::notify(ILoggable *loggable){
 
 //Assignment operator for Subject class
 Subject &Subject::operator=(const Subject &other){
-    // TODO: insert return statement here****************************
+    if(this != &other) {
+        //Clean up current observers
+        for(auto elem : observers){
+            delete elem;
+        }
+        //Copy the observers from the other object
+        observers= other.observers;
+    }
+    return *this;
 }
 
-// Stream insertion operator for Subject class
+//Stream insertion operator for Subject class
 ostream &operator<<(ostream &os, const Subject &subject){
+    os<< "Subject with Observers:\n";
     for(auto elem : subject.observers){
          os << " - " << *elem << "\n";
     }
     return os;
-    //TODO (CHANGE THIS?)**************************************
+}
+
+//Assignmnet operator for Observer class
+Observer &Observer::operator=(const Observer &other){
+    return *this;
 }
 
 //Default constructor
@@ -69,9 +82,14 @@ Observer::~Observer(){
     //Nothing needed here
 }
 
+Observer::Observer(const Observer &other){
+    //No addditional logic needed here
+}
+
 //Stream insertion operator for Observer class
 ostream &operator<<(ostream &os, const Observer &obj){
-    // TODO: insert return statement here*************************
+    os << "Observer";
+    return os;
 }
 
 //Default constructor
@@ -105,7 +123,21 @@ this->subject=subject;
 
 //Copy constructor
 LogObserver::LogObserver(const LogObserver &other){
-    //TODO*********************************************************
+    logFileName = other.logFileName;
+
+    //Ensuring the log file is closed for the new instance
+    if (logFile.is_open()) {
+        logFile.close();
+    }
+
+    //Open the log file for the new instance
+    logFile.open(logFileName);
+
+    //Copy the subject and attach this observer to the new subject
+    subject = other.subject;
+    if(subject){
+        subject->attach(this);
+    }
 }
 
 //Destructor that closes the file
@@ -139,16 +171,37 @@ void LogObserver::update(ILoggable *loggable){
 
 //Assignment operator for LogObserver class
 LogObserver &LogObserver::operator=(const LogObserver &other){
-    // TODO: insert return statement here
+    if(this!= &other) {
+        //Close the current log file if open
+        if(logFile.is_open()){
+            logFile.close();
+        }
+
+        //Copy logFileName from the other object
+        logFileName= other.logFileName;
+
+        //Open the log file for the new instance
+        logFile.open(logFileName);
+
+        //Copy the subject and attach this observer to the new subject (if it is not nullptr)
+        subject= other.subject;
+        if(subject){
+            subject->attach(this);
+        }
+    }
+    return *this;
 }
 
 //Stream insertion operator for LogObserver class
 ostream &operator<<(ostream &os, const LogObserver &logObserver){
-    os <<"LogObserver: logFileName="<< logObserver.logFileName; 
+    os<<"LogObserver: logFileName:"<< logObserver.logFileName;
+    if(logObserver.subject){
+        os<< ", attached to: "<< *logObserver.subject;
+    }
     return os;
 }
 
 //Free function
 void testLoggingObserver(){
-    
+
 }

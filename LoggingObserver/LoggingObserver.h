@@ -34,8 +34,10 @@ private:
 class Observer{
 public:
     virtual ~Observer();
+    Observer(const Observer& other);
     virtual void update(ILoggable* loggable)=0;
-    friend ostream& operator<<(ostream& os, const Observer& obj);//******************DELETE?????*******************************
+    friend ostream& operator<<(ostream& os, const Observer& obj);
+    Observer& operator=(const Observer& other);
 protected:
     Observer();
 };

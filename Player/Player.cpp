@@ -132,6 +132,7 @@ void Player::issueOrder(string type){
      //   order=new NegotiateOrder();
     //}
     else{
+        cout<<"Invalid type in issueOrder(type), no order instance was created."<<endl;
         return;
     }
 

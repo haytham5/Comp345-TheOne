@@ -278,9 +278,10 @@ void CommandProcessor::saveCommand(string command, string effect)
 
     commands.push_back(Command(command, effect));
 
-    cout << "Saved Console command: " << commands.back() << endl;
     //Notifies observers
     notify(this);
+
+    cout << "Saved Console command: " << commands.back() << endl;
 }
 
 //FILE COMMAND ADAPTER
