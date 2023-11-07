@@ -65,6 +65,15 @@ void OrdersList::removeOrder(Order *order)
     }
 }
 
+Order *OrdersList::getOrder(int index)
+{
+    if (index < orders.size() && index >= 0)
+    {
+        return orders[index];
+    }
+    return nullptr;
+}
+
 void OrdersList::moveOrder(int fromIndex, int toIndex)
 {
     if (fromIndex < 0 || fromIndex >= orders.size() || toIndex < 0 || toIndex >= orders.size())

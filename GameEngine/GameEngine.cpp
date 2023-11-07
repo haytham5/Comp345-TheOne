@@ -364,6 +364,7 @@ void GameEngine::executeOrdersPhase()
 
         for (int j = 0; j < playerOrderList->getOrdersListSize(); j++)
         {
+            Order *order = playerOrderList->getOrders().at(j);
             // TODO requires part 4 to be completed before implementing
             /*
             if(playerOrderList->getOrders(j)->getOrder() == "deploy")
@@ -384,6 +385,7 @@ void GameEngine::executeOrdersPhase()
 
         for (int j = 0; j < playerOrderList->getOrdersListSize(); j++)
         {
+            Order *order = playerOrderList->getOrders().at(j);
             // TODO requires part 4 to be completed before implementing
             // playerOrderList->getOrders(j).execute();
         }
