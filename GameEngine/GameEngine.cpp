@@ -108,10 +108,10 @@ GameEngine::GameState GameEngine::stringToState(string s)
     return END;
 }
 
-bool GameEngine::executeCommand(Command *command)
+bool GameEngine::executeCommand(Command command)
 {
-    string c = command->getCommand();
-    string e = command->getEffect();
+    string c = command.getCommand();
+    string e = command.getEffect();
 
     //TODO: ENGINE ACTIONS BASED ON STATE (PART 2)
     //IF LOADMAP, ASK FOR MAP FILENAME
@@ -185,8 +185,8 @@ void GameEngine::run()
     {
         string state = stateToString();
         cout << "You are now in the state: " << stateToString() << "\n";
-        if(processor != NULL) processor->setState(&state);
-        else fileProcessor->setState(&state);
+        if(processor != NULL) processor->setState(state);
+        else fileProcessor->setState(state);
 
         if (state == "END")
         {
@@ -205,18 +205,22 @@ void GameEngine::run()
             
             if(processor != NULL) {
                 cin >> *processor;
+                
                 if(processor->hasNew()) {
                     if(executeCommand(processor->getCommand()))
-                        executeStateChange(processor->getCommand()->getEffect());
+                        executeStateChange(processor->getCommand().getEffect());
                     processor->removeNew();
                 }
             }
 
             else {
                 cin >> *fileProcessor;
+                
                 if(fileProcessor->hasNew()) {
+                    
                     if(executeCommand(fileProcessor->getCommand()))
-                        executeStateChange(fileProcessor->getCommand()->getEffect());
+                        executeStateChange(fileProcessor->getCommand().getEffect());
+                        
                     fileProcessor->removeNew();
                 }
             }
@@ -225,6 +229,13 @@ void GameEngine::run()
     }
     cout << "Game Over";
 
+}
+
+void testGameEngine()
+{
+    GameEngine *engine = new GameEngine();
+
+    engine->run();
 }
 
 string GameEngine::stringToLog()

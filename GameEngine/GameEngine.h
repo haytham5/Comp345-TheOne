@@ -45,7 +45,7 @@ public:
     GameState stringToState(string s);
 
     //Executes command, if command needs to be executed
-    bool executeCommand(Command* command);
+    bool executeCommand(Command command);
 
     //Changes state
     void executeStateChange(string stateChange);

@@ -51,18 +51,18 @@ class CommandProcessor : public ILoggable, public Subject {
         ~CommandProcessor();
 
         //Copy Constructor
-   //     CommandProcessor(const CommandProcessor& c);
+        CommandProcessor(const CommandProcessor& c);
 
         //Operators
-   //     CommandProcessor& operator=(const CommandProcessor& c);
+        CommandProcessor& operator=(const CommandProcessor& c);
 
-   //     friend ostream& operator<<(ostream& out, const CommandProcessor& object);
+        friend ostream& operator<<(ostream& out, const CommandProcessor& object);
 
         friend istream& operator>>(istream& in, CommandProcessor& object);
 
-        Command* getCommand();
+        Command getCommand();
 
-        void setState(string* s);
+        void setState(string s);
 
         bool hasNew();
 
@@ -71,13 +71,13 @@ class CommandProcessor : public ILoggable, public Subject {
         virtual string stringToLog() override;
 
     protected: 
-        char* type;
+        char type;
 
-        vector<Command*> commands;
+        vector<Command> commands;
 
-        string* state;
+        string state;
 
-        bool* newCommand;
+        bool newCommand = false;
 
         void readCommmand(string s);
 

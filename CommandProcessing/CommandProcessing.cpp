@@ -77,7 +77,6 @@ Command::Command(string c, string e)
 
 Command::~Command()
 {
-
 }
 
 Command::Command(const Command &c)
@@ -102,7 +101,7 @@ ostream &operator<<(ostream &out, const Command &object)
 void Command::saveEffect(string e)
 {
     effect = e;
-    //Notifies observers
+    //Notifies observer
     notify(this);
 }
 
@@ -125,41 +124,47 @@ string Command::stringToLog()
 
 CommandProcessor::CommandProcessor()
 {
-    char t = 'c';
-    bool f = false;
-    this->type = &t;
-    this->newCommand = &f;
+    type = 'c';
+    newCommand = false;
 }
 
 CommandProcessor::CommandProcessor(char type)
 {
-    bool f = false;
-    this->type = &type;
-    this->newCommand = &f;
+    this->type = type;
+    newCommand = false;
 }
 
 CommandProcessor::~CommandProcessor()
-{
-    delete type;
-    delete newCommand;
-    delete state;
+{}
 
-    for (auto elem : commands) {
-        elem = NULL;
-        delete elem;
-    }
+CommandProcessor::CommandProcessor(const CommandProcessor &c)
+{
+    this->type = c.type;
+    this->commands = c.commands;
+    this->state = c.state;
+    this->newCommand = c.newCommand;
 }
 
-Command* CommandProcessor::getCommand()
+CommandProcessor &CommandProcessor::operator=(const CommandProcessor &c)
 {
-    Command * c = new Command();
+    this->type = c.type;
+    this->commands = c.commands;
+    this->state = c.state;
+    this->newCommand = c.newCommand;
+
+    return *this;
+}
+
+Command CommandProcessor::getCommand()
+{
+    Command c;
     if(!commands.empty()){
         return commands.back();
     }
     else return c;
 }
 
-void CommandProcessor::setState(string *s)
+void CommandProcessor::setState(string s)
 {
     state = s;
 }
@@ -171,17 +176,22 @@ bool CommandProcessor::hasNew()
 
 void CommandProcessor::removeNew()
 {
-    bool f = false;
-    newCommand = &f;
+    newCommand = false;
+}
+
+ostream &operator<<(ostream &out, const CommandProcessor &object)
+{
+    out << "The command processor is of type " << object.type << "." << endl;
+    return out;
 }
 
 string CommandProcessor::stringToLog()
 {
     if(!commands.empty()) {
-        Command* lastCommand= commands.back();
+        Command lastCommand= commands.back();
         string logString;
         
-        logString= "Command: "+ lastCommand->getCommand() + " was just saved.";
+        logString= "Command: "+ lastCommand.getCommand() + " was just saved.";
         return logString;
     } else {
         cout<< "No commands in the vector to log."<<endl;
@@ -213,7 +223,7 @@ string CommandProcessor::validate(string command)
     cout << "VALIDATING COMMAND... " << endl;
 
     //CONSOLE COMMAND VALIDATION
-    if(*type == 'c') {
+    if(type == 'c') {
         cout << "Scanning console commands... ";
         for(int i= 0; i < sizeof(acceptedConsoleCommands); i++) {
         //Check if console level command or game level command
@@ -221,8 +231,8 @@ string CommandProcessor::validate(string command)
 
                 cout << "Correct Console command: " << command << "." << endl;
 
-                if(acceptedConsoleCommands[i][1] == *state) {
-                    cout << "Correct state " << *state << ". Validated." << endl;
+                if(acceptedConsoleCommands[i][1] == state) {
+                    cout << "Correct state " << state << ". Validated." << endl;
                     return acceptedConsoleCommands[i][2];
                 }
             }
@@ -238,8 +248,8 @@ string CommandProcessor::validate(string command)
 
                 cout << "Correct Player command: " << command << "." << endl;
 
-                if(acceptedPlayerCommands[i][1] == *state) {
-                    cout << "Correct state " << *state << ". Validated." << endl;
+                if(acceptedPlayerCommands[i][1] == state) {
+                    cout << "Correct state " << state << ". Validated." << endl;
                     return acceptedPlayerCommands[i][0];
                 }
             }
@@ -253,29 +263,31 @@ string CommandProcessor::validate(string command)
 
 void CommandProcessor::saveCommand(string command, string effect)
 {
+    
+    if(newCommand) cout << "true" << endl;
+
     if(effect != "ERROR: Invalid Command") {
         cout << "SAVING COMMAND... " << endl;
-        *newCommand = true;
+        newCommand = true;
     }
 
     else {
         cout << "SAVING ERROR... " << endl;
     }
 
-    Command* c = new Command(command, effect);
-    commands.push_back(c);
-    
+
+    commands.push_back(Command(command, effect));
+
+    cout << "Saved Console command: " << commands.back() << endl;
     //Notifies observers
     notify(this);
-
-    cout << "Saved Console command: " << *commands.back() << endl;
-
 }
 
 //FILE COMMAND ADAPTER
 
 FileCommandProcessorAdapter::FileCommandProcessorAdapter(const string& filename)
 {
+    newCommand = false;
     fileEmptyFlag = false;
 
     ifstream file(filename);
@@ -297,7 +309,39 @@ FileCommandProcessorAdapter::FileCommandProcessorAdapter(const string& filename)
     cout << "Commands successfully saved." << endl;
 }
 
-istream& operator>>(istream& in, FileCommandProcessorAdapter& object)
+FileCommandProcessorAdapter::~FileCommandProcessorAdapter()
+{
+}
+
+FileCommandProcessorAdapter::FileCommandProcessorAdapter(const FileCommandProcessorAdapter &c)
+{
+    this->type = c.type;
+    this->commands = c.commands;
+    this->state = c.state;
+    this->newCommand = c.newCommand;
+    this->fileCollection = c.fileCollection;
+    this->fileEmptyFlag = c.fileEmptyFlag;
+}
+
+FileCommandProcessorAdapter &FileCommandProcessorAdapter::operator=(const FileCommandProcessorAdapter &c)
+{
+    this->type = c.type;
+    this->commands = c.commands;
+    this->state = c.state;
+    this->newCommand = c.newCommand;
+    this->fileCollection = c.fileCollection;
+    this->fileEmptyFlag = c.fileEmptyFlag;
+
+    return *this;
+}
+
+ostream &operator<<(ostream &out, const FileCommandProcessorAdapter &object)
+{
+    out << "File Command Processor Adapter is of type " << object.type << "." << endl;
+    return out;
+}
+
+istream &operator>>(istream &in, FileCommandProcessorAdapter &object)
 {
     if(!object.fileEmptyFlag) cout << "Utilizing command from file..." << endl;
     string s = "";
@@ -319,3 +363,4 @@ istream& operator>>(istream& in, FileCommandProcessorAdapter& object)
 
     return in;
 }
+

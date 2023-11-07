@@ -140,7 +140,7 @@ void Player::issueOrder(string type){
 
 void Player::testState(string s)
 {
-    processor->setState(&s);
+    processor->setState(s);
 }
 
 void Player::play()
