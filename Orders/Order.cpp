@@ -17,6 +17,11 @@ bool Order::hasExecuted() const {
     return isExecuted; 
 }
 
+string Order::stringToLog()
+{
+    return "Effect: "+something+" was just executed.";//TODO**********************
+}
+
 OrdersList::OrdersList() {}
 
 // Copy constructor
@@ -39,6 +44,8 @@ OrdersList::~OrdersList() {
 // Methods
 void OrdersList::addOrder(Order* order) {
     orders.push_back(order);
+    //Notifies observers
+    notify(this);
 }
 
 void OrdersList::removeOrder(Order* order) {
@@ -66,6 +73,20 @@ OrdersList &OrdersList::operator=(const OrdersList &other)
 
 const std::vector<Order*>& OrdersList::getOrders() const {
     return orders;
+}
+
+string OrdersList::stringToLog()
+{
+    if(!orders.empty()) {
+        Order* lastOrder= orders.back();
+        string logString;
+        
+        logString= lastOrder->getDescription() + " was just added.";
+        return logString;
+    } else {
+        cout<< "No orders in the vector to log."<<endl;
+        return;
+    }
 }
 
 std::ostream& operator<<(std::ostream& os, const OrdersList& ordersList) {
@@ -153,6 +174,8 @@ void AdvanceOrder::execute() {
         // isExecuted = true;
 
         cout << "Advance" << endl;
+        //Notifies observers
+        notify(this);
     }
 }
 
@@ -190,6 +213,8 @@ void AirliftOrder::execute() {
         // isExecuted = true;
 
         cout << "Airlift" << endl;
+        //Notifies observers
+        notify(this);
     }
 }
 
@@ -225,6 +250,8 @@ void BlockadeOrder::execute() {
         // isExecuted = true;
 
         cout << "Blockading" << endl;
+        //Notifies observers
+        notify(this);
     }
 }
 
@@ -263,6 +290,8 @@ void DeployOrder::execute() {
         // targetTerritory->setArmies(targetTerritory->getArmies() + numberOfArmies);
         // isExecuted = true;
         cout << "Deploy" << endl; 
+        //Notifies observers
+        notify(this);
     }
 }
 
@@ -295,6 +324,8 @@ void BombOrder::execute()  {
         // targetTerritory->setArmies(targetTerritory->getArmies() / 2);  // Reduce armies by half as an example effect of bombing.
         // isExecuted = true;
         cout << "Bomb" << endl;
+        //Notifies observers
+        notify(this);
     }
 }
 

@@ -1,10 +1,13 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "../CommandProcessing/CommandProcessing.h"
+#include "../Player/Player.h"
+#include "../LoggingObserver/LoggingObserver.h"
 
 using namespace std;
 
-class GameEngine
+class GameEngine : public ILoggable, public Subject
 {
 public:
     //different states the game can be in
@@ -15,6 +18,7 @@ public:
         MAP_VALIDATED,
         PLAYERS_ADDED,
         ASSIGN_REINFORCEMENT,
+        GAME_START,
         ISSUE_ORDERS,
         EXECUTE_ORDERS,
         WIN,
@@ -22,22 +26,48 @@ public:
     };
     //default constructor
     GameEngine();
+    
     //copy constructor
     GameEngine(GameEngine& gameEngine);
+
+    //Run
+    void run();
+
     //function to get current state of game
     GameState getGameState();
+    //Transition states
     void transition(GameEngine::GameState);
-    std::string stateToString();
+    
     //function to convert states to string
-    void executeStateChange(string command);
+    std::string stateToString();
+    
+    //Function to convert string to state
+    GameState stringToState(string s);
 
-    GameEngine& operator=(const GameEngine& gameEngine);
+    //Executes command, if command needs to be executed
+    bool executeCommand(Command* command);
 
-ostream& operator<<(std::ostream& os, const GameEngine& gameEngine);
+    //Changes state
+    void executeStateChange(string stateChange);
 
+    GameEngine& operator=(GameEngine& gameEngine);
+
+    friend ostream& operator<<(ostream& os, GameEngine& gameEngine);
+
+    virtual string stringToLog() override;
 private:
+    //Game started
+    bool gameStarted;
+
     //state of the game
     GameState state;
+
+    //Processor
+    CommandProcessor* processor;
+
+    FileCommandProcessorAdapter* fileProcessor;
+
+    vector<Player*> players;
 };
 
 //test for game engine in part 5 of assignment 1

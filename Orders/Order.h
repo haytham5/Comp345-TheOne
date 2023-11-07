@@ -2,10 +2,11 @@
 #include <string>
 #include <vector>
 #include "../Map/Map.h"  // Assuming Territory is in a separate file named Territory.h
+#include "../LoggingObserver/LoggingObserver.h"
 
 void testOrdersList();
 
-class Order {
+class Order : public ILoggable, public Subject{
 protected:
     std::string description;
     bool isExecuted = false;
@@ -22,9 +23,11 @@ public:
 
     std::string getDescription() const;
     bool hasExecuted() const;
+
+    virtual string stringToLog() override;
 };
 
-class OrdersList {
+class OrdersList : public ILoggable, public Subject {
 private:
     std::vector<Order*> orders;
 
@@ -45,6 +48,8 @@ public:
 
     // Overload stream insertion operator
     friend std::ostream& operator<<(std::ostream& os, const OrdersList& ordersList);
+
+    virtual string stringToLog() override;
 };
 
 
