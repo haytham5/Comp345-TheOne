@@ -1,4 +1,6 @@
 #include "Player.h"
+#include <iostream>
+#include <string>
 using namespace std;
 //Default constructor
 Player::Player(){
@@ -6,6 +8,7 @@ Player::Player(){
     this->map=nullptr;
     this->playerHand=nullptr;
     this->orderList=nullptr;
+    this->processor=new CommandProcessor('p');
 }
 
 //Parameterized constructor
@@ -14,6 +17,16 @@ Player::Player(const string& name, Map* gameMap, Hand* hand, OrdersList* orderLi
     this->map=gameMap;
     this->playerHand=hand;
     this->orderList=orderList;
+    this->processor=new CommandProcessor('p');
+}
+
+//Parameterized constructor with processor
+Player::Player(const string& name, Map* gameMap, Hand* hand, OrdersList* orderList, CommandProcessor* processor){
+    this->playerName=name;
+    this->map=gameMap;
+    this->playerHand=hand;
+    this->orderList=orderList;
+    this->processor = processor;
 }
 
 //Copy constructor
@@ -122,6 +135,16 @@ void Player::issueOrder(string type){
     orderList->addOrder(order);
 }
 
+void Player::testState(string s)
+{
+    processor->setState(s);
+}
+
+void Player::play()
+{
+    cout<< getName() << ", Enter your command: ";
+    cin >> *processor;
+}
 
 //Free function
 void testPlayers(){

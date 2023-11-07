@@ -6,6 +6,7 @@
 #include "../Map/Map.h"
 #include "../Orders/Order.h"
 #include "../Card/Card.h"
+#include "../CommandProcessing/CommandProcessing.h"
 
 using namespace std;
 
@@ -17,8 +18,11 @@ class Player{
    //Default constructor
     Player();
 
-   //Parameterized constructor
+    //Parameterized constructor
     Player(const string& name, Map* gameMap, Hand* hand, OrdersList* orderList);
+
+   //Parameterized constructor with processor
+    Player(const string& name, Map* gameMap, Hand* hand, OrdersList* orderList, CommandProcessor* processor);
     
     //Copy constructor
     Player(const Player& other);
@@ -60,12 +64,21 @@ class Player{
     //issueOrder() function declaration
     void issueOrder(string type);
 
+    //Test State
+    void testState(string s);
+
+    //Get Player Command
+    void play();
+
  private:
    vector<Territory*> playerTerritories;
     Hand* playerHand;
     string playerName;
     OrdersList* orderList;
     Map* map;
+
+    //Processor
+    CommandProcessor* processor;
 
 };
 
