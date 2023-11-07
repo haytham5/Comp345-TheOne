@@ -64,6 +64,9 @@ public:
   // issueOrder() function declaration
   void issueOrder(string type);
 
+  // Get Player Order List
+  OrdersList *getOrderList();
+
   // Test State
   void testState(string s);
 

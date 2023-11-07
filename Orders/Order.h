@@ -1,140 +1,146 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "../Map/Map.h"  // Assuming Territory is in a separate file named Territory.h
+#include "../Map/Map.h" // Assuming Territory is in a separate file named Territory.h
 
 void testOrdersList();
 
-class Order {
+class Order
+{
 protected:
     std::string description;
     bool isExecuted = false;
 
 public:
     virtual bool validate() = 0; // Check if the order is valid.
-    virtual void execute() = 0; // Execute the order action.
-    virtual ~Order() {} // Virtual destructor to ensure proper cleanup for derived classes.
-    
-    Order& operator = (const Order& other);
+    virtual void execute() = 0;  // Execute the order action.
+    virtual ~Order() {}          // Virtual destructor to ensure proper cleanup for derived classes.
 
-    //Ostream
-    friend ostream & operator << (ostream &out, const Order &object);
+    Order &operator=(const Order &other);
+
+    // Ostream
+    friend ostream &operator<<(ostream &out, const Order &object);
 
     std::string getDescription() const;
     bool hasExecuted() const;
 };
 
-class OrdersList {
+class OrdersList
+{
 private:
-    std::vector<Order*> orders;
+    std::vector<Order *> orders;
 
 public:
-    OrdersList();  // Constructor
-    OrdersList(const OrdersList& other);  // Copy constructor
-    ~OrdersList();  // Destructor
+    OrdersList();                        // Constructor
+    OrdersList(const OrdersList &other); // Copy constructor
+    ~OrdersList();                       // Destructor
 
     // Methods
-    void addOrder(Order* order);
-    void removeOrder(Order* order);
+    void addOrder(Order *order);
+    void removeOrder(Order *order);
     void moveOrder(int fromIndex, int toIndex);
 
-    OrdersList& operator = (const OrdersList& other);
-    
+    OrdersList &operator=(const OrdersList &other);
+
     // Getters
-    const std::vector<Order*>& getOrders() const;
+    const std::vector<Order *> &getOrders() const;
+    int getOrdersListSize();
 
     // Overload stream insertion operator
-    friend std::ostream& operator<<(std::ostream& os, const OrdersList& ordersList);
+    friend std::ostream &operator<<(std::ostream &os, const OrdersList &ordersList);
 };
 
-
-class DeployOrder : public Order {
+class DeployOrder : public Order
+{
 private:
-    Territory* targetTerritory;
+    Territory *targetTerritory;
     int numberOfArmies;
 
 public:
     // Constructor
     DeployOrder();
-    DeployOrder(Territory* target, int armies);
+    DeployOrder(Territory *target, int armies);
 
-    DeployOrder& operator = (const DeployOrder& other);
+    DeployOrder &operator=(const DeployOrder &other);
 
-    //Ostream
-    friend ostream & operator << (ostream &out, const DeployOrder &object);
+    // Ostream
+    friend ostream &operator<<(ostream &out, const DeployOrder &object);
 
     // Overridden functions from the base Order class
     bool validate() override;
     void execute() override;
 };
 
-class AdvanceOrder : public Order {
+class AdvanceOrder : public Order
+{
 private:
-    Territory* sourceTerritory;
-    Territory* targetTerritory;
+    Territory *sourceTerritory;
+    Territory *targetTerritory;
     int numberOfArmies;
 
 public:
     AdvanceOrder();
-    AdvanceOrder(Territory* source, Territory* target, int armies);
+    AdvanceOrder(Territory *source, Territory *target, int armies);
 
-    AdvanceOrder& operator = (const AdvanceOrder& other);
+    AdvanceOrder &operator=(const AdvanceOrder &other);
 
-    //Ostream
-    friend ostream & operator << (ostream &out, const AdvanceOrder &object);
+    // Ostream
+    friend ostream &operator<<(ostream &out, const AdvanceOrder &object);
 
     bool validate() override;
     void execute() override;
 };
 
-class AirliftOrder : public Order {
+class AirliftOrder : public Order
+{
 private:
-    Territory* sourceTerritory;
-    Territory* targetTerritory;
+    Territory *sourceTerritory;
+    Territory *targetTerritory;
     int numberOfArmies;
 
 public:
     AirliftOrder();
-    AirliftOrder(Territory* source, Territory* target, int armies);
+    AirliftOrder(Territory *source, Territory *target, int armies);
 
-    AirliftOrder& operator = (const AirliftOrder& other);
+    AirliftOrder &operator=(const AirliftOrder &other);
 
-    //Ostream
-    friend ostream & operator << (ostream &out, const AirliftOrder &object);
-
+    // Ostream
+    friend ostream &operator<<(ostream &out, const AirliftOrder &object);
 
     bool validate() override;
     void execute() override;
 };
 
-class BlockadeOrder : public Order {
+class BlockadeOrder : public Order
+{
 private:
-    Territory* targetTerritory;
+    Territory *targetTerritory;
 
 public:
     BlockadeOrder();
-    BlockadeOrder(Territory* target);
+    BlockadeOrder(Territory *target);
 
-    BlockadeOrder& operator = (const BlockadeOrder& other);
-    //Ostream
-    friend ostream & operator << (ostream &out, const BlockadeOrder &object);
+    BlockadeOrder &operator=(const BlockadeOrder &other);
+    // Ostream
+    friend ostream &operator<<(ostream &out, const BlockadeOrder &object);
 
     bool validate() override;
     void execute() override;
 };
 
-class BombOrder : public Order {
+class BombOrder : public Order
+{
 private:
-    Territory* targetTerritory;
+    Territory *targetTerritory;
 
 public:
     BombOrder();
-    BombOrder(Territory* target);
+    BombOrder(Territory *target);
 
-    BombOrder& operator = (const BombOrder& other);
+    BombOrder &operator=(const BombOrder &other);
 
-    //Ostream
-    friend ostream & operator << (ostream &out, const BombOrder &object);
+    // Ostream
+    friend ostream &operator<<(ostream &out, const BombOrder &object);
 
     bool validate() override;
     void execute() override;

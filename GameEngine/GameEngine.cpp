@@ -288,6 +288,7 @@ void GameEngine::reinforcementPhase()
     }
 }
 
+// each player adds orders to their order list
 void GameEngine::issueOrdersPhase()
 {
     for (int i = 0; i < players.size(); i++)
@@ -320,6 +321,47 @@ void GameEngine::issueOrdersPhase()
             }
             cout << "\n"
                  << endl;
+        }
+    }
+}
+
+// Executes the orders for each player
+void GameEngine::executeOrdersPhase()
+{
+    int beforeTerritorySize;
+    int afterTerritorySize;
+
+    // game engine should execute all deploy orders before any other orders
+    for (int i = 0; i < players.size(); i++)
+    {
+        players[i]->setPhase("Execute Orders: Deploy");
+        beforeTerritorySize = players[i]->getPlayerTerritories().size();
+        OrdersList *playerOrderList = players[i]->getOrderList();
+
+        for (int j = 0; j < playerOrderList->getOrdersListSize(); j++)
+        {
+            // TODO requires part 4 to be completed before implementing
+            /*
+            if(playerOrderList->getOrders(j)->getOrder() == "deploy")
+            {
+                playerOrderList->getOrders(j).execute();
+            }
+            */
+        }
+        afterTerritorySize = players[i]->getPlayerTerritories().size();
+        // TODO if player conquered one or more territories, they draw a card
+    }
+
+    // execute all other orders
+    for (int i = 0; i < players.size(); i++)
+    {
+        players[i]->setPhase("Executing Orders");
+        OrdersList *playerOrderList = players[i]->getOrderList();
+
+        for (int j = 0; j < playerOrderList->getOrdersListSize(); j++)
+        {
+            // TODO requires part 4 to be completed before implementing
+            // playerOrderList->getOrders(j).execute();
         }
     }
 }

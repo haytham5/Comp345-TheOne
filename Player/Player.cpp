@@ -90,6 +90,11 @@ void Player::printOrderList()
     }
 }
 
+OrdersList *Player::getOrderList()
+{
+    return orderList;
+}
+
 vector<Territory *> Player::getPlayerTerritories() const
 {
     return playerTerritories;
