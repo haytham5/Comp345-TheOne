@@ -177,10 +177,10 @@ AirliftOrder::AirliftOrder()
     description = "Airlift";
 }
 
-AirliftOrder::AirliftOrder(Territory *source, Territory *target, int armies)
-    : sourceTerritory(source), targetTerritory(target), numberOfArmies(armies)
+AirliftOrder::AirliftOrder(Territory *source, Territory *target, int armies, const std::string& player)
+    : sourceTerritory(source), targetTerritory(target), numberOfArmies(armies), issuingPlayer(player)
 {
-    description = "Airlift " + std::to_string(armies) + " from " + source->getName() + " to " + target->getName();
+    description = "Airlift " + std::to_string(armies) + " from " + source->getName() + " to " + target->getName() + " by " + issuingPlayer;
 }
 
 AirliftOrder &AirliftOrder::operator=(const AirliftOrder &other)
@@ -194,18 +194,31 @@ AirliftOrder &AirliftOrder::operator=(const AirliftOrder &other)
 }
 
 bool AirliftOrder::validate() {
-    // Logic to validate the airlift order.
-    //TODO: return sourceTerritory->getArmies() >= numberOfArmies;
-    return true;
+    if (sourceTerritory == nullptr || targetTerritory == nullptr) {
+        return false; // Check for null pointers
+    }
+
+    // Check if both territories belong to the player issuing the order
+    return sourceTerritory->getPlayer() == issuingPlayer && targetTerritory->getPlayer() == issuingPlayer;
 }
 
 void AirliftOrder::execute() {
     if (validate()) {
-        // sourceTerritory->setArmies(sourceTerritory->getArmies() - numberOfArmies);
-        // targetTerritory->setArmies(targetTerritory->getArmies() + numberOfArmies);
-        // isExecuted = true;
+        if (validate()) {
+        int currentSourceArmies = sourceTerritory->getArmies();
+        int currentTargetArmies = targetTerritory->getArmies();
 
-        cout << "Airlift" << endl;
+        // Check if the source territory has enough armies
+        if (numberOfArmies <= currentSourceArmies) {
+            sourceTerritory->setArmies(currentSourceArmies - numberOfArmies);
+            targetTerritory->setArmies(currentTargetArmies + numberOfArmies);
+            isExecuted = true;
+        } else {
+            std::cout << "Not enough armies in the source territory to execute airlift." << std::endl;
+        }
+    } else {
+        std::cout << "Airlift order is invalid and cannot be executed." << std::endl;
+    }
     }
 }
 
@@ -340,7 +353,7 @@ void testOrdersList() {
     AdvanceOrder* advanceOrder = new AdvanceOrder(&territory1, &territory2, 3, &gameMap, "Player1");
     BombOrder* bombOrder = new BombOrder(&territory2);
     BlockadeOrder* blockadeOrder = new BlockadeOrder(&territory1);
-    AirliftOrder* airliftOrder = new AirliftOrder(&territory1, &territory2, 2);
+    AirliftOrder* airliftOrder = new AirliftOrder(&territory1, &territory2, 2, "Player1");
     //NegotiateOrder* negotiateOrder = new NegotiateOrder(&player2);
 
     // Add orders to an OrdersList

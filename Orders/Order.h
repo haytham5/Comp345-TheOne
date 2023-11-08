@@ -96,10 +96,11 @@ private:
     Territory* sourceTerritory;
     Territory* targetTerritory;
     int numberOfArmies;
+     std::string issuingPlayer;  // The player issuing the order
 
 public:
     AirliftOrder();
-    AirliftOrder(Territory* source, Territory* target, int armies);
+    AirliftOrder(Territory* source, Territory* target, int armies, const std::string& player);
 
     AirliftOrder& operator = (const AirliftOrder& other);
 
