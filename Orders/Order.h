@@ -74,10 +74,13 @@ private:
     Territory* sourceTerritory;
     Territory* targetTerritory;
     int numberOfArmies;
+    //Pointer to the map object
+    Map* gameMap;
+    std::string issuingPlayer; //The player issuing the order
 
 public:
     AdvanceOrder();
-    AdvanceOrder(Territory* source, Territory* target, int armies);
+    AdvanceOrder(Territory* source, Territory* target, int armies, Map* gameMap, const std::string& player);
 
     AdvanceOrder& operator = (const AdvanceOrder& other);
 

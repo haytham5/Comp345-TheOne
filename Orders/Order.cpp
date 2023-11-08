@@ -123,10 +123,10 @@ AdvanceOrder::AdvanceOrder()
     description = "Advance";
 }
 
-AdvanceOrder::AdvanceOrder(Territory *source, Territory *target, int armies)
-    : sourceTerritory(source), targetTerritory(target), numberOfArmies(armies)
+AdvanceOrder::AdvanceOrder(Territory *source, Territory *target, int armies, Map* gameMap, const std::string& player)
+    : sourceTerritory(source), targetTerritory(target), numberOfArmies(armies), gameMap(gameMap), issuingPlayer(player)
 {
-    description = "Advance " + std::to_string(armies) + " from " + source->getName() + " to " + target->getName();
+    description = "Advance " + std::to_string(armies) + " from " + source->getName() + " to " + target->getName() + " by player " + issuingPlayer;
 }
 
 AdvanceOrder &AdvanceOrder::operator=(const AdvanceOrder &other)
@@ -140,19 +140,35 @@ AdvanceOrder &AdvanceOrder::operator=(const AdvanceOrder &other)
 }
 
 bool AdvanceOrder::validate() {
-    // Logic to validate the advance order.
-    // For example, the source territory must have enough armies to advance.
-    //TODO: return sourceTerritory->getArmies() >= numberOfArmies;
+    // Check if the source territory belongs to the player issuing the order
+    if (sourceTerritory->getPlayer() != issuingPlayer) {
+        return false;
+    }
+
+    // Check if the target territory is adjacent to the source territory
+    vector<string> neighbors = gameMap->getNeighbors(sourceTerritory->getName());
+    if (find(neighbors.begin(), neighbors.end(), targetTerritory->getName()) == neighbors.end()) {
+        return false; // Target territory is not in the list of neighbors
+    }
+
     return true;
 }
 
 void AdvanceOrder::execute() {
     if (validate()) {
-        // sourceTerritory->setArmies(sourceTerritory->getArmies() - numberOfArmies);
-        // targetTerritory->setArmies(targetTerritory->getArmies() + numberOfArmies);
-        // isExecuted = true;
+        if (targetTerritory->getPlayer() != issuingPlayer) {
+            // Simulate a battle
+            //simulateBattle();
+            cout << "Simulating battle" << endl;
+        } else {
+            // Move armies without a battle
+            sourceTerritory->setArmies(sourceTerritory->getArmies() - numberOfArmies);
+            targetTerritory->setArmies(targetTerritory->getArmies() + numberOfArmies);
+        }
 
-        cout << "Advance" << endl;
+        isExecuted = true;
+    } else {
+        std::cout << "Advance order is invalid and cannot be executed." << std::endl;
     }
 }
 
@@ -315,10 +331,13 @@ void testOrdersList() {
     Territory territory2("Territory2", 1, 1, "ContinentA");
     // Player player1("Player1");
     // Player player2("Player2");
-
+    // Creating a map and adding territories (and possibly setting adjacency)
+    Map gameMap;
+    gameMap.addTerritory("Territory1", 0, 0, "ContinentA");
+    gameMap.addTerritory("Territory2", 1, 1, "ContinentA");
     // Creating orders
     DeployOrder* deployOrder = new DeployOrder(&territory1, 5, "Player1");
-    AdvanceOrder* advanceOrder = new AdvanceOrder(&territory1, &territory2, 3);
+    AdvanceOrder* advanceOrder = new AdvanceOrder(&territory1, &territory2, 3, &gameMap, "Player1");
     BombOrder* bombOrder = new BombOrder(&territory2);
     BlockadeOrder* blockadeOrder = new BlockadeOrder(&territory1);
     AirliftOrder* airliftOrder = new AirliftOrder(&territory1, &territory2, 2);
