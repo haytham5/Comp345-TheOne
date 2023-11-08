@@ -267,7 +267,6 @@ void GameEngine::mainGameLoop()
             }
         }
 
-        // TODO reinforcement phase skipped during first round
         reinforcementPhase();
         issueOrdersPhase();
         executeOrdersPhase();
@@ -328,7 +327,7 @@ void GameEngine::issueOrdersPhase()
             cout << "Player: " << name << " input your order here: ";
             cin >> order;
 
-            if (order == "advance" || order == "deploy" || order == "bomb" || order == "blockade" || order == "airlift" || order == "negotiate")
+            if (order == "Advance" || order == "Deploy" || order == "Bomb" || order == "Blockade" || order == "Airlift" || order == "Negotiate")
             {
                 players[i]->issueOrder(order);
             }

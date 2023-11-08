@@ -138,6 +138,18 @@ void Player::addPlayerTerritories(Territory *territory)
 void Player::issueOrder(string type)
 {
     Order *order;
+    vector<Territory *> toAttackList = toAttack();
+    vector<Territory *> toDefendList = toDefend();
+    // temporary reinforcement pool while
+    int reinforcementPool = 0;
+
+    while (reinforcementPool != 0)
+    {
+        for (int i = 0; i < toDefendList.size(); i++)
+        {
+            // TODO deploy orders on its owns territories from toDefendList
+        }
+    }
 
     if (type == "Deploy")
     {
