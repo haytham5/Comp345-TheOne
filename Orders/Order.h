@@ -52,11 +52,12 @@ class DeployOrder : public Order {
 private:
     Territory* targetTerritory;
     int numberOfArmies;
+    std::string issuingPlayer; //The player issuing the order
 
 public:
     // Constructor
     DeployOrder();
-    DeployOrder(Territory* target, int armies);
+    DeployOrder(Territory* target, int armies, const std::string& player); //adds the player to the constructor
 
     DeployOrder& operator = (const DeployOrder& other);
 

@@ -233,10 +233,11 @@ DeployOrder::DeployOrder()
     description = "Deploy";
 }
 
-DeployOrder::DeployOrder(Territory *target, int armies)
-    : targetTerritory(target), numberOfArmies(armies)
+//added Player to the constructor
+DeployOrder::DeployOrder(Territory *target, int armies, const std::string& player)
+    : targetTerritory(target), numberOfArmies(armies), issuingPlayer(player)
 {
-    description = "Deploy " + std::to_string(armies) + " to " + target->getName();
+    description = "Deploy " + std::to_string(armies) + " to " + target->getName() + "by player " + issuingPlayer;
 }
 
 DeployOrder &DeployOrder::operator=(const DeployOrder &other)
@@ -252,17 +253,25 @@ bool DeployOrder::validate() {
     // Here you would implement the validation logic for a Deploy order.
     // This is just a mock implementation.
     //return targetTerritory != nullptr && numberOfArmies > 0;
-    return true;
+
+    if (targetTerritory == nullptr) {
+        return false;
+    }
+    return targetTerritory->getPlayer() == issuingPlayer;
 }
 
 void DeployOrder::execute() {
-    // Here you would implement the action for the Deploy order.
-    // For example, increasing the number of armies in the target territory.
-    // This is a mock implementation for demonstration purposes.
     if (validate()) {
-        // targetTerritory->setArmies(targetTerritory->getArmies() + numberOfArmies);
-        // isExecuted = true;
-        cout << "Deploy" << endl; 
+        // Add the specified number of armies to the target territory
+        int currentArmies = targetTerritory->getArmies();
+        targetTerritory->setArmies(currentArmies + numberOfArmies);
+
+        // Set the order as executed
+        isExecuted = true;
+
+        std::cout << "Deployed " << numberOfArmies << " armies to " << targetTerritory->getName() << std::endl;
+    } else {
+        std::cout << "Deploy order is invalid and cannot be executed." << std::endl;
     }
 }
 
@@ -308,7 +317,7 @@ void testOrdersList() {
     // Player player2("Player2");
 
     // Creating orders
-    DeployOrder* deployOrder = new DeployOrder(&territory1, 5);
+    DeployOrder* deployOrder = new DeployOrder(&territory1, 5, "Player1");
     AdvanceOrder* advanceOrder = new AdvanceOrder(&territory1, &territory2, 3);
     BombOrder* bombOrder = new BombOrder(&territory2);
     BlockadeOrder* blockadeOrder = new BlockadeOrder(&territory1);
