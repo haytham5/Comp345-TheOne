@@ -17,6 +17,6 @@
 - Command processor and command adapter **(Haytham)**  
 - Game startup phase **(Simon)**
 - Game play: main game loop **(Luca)**
-- Order execution implementation 
+- Order execution implementation **(Mouhamed)**
 - Game log observer: commands and orders **(Ricky)** 
 
