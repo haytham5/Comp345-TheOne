@@ -264,7 +264,7 @@ DeployOrder::DeployOrder()
 
 //added Player to the constructor
 DeployOrder::DeployOrder(Territory *target, int armies, const std::string& player)
-    : targetTerritory(target), numberOfArmies(armies), issuingPlayer(player)
+   
 {
     description = "Deploy " + std::to_string(armies) + " to " + target->getName() + "by player " + issuingPlayer;
 }
@@ -279,10 +279,6 @@ DeployOrder &DeployOrder::operator=(const DeployOrder &other)
 }
 
 bool DeployOrder::validate() {
-    // Here you would implement the validation logic for a Deploy order.
-    // This is just a mock implementation.
-    //return targetTerritory != nullptr && numberOfArmies > 0;
-
     if (targetTerritory == nullptr) {
         return false;
     }
@@ -309,30 +305,54 @@ BombOrder::BombOrder()
     description = "bomb";
 }
 
-BombOrder::BombOrder(Territory *target)
-{
-    description = "Bomb " + target->getName();
+BombOrder::BombOrder(Territory *target, const std::string& player, Map* gameMap)
+ : targetTerritory(target), issuingPlayer(player), gameMap(gameMap) {
+    description = "Bomb " + target->getName() + " by " + issuingPlayer;
 }
 
 BombOrder &BombOrder::operator=(const BombOrder &other)
 {
-    description = other.description;
-    isExecuted = other.isExecuted;
-    targetTerritory = other.targetTerritory;
+    if (this != &other) {
+        description = other.description;
+        isExecuted = other.isExecuted;
+        targetTerritory = other.targetTerritory;
+        issuingPlayer = other.issuingPlayer;
+        gameMap = other.gameMap;
+    }
     return *this;
 }
 
 bool BombOrder::validate()  {
-// Simple validation: Target territory must have armies.
-    //TODO: return targetTerritory->getArmies() > 0;
-    return true;
+  if (targetTerritory == nullptr) {
+        return false; // Check for null pointer
+    }
+
+    // Check if the target territory belongs to another player
+    if (targetTerritory->getPlayer() == issuingPlayer) {
+        return false;
+    }
+
+     // Check if the target territory is adjacent to any territory owned by the issuing player
+    for (Territory* ownedTerritory : gameMap->getTerritories()) {
+        if (ownedTerritory != nullptr && ownedTerritory->getPlayer() == issuingPlayer) {
+            vector<string> neighbors = gameMap->getNeighbors(ownedTerritory->getName());
+            if (find(neighbors.begin(), neighbors.end(), targetTerritory->getName()) != neighbors.end()) {
+                return true; // Found an adjacent territory owned by the player
+            }
+        }
+    }
+
+    return false;
 }
 
 void BombOrder::execute()  {
-    if (validate()) {
-        // targetTerritory->setArmies(targetTerritory->getArmies() / 2);  // Reduce armies by half as an example effect of bombing.
-        // isExecuted = true;
-        cout << "Bomb" << endl;
+     if (validate()) {
+        int currentArmies = targetTerritory->getArmies();
+        targetTerritory->setArmies(currentArmies / 2);  // Halve the armies
+        isExecuted = true;
+        std::cout << "Successfully bombed " << targetTerritory->getName() << ". Armies reduced to " << targetTerritory->getArmies() << std::endl;
+    } else {
+        std::cout << "Bomb order is invalid and cannot be executed." << std::endl;
     }
 }
 
@@ -351,7 +371,7 @@ void testOrdersList() {
     // Creating orders
     DeployOrder* deployOrder = new DeployOrder(&territory1, 5, "Player1");
     AdvanceOrder* advanceOrder = new AdvanceOrder(&territory1, &territory2, 3, &gameMap, "Player1");
-    BombOrder* bombOrder = new BombOrder(&territory2);
+    BombOrder* bombOrder = new BombOrder(&territory2, "Player1", &gameMap);
     BlockadeOrder* blockadeOrder = new BlockadeOrder(&territory1);
     AirliftOrder* airliftOrder = new AirliftOrder(&territory1, &territory2, 2, "Player1");
     //NegotiateOrder* negotiateOrder = new NegotiateOrder(&player2);

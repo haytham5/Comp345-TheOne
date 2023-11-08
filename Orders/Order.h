@@ -131,10 +131,12 @@ public:
 class BombOrder : public Order {
 private:
     Territory* targetTerritory;
+    std::string issuingPlayer;  // The player issuing the order
+    Map* gameMap;  // Map object to check adjacency
 
 public:
     BombOrder();
-    BombOrder(Territory* target);
+    BombOrder(Territory* target, const std::string& player, Map* gameMap);
 
     BombOrder& operator = (const BombOrder& other);
 
