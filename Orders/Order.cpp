@@ -227,10 +227,10 @@ BlockadeOrder::BlockadeOrder()
     description = "Blockade";
 }
 
-BlockadeOrder::BlockadeOrder(Territory *target)
-    : targetTerritory(target)
+BlockadeOrder::BlockadeOrder(Territory *target, const std::string& player)
+    : targetTerritory(target), issuingPlayer(player)
 {
-    description = "Blockade " + target->getName();
+    description = "Blockade " + target->getName() + " by " + issuingPlayer;
 }
 
 BlockadeOrder &BlockadeOrder::operator=(const BlockadeOrder &other)
@@ -242,20 +242,33 @@ BlockadeOrder &BlockadeOrder::operator=(const BlockadeOrder &other)
 }
 
 bool BlockadeOrder::validate() {
-    // Logic to validate the blockade order.
-    //TODO: return targetTerritory->getPlayer() == NEUTRAL;
-    return true;
+    // Check for null pointer
+    if (targetTerritory == nullptr) {
+        return false;
+    }
+
+    // The order is valid if the target territory belongs to the issuing player
+    // Assuming that the issuing player's name is stored in a variable `issuingPlayer`
+    return targetTerritory->getPlayer() == issuingPlayer;
 }
+
 
 void BlockadeOrder::execute() {
     if (validate()) {
-        // targetTerritory->setArmies(targetTerritory->getArmies() * 3);
-        // //TODO: Figure out what being neutral means type shit 
-        // isExecuted = true;
+        // Double the number of armies in the target territory
+        targetTerritory->setArmies(targetTerritory->getArmies() * 2);
 
-        cout << "Blockading" << endl;
+        // Transfer ownership to Neutral
+        // Assuming "Neutral" is a special player identifier for neutral territories
+        targetTerritory->setPlayer("Neutral");
+
+        isExecuted = true;
+        cout << "Blockade executed on " << targetTerritory->getName() << ". Armies doubled and ownership transferred to Neutral." << endl;
+    } else {
+        cout << "Blockade order is invalid and cannot be executed." << endl;
     }
 }
+
 
 DeployOrder::DeployOrder()
 {
@@ -372,7 +385,7 @@ void testOrdersList() {
     DeployOrder* deployOrder = new DeployOrder(&territory1, 5, "Player1");
     AdvanceOrder* advanceOrder = new AdvanceOrder(&territory1, &territory2, 3, &gameMap, "Player1");
     BombOrder* bombOrder = new BombOrder(&territory2, "Player1", &gameMap);
-    BlockadeOrder* blockadeOrder = new BlockadeOrder(&territory1);
+    BlockadeOrder* blockadeOrder = new BlockadeOrder(&territory1, "Player1");
     AirliftOrder* airliftOrder = new AirliftOrder(&territory1, &territory2, 2, "Player1");
     //NegotiateOrder* negotiateOrder = new NegotiateOrder(&player2);
 
@@ -423,6 +436,8 @@ void testOrdersList() {
 
     std::cout << "===== Testing Complete =====" << std::endl;
 }
+
+
 
 ostream &operator<<(ostream &out, const Order &object)
 {

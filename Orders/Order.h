@@ -115,10 +115,11 @@ public:
 class BlockadeOrder : public Order {
 private:
     Territory* targetTerritory;
+    std::string issuingPlayer;  
 
 public:
     BlockadeOrder();
-    BlockadeOrder(Territory* target);
+    BlockadeOrder(Territory* target, const std::string& player);
 
     BlockadeOrder& operator = (const BlockadeOrder& other);
     //Ostream
