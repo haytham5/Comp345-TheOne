@@ -6,5 +6,6 @@ using namespace std;
 
 int main() {
     testOrdersList();
+    testOrderExecution();
     return 0;
 }

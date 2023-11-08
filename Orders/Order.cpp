@@ -437,6 +437,73 @@ void testOrdersList() {
     std::cout << "===== Testing Complete =====" << std::endl;
 }
 
+void testOrderExecution() {
+    std::cout << "===== Testing Order Execution =====" << std::endl;
+
+    // Set up necessary game components
+    Map gameMap; // Assuming this is your game map
+    // Initialize territories and players (example names used)
+    Territory territory1("Territory1", 0, 0, "ContinentA", "Player1", 10);
+    Territory territory2("Territory2", 1, 1, "ContinentA", "Player2", 8);
+    Territory territory3("Territory3", 2, 2, "ContinentB", "Neutral", 5); // Neutral territory
+
+    // Set up adjacency (assuming 'addEdge' correctly sets up adjacency)
+    gameMap.addEdge("Territory1", "Territory2"); // Example setup
+
+    // Create orders
+    DeployOrder deployOrder(&territory1, 5, "Player1");
+    AdvanceOrder advanceOrder(&territory1, &territory2, 3, &gameMap, "Player1");
+    BlockadeOrder blockadeOrder(&territory1, "Player1");
+    BombOrder bombOrder(&territory2, "Player1", &gameMap);
+    AirliftOrder airliftOrder(&territory1, &territory3, 4, "Player1");
+
+    // Execute DeployOrder
+    std::cout << "Executing Deploy Order..." << std::endl;
+    if (deployOrder.validate()) {
+        deployOrder.execute();
+    }
+
+    // Execute AdvanceOrder
+    std::cout << "Executing Advance Order..." << std::endl;
+    if (advanceOrder.validate()) {
+        advanceOrder.execute();
+        if (territory2.getPlayer() == "Player1") {
+            std::cout << "Territory conquered by Player1. Transfer complete." << std::endl;
+            // Assuming a function to award a card to a player
+            // awardCardToPlayer("Player1");
+        }
+    }
+
+    // Execute BlockadeOrder
+    std::cout << "Executing Blockade Order..." << std::endl;
+    if (blockadeOrder.validate()) {
+        blockadeOrder.execute();
+        if (territory1.getPlayer() == "Neutral") {
+            std::cout << "Territory ownership transferred to Neutral." << std::endl;
+        }
+    }
+
+  // Execute BombOrder
+    std::cout << "Executing Bomb Order..." << std::endl;
+    if (bombOrder.validate()) {
+        bombOrder.execute();
+        std::cout << "Bomb order executed. Armies in " << territory2.getName() << " reduced to " << territory2.getArmies() << std::endl;
+    } else {
+        std::cout << "Bomb order is invalid and cannot be executed." << std::endl;
+    }
+
+    // Execute AirliftOrder
+    std::cout << "Executing Airlift Order..." << std::endl;
+    if (airliftOrder.validate()) {
+        airliftOrder.execute();
+        std::cout << "Airlift order executed. " << territory1.getName() << " armies: " << territory1.getArmies() << ", " << territory3.getName() << " armies: " << territory3.getArmies() << std::endl;
+    } else {
+        std::cout << "Airlift order is invalid and cannot be executed." << std::endl;
+    }
+
+
+    std::cout << "===== Testing Complete =====" << std::endl;
+}
 
 
 ostream &operator<<(ostream &out, const Order &object)

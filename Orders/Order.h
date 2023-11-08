@@ -4,6 +4,7 @@
 #include "../Map/Map.h"  // Assuming Territory is in a separate file named Territory.h
 
 void testOrdersList();
+void testOrderExecution();
 
 class Order {
 protected:
