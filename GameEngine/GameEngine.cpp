@@ -253,10 +253,8 @@ void testGameEngine()
 // round robin fashion cycle through 3 phases -> reinforcement, issue orders and execute orders
 void GameEngine::mainGameLoop()
 {
-    // temporary number of players while waiting for part 2
-    int numPlayers = 5;
 
-    while (numPlayers != 1)
+    while (players.size() != 1)
     {
         cout << "Players in the game:  ";
         // if player territories list size is 0, they are removed from game
