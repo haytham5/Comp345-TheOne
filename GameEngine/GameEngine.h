@@ -82,3 +82,6 @@ private:
 
 // test for game engine in part 5 of assignment 1
 void testGameEngine();
+
+// test for main game loop in part 3 of assignment 2
+void testMainGameLoop();

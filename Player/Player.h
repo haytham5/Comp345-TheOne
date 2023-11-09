@@ -79,6 +79,9 @@ public:
   // Get Player Phase
   string getPhase();
 
+  // Check if player owns all territories in continent
+  bool ownAllTerritoryInContinent();
+
 private:
   vector<Territory *> playerTerritories;
   Hand *playerHand;

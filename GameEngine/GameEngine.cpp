@@ -258,6 +258,7 @@ void GameEngine::mainGameLoop()
 
     while (numPlayers != 1)
     {
+        cout << "Players in the game:  ";
         // if player territories list size is 0, they are removed from game
         for (int i = 0; i < players.size(); i++)
         {
@@ -265,6 +266,7 @@ void GameEngine::mainGameLoop()
             {
                 // TODO remove player
             }
+            cout << players[i]->getName() << ", ";
         }
 
         reinforcementPhase();
@@ -275,17 +277,6 @@ void GameEngine::mainGameLoop()
 
 void GameEngine::reinforcementPhase()
 {
-    // temporary creation of players while waiting for part 2 to be completed
-    int numPlayers = 5;
-    players[numPlayers];
-    for (int i = 0; i < numPlayers; i++)
-    {
-        Player *p = new Player();
-        p->setName("Player: " + i);
-    }
-
-    // temporary bool if player owns all territory of continent
-    bool ownAllTerritoryInContinent = false;
 
     for (int i = 0; i < players.size(); i++)
     {
@@ -298,7 +289,7 @@ void GameEngine::reinforcementPhase()
             // cout << players[i]->getReinforcementPool();
         }
         // else if the player owns all the territories of an entire continent, the player is given a number of army units corresponding to the continent’s control bonus value
-        else if (ownAllTerritoryInContinent)
+        else if (players[i]->ownAllTerritoryInContinent())
         {
             // players[i]->setReinforcementPool(players[i]->getReinforcementPool() + 10);
             // cout << players[i]->getReinforcementPool();
@@ -379,4 +370,9 @@ void GameEngine::executeOrdersPhase()
         cout << "Player: " << players[i]->getName() << " executes order: " << order->getDescription();
         order->execute();
     }
+}
+
+void testMainGameLoop()
+{
+    GameEngine *engine = new GameEngine();
 }

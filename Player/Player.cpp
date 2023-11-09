@@ -148,34 +148,135 @@ void Player::issueOrder(string type)
         for (int i = 0; i < toDefendList.size(); i++)
         {
             // TODO deploy orders on its owns territories from toDefendList
+            int deployAmount;
+            cout << "Player: " << getName() << " has " << reinforcementPool << " army units available to deploy  and has " << toDefendList.size() << " territories \n";
+            cout << "How many units would you like to deploy to territory: " << toDefendList[i]->getName() << "?";
+            cin >> deployAmount;
+            order = new DeployOrder(toDefendList[i], deployAmount);
         }
     }
 
-    if (type == "Deploy")
+    if (type == "Advance")
     {
-        order = new DeployOrder();
-    }
-    else if (type == "Bomb")
-    {
-        order = new BombOrder();
-    }
-    else if (type == "Advance")
-    {
-        order = new AdvanceOrder();
-    }
-    else if (type == "Airlift")
-    {
-        order = new AirliftOrder();
-    }
-    else if (type == "Blockade")
-    {
-        order = new BlockadeOrder();
-    }
-    else
-    {
-        return;
+        string attackOrDefend;
+        cout << "Player: " << getName() << " would you like to move units to defend or attack teritories? Enter Defend or Attack";
+        cin >> attackOrDefend;
+        while (attackOrDefend != "")
+        {
+            if (attackOrDefend == "Defend")
+            {
+                cout << "Player : " << getName() << " your territories are: ";
+                for (int i = 0; i < toDefendList.size(); i++)
+                {
+                    cout << toDefendList[i]->getName() << ": " << toDefendList[i]->getArmies() << " army units\n";
+                }
+                string territory1;
+                int territory1Size;
+                string territory2;
+                int numToMove;
+                cout << "Which territory would you like to move army units from?";
+                cin >> territory1;
+                for (int i = 0; i < toDefendList.size(); i++)
+                {
+                    if (territory1 == toDefendList[i]->getName())
+                    {
+                        territory1Size = toDefendList.size();
+                    }
+                }
+                cout << "Territory: " << territory1 << " currently has " << territory1Size << " army units\n";
+                cout << "How many army units would you like to move?";
+                cin >> numToMove;
+                cout << "To which territory would you like to send them to?";
+                cin >> territory2;
+                for (int i = 0; i < toDefendList.size(); i++)
+                {
+                    if (territory2 == toDefendList[i]->getName())
+                    {
+                        int armies = numToMove + toDefendList[i]->getArmies();
+                        order = new DeployOrder(toDefendList[i], armies);
+                        cout << "Territory: " << territory2 << " now has " << toDefendList[i]->getArmies() << " army units\n";
+                    }
+                }
+                for (int i = 0; i < toDefendList.size(); i++)
+                {
+                    if (territory1 == toDefendList[i]->getName())
+                    {
+                        int armies = toDefendList[i]->getArmies() - numToMove;
+                        toDefendList[i]->setArmies(armies);
+                    }
+                }
+            }
+            else if (attackOrDefend == "Attack")
+            {
+                cout << "Player : " << getName() << " your territories are: ";
+                for (int i = 0; i < toDefendList.size(); i++)
+                {
+                    cout << toDefendList[i]->getName() << ": " << toDefendList[i]->getArmies() << " army units\n";
+                }
+                string territory1;
+                int numToMove;
+                string territory2;
+                cout << "From which territory would you like to move your army units from?";
+                cin >> territory1;
+                Territory *sourceTeritory;
+                for (int i = 0; i < toDefendList.size(); i++)
+                {
+                    if (territory1 == toDefendList[i]->getName())
+                    {
+                        sourceTeritory = toDefendList[i];
+                    }
+                }
+                cout << "How many army units from territory " << territory1 << " would you like to move?";
+                cin >> numToMove;
+                cout << "Which of the following neighboring territories would you like to attack? \n";
+                for (int i = 0; i < toAttackList.size(); i++)
+                {
+                    cout << toAttackList[i]->getName() << "\n";
+                }
+                cin >> territory2;
+                for (int i = 0; i < toAttackList.size(); i++)
+                {
+                    if (territory2 == toAttackList[i]->getName())
+                    {
+                        order = new AdvanceOrder(sourceTeritory, toAttackList[i], numToMove);
+                        cout << numToMove << " army units have been advanced to territory " << territory2 << "\n";
+                    }
+                }
+            }
+            else
+            {
+                cout << "Invalid command. Try again";
+                cin >> attackOrDefend;
+            }
+        }
     }
 
+    /*
+if (type == "Deploy")
+{
+    order = new DeployOrder();
+}
+else if (type == "Bomb")
+{
+    order = new BombOrder();
+}
+else if (type == "Advance")
+{
+    order = new AdvanceOrder();
+}
+else if (type == "Airlift")
+{
+    order = new AirliftOrder();
+}
+else if (type == "Blockade")
+{
+    order = new BlockadeOrder();
+}
+else
+{
+    return;
+}
+*/
     orderList->addOrder(order);
 }
 
@@ -198,6 +299,12 @@ string Player::getPhase()
 void Player::setPhase(string ph)
 {
     phase = ph;
+}
+
+bool Player::ownAllTerritoryInContinent()
+{
+    // TODO check if player owns all territories in continent
+    return false;
 }
 
 // Free function
