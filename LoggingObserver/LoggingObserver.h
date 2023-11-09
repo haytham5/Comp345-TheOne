@@ -15,6 +15,18 @@ public:
     friend ostream& operator<<(ostream& os, const ILoggable& obj);//******************DELETE?????*******************************
 };
 
+//Abstract class/interface that receives updates from subjects
+class Observer{
+public:
+    virtual ~Observer();
+    Observer(const Observer& other);
+    virtual void update(ILoggable* loggable)=0;
+    friend ostream& operator<<(ostream& os, const Observer& obj);
+    Observer& operator=(const Observer& other);
+protected:
+    Observer();
+};
+
 //Notifies observer of changes and maintains a vector of observers
 class Subject{
 public:
@@ -30,23 +42,11 @@ private:
     vector<Observer*> observers;
 };
 
-//Abstract class/interface that receives updates from subjects
-class Observer{
-public:
-    virtual ~Observer();
-    Observer(const Observer& other);
-    virtual void update(ILoggable* loggable)=0;
-    friend ostream& operator<<(ostream& os, const Observer& obj);
-    Observer& operator=(const Observer& other);
-protected:
-    Observer();
-};
-
 //Class responsible for writing logs to the gamelog.txt file
 class LogObserver : public Observer{
 public:
     LogObserver();
-    LogObserver(const string& fileName, Subject* subject);
+    LogObserver(Subject* subject);
     LogObserver(const LogObserver& other);
     ~LogObserver();
     void update(ILoggable* loggable) override;

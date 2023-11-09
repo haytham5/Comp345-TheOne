@@ -17,9 +17,11 @@ bool Order::hasExecuted() const {
     return isExecuted; 
 }
 
+//For game log
 string Order::stringToLog()
 {
-    return "Effect: "+something+" was just executed.";//TODO**********************
+    return "working on this";
+    //return "Effect: "+something+" was just executed.";//TODO**********************
 }
 
 OrdersList::OrdersList() {}
@@ -75,17 +77,18 @@ const std::vector<Order*>& OrdersList::getOrders() const {
     return orders;
 }
 
+//For game log
 string OrdersList::stringToLog()
 {
     if(!orders.empty()) {
         Order* lastOrder= orders.back();
         string logString;
         
-        logString= lastOrder->getDescription() + " was just added.";
+        logString= "Order: "+lastOrder->getDescription() + " was just issued (added to OrdersList).";
         return logString;
     } else {
         cout<< "No orders in the vector to log."<<endl;
-        return;
+        return "No orders in the vector to log.";
     }
 }
 

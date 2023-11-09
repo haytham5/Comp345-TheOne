@@ -35,6 +35,8 @@ class Command : public ILoggable, public Subject {
 
         virtual string stringToLog() override;
 
+        
+
     private:
         string command;
         string effect;
@@ -69,6 +71,8 @@ class CommandProcessor : public ILoggable, public Subject {
         void removeNew();
 
         virtual string stringToLog() override;
+
+        void testSaveCommand(string c, string e);
 
     protected: 
         char type;

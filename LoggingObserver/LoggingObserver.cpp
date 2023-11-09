@@ -1,4 +1,7 @@
 #include "LoggingObserver.h"
+#include "../CommandProcessing/CommandProcessing.h"
+#include "../GameEngine/GameEngine.h"
+#include "../Orders/Order.h"
 #include<iostream>
 using namespace std;
 
@@ -97,14 +100,14 @@ LogObserver::LogObserver(){
     //Nothing needed here
 }
 
-//Paramaterized constructor that opens file with given fileName
-LogObserver::LogObserver(const string &fileName,Subject* subject){
-this->logFileName=fileName;
+//Paramaterized constructor that opens file with given fileName and attaches the subject
+LogObserver::LogObserver(Subject* subject){
+this->logFileName="gamelog.txt";
 this->subject=subject;
  try{   
-    logFile.open(fileName);
+    logFile.open(logFileName);
     if (!logFile.is_open()) {
-            throw runtime_error("Error: Unable to open the file with the provided filename in the paramaterized constructor");
+            throw runtime_error("Error: Unable to open the file in the paramaterized constructor");
         }
 
     //Attach this observer to the subject if the subject is not nullptr
@@ -116,7 +119,7 @@ this->subject=subject;
     }
  }
  catch(const exception& e){
-    cerr<<"Error: Unable to open file with name: "<<fileName<<"in parameterized constructor"<<endl;
+    cerr<<"Error: Unable to open file with name: "<<logFileName<<"in parameterized constructor"<<endl;
     cerr<<e.what()<<endl;
  }
 }
@@ -203,5 +206,37 @@ ostream &operator<<(ostream &os, const LogObserver &logObserver){
 
 //Free function
 void testLoggingObserver(){
+    //TODO***********************************
 
+    cout<< "Testing LogObserver:"<<endl;
+
+    //Instantiating concrete subjects
+    Command* cmd= new Command();
+    CommandProcessor* cmdP= new CommandProcessor();
+    GameEngine* game = new GameEngine();
+    OrdersList* oList= new OrdersList();
+    BlockadeOrder* blockOrder= new BlockadeOrder();
+
+    //Instantiating concrete observer
+    LogObserver* logO = new LogObserver(cmd);
+
+    //Attaching observers to subjects
+    cmdP->attach(logO);
+    game->attach(logO);
+    oList->attach(logO);
+    blockOrder->attach(logO);
+
+    //Testing that gamelog successfully writes the information for CommandProcessing and Command class
+    cmdP->testSaveCommand("blue","red");
+    cmd->saveEffect("testEffect");
+
+    //Testing that gamelog successfully writes the information for GameEngine class
+    game->executeStateChange("MAP_LOADED");
+
+    //Testing that gamelog successfully writes the information for Order and OrdersList class
+    oList->addOrder(blockOrder);
+    blockOrder->execute();
+
+    cout<<"Done testing, check gamelog.txt"<<endl;
+    
 }

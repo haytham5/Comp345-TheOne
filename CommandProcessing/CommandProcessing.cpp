@@ -115,6 +115,7 @@ string Command::getCommand()
     return command;
 }
 
+//For game log
 string Command::stringToLog()
 {
     return "Effect: "+ effect+" was just saved.";
@@ -185,6 +186,7 @@ ostream &operator<<(ostream &out, const CommandProcessor &object)
     return out;
 }
 
+//For game log
 string CommandProcessor::stringToLog()
 {
     if(!commands.empty()) {
@@ -195,8 +197,13 @@ string CommandProcessor::stringToLog()
         return logString;
     } else {
         cout<< "No commands in the vector to log."<<endl;
-        return;
+        return "No commands in the vector to log.";
     }
+}
+
+void CommandProcessor::testSaveCommand(string c, string e)
+{
+    saveCommand(c,e);
 }
 
 istream &operator>>(istream &in, CommandProcessor &cproc)
@@ -360,7 +367,7 @@ istream &operator>>(istream &in, FileCommandProcessorAdapter &object)
         in >> s;
     }
 
-    object.readCommmand(s);
+   object.readCommmand(s); 
 
     return in;
 }

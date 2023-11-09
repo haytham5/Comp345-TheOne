@@ -1,4 +1,5 @@
 #include "LoggingObserver.h"
+#include "../CommandProcessing/CommandProcessing.h"
 
 int main(){
     testLoggingObserver();

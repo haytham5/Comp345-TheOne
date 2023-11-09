@@ -238,16 +238,17 @@ void testGameEngine()
     engine->run();
 }
 
+//For game log
 string GameEngine::stringToLog()
 {
-    return "Game State is now: "+this->getGameState();
+    return "Game State is now: "+stateToString();
 }
 
 
 
-void testGameEngine()
+/*void testGameEngine()
 {
     GameEngine *engine = new GameEngine();
 
     engine->run();
-}
+}*/
