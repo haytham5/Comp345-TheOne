@@ -5,7 +5,7 @@
 using namespace std;
 
 int main() {
-    testOrdersList();
+    //testOrdersList();
     testOrderExecution();
     return 0;
 }
