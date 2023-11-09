@@ -28,6 +28,10 @@ GameEngine::GameState GameEngine::getGameState()
     return state;
 }
 
+void GameEngine::startupPhase(){
+
+}
+
 //function to transition to next state
 void GameEngine::transition(GS state)
 {

@@ -31,10 +31,12 @@ public:
 
     //Run
     void run();
-
+    
     //function to get current state of game
     GameState getGameState();
     //Transition states
+
+    void startupPhase();
     void transition(GameEngine::GameState);
     
     //function to convert states to string
