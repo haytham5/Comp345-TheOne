@@ -20,8 +20,7 @@ bool Order::hasExecuted() const {
 //For game log
 string Order::stringToLog()
 {
-    return "working on this";
-    //return "Effect: "+something+" was just executed.";//TODO**********************
+    return "Order: "+getDescription()+" was just executed.";
 }
 
 OrdersList::OrdersList() {}

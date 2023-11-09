@@ -2,13 +2,9 @@
 #include "../CommandProcessing/CommandProcessing.h"
 #include "../GameEngine/GameEngine.h"
 #include "../Orders/Order.h"
+#include "../Map/Map.h"
 #include<iostream>
 using namespace std;
-
-//Stream insertion operator for ILoggable class
-ostream &operator<<(ostream &os, const ILoggable &obj){
-    // TODO: insert return statement here***************************
-}
 
 //Default constructor
 Subject::Subject(){
@@ -206,16 +202,18 @@ ostream &operator<<(ostream &os, const LogObserver &logObserver){
 
 //Free function
 void testLoggingObserver(){
-    //TODO***********************************
 
     cout<< "Testing LogObserver:"<<endl;
+
+    //Instantiating a Territory (will be used by one of the orders)
+    Territory* terr= new Territory("Canada",0,1,"North America");
 
     //Instantiating concrete subjects
     Command* cmd= new Command();
     CommandProcessor* cmdP= new CommandProcessor();
     GameEngine* game = new GameEngine();
     OrdersList* oList= new OrdersList();
-    BlockadeOrder* blockOrder= new BlockadeOrder();
+    BlockadeOrder* blockOrder= new BlockadeOrder(terr);
 
     //Instantiating concrete observer
     LogObserver* logO = new LogObserver(cmd);

@@ -12,7 +12,6 @@ class ILoggable{
 public:
     //Pure virtual function
     virtual string stringToLog()=0;
-    friend ostream& operator<<(ostream& os, const ILoggable& obj);//******************DELETE?????*******************************
 };
 
 //Abstract class/interface that receives updates from subjects

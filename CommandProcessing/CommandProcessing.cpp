@@ -118,7 +118,7 @@ string Command::getCommand()
 //For game log
 string Command::stringToLog()
 {
-    return "Effect: "+ effect+" was just saved.";
+    return "Commands Effect: "+ effect+" was just saved.";
 }
 
 //CONSOLE COMMAND PROCESSING
