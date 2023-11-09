@@ -1,5 +1,7 @@
 #include "Order.h"
 #include <iostream>
+#include <algorithm>
+#include <vector>
 #define NEUTRAL "Unassigned"
 
 Order &Order::operator=(const Order &other)
@@ -145,13 +147,14 @@ bool AdvanceOrder::validate() {
         return false;
     }
 
+    bool present = false;
+
+
     // Check if the target territory is adjacent to the source territory
     vector<string> neighbors = gameMap->getNeighbors(sourceTerritory->getName());
-    if (find(neighbors.begin(), neighbors.end(), targetTerritory->getName()) == neighbors.end()) {
-        return false; // Target territory is not in the list of neighbors
-    }
+    for(auto elem : neighbors ) if(elem == targetTerritory->getName()) present = true;
 
-    return true;
+    return present;
 }
 
 void AdvanceOrder::execute() {
@@ -349,9 +352,9 @@ bool BombOrder::validate()  {
     for (Territory* ownedTerritory : gameMap->getTerritories()) {
         if (ownedTerritory != nullptr && ownedTerritory->getPlayer() == issuingPlayer) {
             vector<string> neighbors = gameMap->getNeighbors(ownedTerritory->getName());
-            if (find(neighbors.begin(), neighbors.end(), targetTerritory->getName()) != neighbors.end()) {
-                return true; // Found an adjacent territory owned by the player
-            }
+
+
+            for(auto elem : neighbors ) if(elem == targetTerritory->getName()) return true;
         }
     }
 
