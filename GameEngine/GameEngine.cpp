@@ -351,42 +351,32 @@ void GameEngine::issueOrdersPhase()
 // Executes the orders for each player
 void GameEngine::executeOrdersPhase()
 {
-    int beforeTerritorySize;
-    int afterTerritorySize;
 
     // game engine should execute all deploy orders before any other orders
     for (int i = 0; i < players.size(); i++)
     {
         players[i]->setPhase("Execute Orders: Deploy");
-        beforeTerritorySize = players[i]->getPlayerTerritories().size();
         OrdersList *playerOrderList = players[i]->getOrderList();
 
         for (int j = 0; j < playerOrderList->getOrdersListSize(); j++)
         {
             Order *order = playerOrderList->getOrders().at(j);
-            // TODO requires part 4 to be completed before implementing
-            /*
-            if(playerOrderList->getOrders(j)->getOrder() == "deploy")
+            if (order->getDescription() == "Deploy")
             {
-                playerOrderList->getOrders(j).execute();
+                cout << "Player: " << players[i]->getName() << " executes deploy orders";
+                order->execute();
             }
-            */
         }
-        afterTerritorySize = players[i]->getPlayerTerritories().size();
-        // TODO if player conquered one or more territories, they draw a card
     }
 
-    // execute all other orders
+    // game engine proceeds to execute the top order on the list of orders of each player in a round-robin fashion
     for (int i = 0; i < players.size(); i++)
     {
         players[i]->setPhase("Executing Orders");
         OrdersList *playerOrderList = players[i]->getOrderList();
 
-        for (int j = 0; j < playerOrderList->getOrdersListSize(); j++)
-        {
-            Order *order = playerOrderList->getOrders().at(j);
-            // TODO requires part 4 to be completed before implementing
-            // playerOrderList->getOrders(j).execute();
-        }
+        Order *order = playerOrderList->getOrders().at(0);
+        cout << "Player: " << players[i]->getName() << " executes order: " << order->getDescription();
+        order->execute();
     }
 }
