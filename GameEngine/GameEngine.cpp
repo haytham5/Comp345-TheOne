@@ -313,16 +313,35 @@ void GameEngine::issueOrdersPhase()
 
         while (answer != "NO")
         {
+            cout << "Player: " << name << " your cards are: \n";
+            for (int j = 0; j < currentPlayerCards.size(); j++)
+            {
+                cout << "Card " << (j + 1) << ": " << currentPlayerCards[j]->getType();
+            }
             cout << "Player: " << name << " input your order here: ";
             cin >> order;
-
-            if (order == "Advance" || order == "Deploy" || order == "Bomb" || order == "Blockade" || order == "Airlift" || order == "Negotiate")
+            while (order != "")
             {
-                players[i]->issueOrder(order);
-            }
-            else
-            {
-                cout << "Invalid Order!" << endl;
+                if (order == "Advance" || order == "Deploy" || order == "Bomb" || order == "Blockade" || order == "Airlift" || order == "Negotiate")
+                {
+                    for (int j = 0; j < currentPlayerCards.size(); j++)
+                    {
+                        if (order == currentPlayerCards[j]->getType())
+                        {
+                            players[i]->issueOrder(order);
+                        }
+                        else
+                        {
+                            cout << "Invalid Order! Try Again";
+                            cin >> order;
+                        }
+                    }
+                }
+                else
+                {
+                    cout << "Invalid Order! Try Again" << endl;
+                    cin >> order;
+                }
             }
 
             cout << "Would you like to issue another order? YES or NO" << endl;
