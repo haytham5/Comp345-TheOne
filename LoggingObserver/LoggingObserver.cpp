@@ -141,7 +141,7 @@ LogObserver::LogObserver(const LogObserver &other){
 
 //Destructor that closes the file
 LogObserver::~LogObserver(){
-cout<< "Destructor called"<<endl;
+cout<< "LogObserver Destructor called"<<endl;
 try{  
  //Detach this observer from the subject if the subject is not nullptr
  if (subject){
@@ -243,5 +243,5 @@ void testLoggingObserver(){
     deployOrder->execute();
 
     cout<<"Done testing, check gamelog.txt"<<endl;
-    
+
 }
