@@ -205,8 +205,9 @@ void testLoggingObserver(){
 
     cout<< "Testing LogObserver:"<<endl;
 
-    //Instantiating a Territory (will be used by one of the orders)
+    //Instantiating  Territories (will be used by the orders)
     Territory* terr= new Territory("Canada",0,1,"North America");
+    Territory* terr2= new Territory("America",0,2,"North America");
 
     //Instantiating concrete subjects
     Command* cmd= new Command();
@@ -214,6 +215,8 @@ void testLoggingObserver(){
     GameEngine* game = new GameEngine();
     OrdersList* oList= new OrdersList();
     BlockadeOrder* blockOrder= new BlockadeOrder(terr);
+    DeployOrder* deployOrder= new DeployOrder(terr2, 3);
+
 
     //Instantiating concrete observer
     LogObserver* logO = new LogObserver(cmd);
@@ -223,6 +226,7 @@ void testLoggingObserver(){
     game->attach(logO);
     oList->attach(logO);
     blockOrder->attach(logO);
+    deployOrder->attach(logO);
 
     //Testing that gamelog successfully writes the information for CommandProcessing and Command class
     cmdP->testSaveCommand("blue","red");
@@ -230,10 +234,13 @@ void testLoggingObserver(){
 
     //Testing that gamelog successfully writes the information for GameEngine class
     game->executeStateChange("MAP_LOADED");
+    game->executeStateChange("GAME_START");
 
     //Testing that gamelog successfully writes the information for Order and OrdersList class
     oList->addOrder(blockOrder);
     blockOrder->execute();
+    oList->addOrder(deployOrder);
+    deployOrder->execute();
 
     cout<<"Done testing, check gamelog.txt"<<endl;
     
