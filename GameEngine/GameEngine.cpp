@@ -16,6 +16,8 @@ GameEngine::GameEngine()
     this->state = START;
 
     this->gameStarted = false;
+
+    this->mapLoader = new MapLoader();
 }
 //copy constructor
 GameEngine::GameEngine(GameEngine& gameEngine){
@@ -28,8 +30,32 @@ GameEngine::GameState GameEngine::getGameState()
     return state;
 }
 
-void GameEngine::startupPhase(){
+void GameEngine::startupPhase() {
+    std::cout << "Startup Phase\n";
+    while(!this->gameStarted) {
+        cout << "Enter command to trigger state change: ";
+        if(processor != NULL) {
+            cin >> *processor;
+            
+            if(processor->hasNew()) {
+                if(executeCommand(processor->getCommand()))
+                    executeStateChange(processor->getCommand().getEffect());
+                processor->removeNew();
+            }
+        }
 
+        else {
+            cin >> *fileProcessor;
+            
+            if(fileProcessor->hasNew()) {
+                
+                if(executeCommand(fileProcessor->getCommand()))
+                    executeStateChange(fileProcessor->getCommand().getEffect());
+                    
+                fileProcessor->removeNew();
+            }
+        }
+    }
 }
 
 //function to transition to next state
@@ -127,7 +153,33 @@ bool GameEngine::executeCommand(Command command)
 
 
     if(c == "loadmap") {
+        string map_name;
         //Ask for map filename and try to load
+        cout << "Enter map filename: ";
+        cin >> map_name;
+        mapLoader->loadMapFromFile("./Map/resources/" + map_name + ".map");
+        this->currentMap = map_name;
+        cout << map_name << " loaded." << endl;
+    }
+
+    if(c == "validatemap") {
+        mapLoader->isValidMapFile(currentMap);
+        cout << currentMap << " is valid." << endl;
+    }
+
+    if(c == "addplayer") {
+        if(currentPlayerIndex != 5){
+            string playerName;
+            cout << "Enter the player name ";
+            cin >> playerName;
+            
+            players.push_back(new Player(playerName, nullptr, nullptr, nullptr));
+            currentPlayerIndex++;
+            cout << "Player " << playerName << " added." << endl;
+        }
+        else {
+            cout << "Max number of players reached." << endl;
+        }
     }
 
     if(c == "gamestart") {
@@ -196,44 +248,47 @@ void GameEngine::run()
         {
             break;
         }
-        else
+  else
         {
             if(gameStarted)  {
                 //MAIN GAMEPLAYLOOP (PART 3)
                 //Run through Players collection and call each playerprocessor
                 //EXAMPLE: 
                 // cout << "Player 1, enter your command: ";
-            }
 
-            cout << "Enter command to trigger state change: ";
-            
-            if(processor != NULL) {
-                cin >> *processor;
+                cout << "Enter command to trigger state change: ";
                 
-                if(processor->hasNew()) {
-                    if(executeCommand(processor->getCommand()))
-                        executeStateChange(processor->getCommand().getEffect());
-                    processor->removeNew();
-                }
-            }
-
-            else {
-                cin >> *fileProcessor;
-                
-                if(fileProcessor->hasNew()) {
+                if(processor != NULL) {
+                    cin >> *processor;
                     
-                    if(executeCommand(fileProcessor->getCommand()))
-                        executeStateChange(fileProcessor->getCommand().getEffect());
+                    if(processor->hasNew()) {
+                        if(executeCommand(processor->getCommand()))
+                            executeStateChange(processor->getCommand().getEffect());
+                        processor->removeNew();
+                    }
+                }
+
+                else {
+                    cin >> *fileProcessor;
+                    
+                    if(fileProcessor->hasNew()) {
                         
-                    fileProcessor->removeNew();
+                        if(executeCommand(fileProcessor->getCommand()))
+                            executeStateChange(fileProcessor->getCommand().getEffect());
+                            
+                        fileProcessor->removeNew();
+                    }
                 }
             }
-
+            else {
+                startupPhase();
+            }
         }
     }
     cout << "Game Over";
-
 }
+
+
 
 void testGameEngine()
 {

@@ -3,6 +3,7 @@
 #include <vector>
 #include "../CommandProcessing/CommandProcessing.h"
 #include "../Player/Player.h"
+#include "../Map/Map.h"
 
 using namespace std;
 
@@ -31,12 +32,13 @@ public:
 
     //Run
     void run();
-    
+
     //function to get current state of game
     GameState getGameState();
-    //Transition states
 
     void startupPhase();
+
+    //Transition states
     void transition(GameEngine::GameState);
     
     //function to convert states to string
@@ -54,6 +56,7 @@ public:
     GameEngine& operator=(GameEngine& gameEngine);
 
     friend ostream& operator<<(ostream& os, GameEngine& gameEngine);
+
 private:
     //Game started
     bool gameStarted;
@@ -67,6 +70,11 @@ private:
     FileCommandProcessorAdapter* fileProcessor;
 
     vector<Player*> players;
+    int currentPlayerIndex;
+
+    MapLoader* mapLoader;
+
+    string currentMap;
 };
 
 //test for game engine in part 5 of assignment 1

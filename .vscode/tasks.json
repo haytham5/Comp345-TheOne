@@ -13,7 +13,7 @@
                 "${workspaceFolder}\\Orders\\Order.cpp",
                 "${workspaceFolder}\\Player\\Player.cpp",
                 "${workspaceFolder}\\GameEngine\\GameEngine.cpp",
-                "${fileDirname}\\CommandProcessingDriver.cpp",
+                "${workspaceFolder}\\CommandProcessing\\CommandProcessingDriver.cpp",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],
