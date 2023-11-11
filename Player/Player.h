@@ -54,6 +54,11 @@ public:
 
   void printOrderList();
 
+  // Check if player owns all territories in continent
+  bool ownAllTerritoryInContinent();
+
+  OrdersList *Player::getOrderList();
+
   // Getter for playerTerritories
   vector<Territory *> getPlayerTerritories() const;
 
@@ -70,6 +75,9 @@ public:
 
   // issueOrder() function declaration
   void issueOrder(string type);
+
+  // Check if player owns all territories in a continent
+  bool ownAllTerritoryInContinent();
 
 private:
   int reinforcementPool;
@@ -90,9 +98,6 @@ private:
 
   // Get Player Phase
   string getPhase();
-
-  // Check if player owns all territories in continent
-  bool ownAllTerritoryInContinent();
 
 private:
   vector<Territory *> playerTerritories;

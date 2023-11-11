@@ -431,7 +431,6 @@ void GameEngine::reinforcementPhase()
 
     for (int i = 0; i < players.size(); i++)
     {
-        players[i]->setPhase("Reinforcement");
         cout << "Player: " << players[i]->getName() << "'s updated reinforcement pool:";
         // if the number of territories owned / 3 is less than 3, number of reinforcement army units for the player is 3
         if (((players[i]->getPlayerTerritories().size()) / 3) < 3)
@@ -460,7 +459,6 @@ void GameEngine::issueOrdersPhase()
     {
         string order;
         string answer;
-        players[i]->setPhase("Issuing Orders");
         string name = players[i]->getName();
         vector<Card *> currentPlayerCards = players[i]->getPlayerHand()->HandCards;
 
@@ -516,7 +514,6 @@ void GameEngine::executeOrdersPhase()
     // game engine should execute all deploy orders before any other orders
     for (int i = 0; i < players.size(); i++)
     {
-        players[i]->setPhase("Execute Orders: Deploy");
         OrdersList *playerOrderList = players[i]->getOrderList();
 
         for (int j = 0; j < playerOrderList->getOrdersListSize(); j++)
@@ -533,7 +530,6 @@ void GameEngine::executeOrdersPhase()
     // game engine proceeds to execute the top order on the list of orders of each player in a round-robin fashion
     for (int i = 0; i < players.size(); i++)
     {
-        players[i]->setPhase("Executing Orders");
         OrdersList *playerOrderList = players[i]->getOrderList();
 
         Order *order = playerOrderList->getOrders().at(0);

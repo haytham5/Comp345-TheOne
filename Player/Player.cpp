@@ -105,6 +105,11 @@ OrdersList *Player::getOrderList()
     return orderList;
 }
 
+bool Player::ownAllTerritoryInContinent()
+{
+    return false;
+}
+
 vector<Territory *> Player::getPlayerTerritories() const
 {
     return playerTerritories;
