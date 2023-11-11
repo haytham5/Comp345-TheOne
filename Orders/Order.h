@@ -1,7 +1,8 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "../Map/Map.h"  // Assuming Territory is in a separate file named Territory.h
+#include "../Map/Map.h" 
+#include "../Player/Player.h"
 
 void testOrdersList();
 void testOrderExecution();
@@ -148,3 +149,19 @@ public:
     bool validate() override;
     void execute() override;
 };
+
+
+class NegotiateOrder : public Order {
+private:
+    std::string issuingPlayer;
+    std::string targetPlayer;
+
+public:
+    NegotiateOrder(const std::string& player1, const std::string& player2);
+    
+    bool validate() override;
+    void execute() override;
+
+};
+
+

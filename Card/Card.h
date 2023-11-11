@@ -102,6 +102,8 @@ public:
     // Function to get the size of the hand
     int size();
 
+    bool hasCard(const std::string& cardType);
+
     // Ostream
     friend ostream& operator<<(ostream& out, const Hand& object);
 private:

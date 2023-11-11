@@ -70,6 +70,12 @@ class Player{
     //Get Player Command
     void play();
 
+    bool hasCard(const std::string& cardType);
+    void setInNegotiationWith(Player* otherPlayer);
+    bool isInNegotiationWith(Player* otherPlayer);
+
+    static Player* getPlayerByName(const std::string& name);
+
  private:
    vector<Territory*> playerTerritories;
     Hand* playerHand;
@@ -77,6 +83,10 @@ class Player{
     OrdersList* orderList;
     Map* map;
 
+    static std::vector<Player*> allPlayers; // Static list of all players
+
+
+    std::unordered_set<Player*> negotiationPartners;
     //Processor
     CommandProcessor* processor;
 
