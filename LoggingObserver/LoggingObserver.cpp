@@ -39,6 +39,7 @@ void Subject::detach(Observer *observer){
 
 //Allows subjects to notify observers of the necessary events
 void Subject::notify(ILoggable *loggable){
+    cout<< "Notifying.."<<endl;
     for(auto elem : observers){
         elem->update(loggable);
     }
@@ -160,6 +161,7 @@ try{
 
 //Overriding and implementing the pure virtual update method. It writes to the log file.
 void LogObserver::update(ILoggable *loggable){
+    cout<<"Updating..."<<endl;
     if(logFile.is_open()){
         logFile<< loggable->stringToLog()<<endl;
     }
