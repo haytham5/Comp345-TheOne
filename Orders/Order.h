@@ -157,6 +157,7 @@ private:
     std::string targetPlayer;
 
 public:
+    NegotiateOrder();
     NegotiateOrder(const std::string& player1, const std::string& player2);
     
     bool validate() override;
