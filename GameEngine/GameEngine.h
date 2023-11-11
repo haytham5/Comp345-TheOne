@@ -49,6 +49,12 @@ public:
     // Changes state
     void executeStateChange(string stateChange);
 
+    // Method that returns a vector of current players
+    vector<Player *> getPlayers();
+
+    // Method that sets the current players
+    void setPlayers(vector<Player *> p);
+
     // Main game loop to cycle through the Reinforcement, Issue Orders and Order Execution Phases
     void mainGameLoop();
 

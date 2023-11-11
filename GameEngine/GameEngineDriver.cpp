@@ -7,7 +7,6 @@ using namespace std;
 
 int main()
 {
-    testGameEngine();
-
+    testMainGameLoop();
     return 0;
 }

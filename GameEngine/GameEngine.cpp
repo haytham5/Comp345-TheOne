@@ -108,6 +108,16 @@ GameEngine::GameState GameEngine::stringToState(string s)
     return END;
 }
 
+vector<Player *> GameEngine::getPlayers()
+{
+    return players;
+}
+
+void GameEngine::setPlayers(vector<Player *> p)
+{
+    players = p;
+}
+
 bool GameEngine::executeCommand(Command command)
 {
     string c = command.getCommand();
@@ -392,4 +402,39 @@ void GameEngine::executeOrdersPhase()
 void testMainGameLoop()
 {
     GameEngine *engine = new GameEngine();
+
+    string name1 = "Player 1";
+    string name2 = "Player 2";
+    Map *map = new Map();
+    Deck *deck = new Deck();
+    Hand *hand = new Hand(deck);
+    Hand *hand2 = new Hand(deck);
+    OrdersList *player1OrderList = new OrdersList();
+    OrdersList *player2OrderList = new OrdersList();
+
+    Player player1(name1, map, hand, player1OrderList);
+    Player player2(name2, map, hand2, player2OrderList);
+
+    vector<Player *> p;
+    p.push_back(&player1);
+    p.push_back(&player2);
+    engine->setPlayers(p);
+
+    // Adding territories to map
+    map->addTerritory("TerritoryA", 0, 0, "Continent1");
+    map->addTerritory("TerritoryB", 1, 0, "Continent1");
+    map->addTerritory("TerritoryC", 2, 0, "Continent2");
+    map->addTerritory("TerritoryD", 3, 0, "Continent2");
+
+    // Adding edges
+    map->addEdge("TerritoryC", "TerritoryB");
+
+    // Assigning territories to players
+    player1.addPlayerTerritories(map->getTerritory("TerritoryA"));
+    player1.addPlayerTerritories(map->getTerritory("TerritoryB"));
+    player2.addPlayerTerritories(map->getTerritory("TerritoryC"));
+    player2.addPlayerTerritories(map->getTerritory("TerritoryD"));
+
+    cout << engine->getPlayers().at(0)->getName();
+    cout << engine->getPlayers().at(0)->getName();
 }
