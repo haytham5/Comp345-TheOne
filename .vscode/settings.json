@@ -113,6 +113,26 @@
     "xmemory": "cpp",
     "xstring": "cpp",
     "xtree": "cpp",
-    "xutility": "cpp"
+    "xutility": "cpp",
+    "filesystem": "cpp",
+    "forward_list": "cpp",
+    "charconv": "cpp",
+    "chrono": "cpp",
+    "cstring": "cpp",
+    "ctime": "cpp",
+    "format": "cpp",
+    "iomanip": "cpp",
+    "ios": "cpp",
+    "locale": "cpp",
+    "ratio": "cpp",
+    "xfacet": "cpp",
+    "xiosbase": "cpp",
+    "xlocbuf": "cpp",
+    "xlocmes": "cpp",
+    "xlocmon": "cpp",
+    "xlocnum": "cpp",
+    "xloctime": "cpp",
+    "xstddef": "cpp",
+    "xtr1common": "cpp"
   }
 }
