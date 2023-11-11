@@ -415,7 +415,7 @@ void GameEngine::mainGameLoop()
         {
             if (players[i]->getPlayerTerritories().empty())
             {
-                // TODO remove player
+                delete players[i];
             }
             cout << players[i]->getName() << ", ";
         }
