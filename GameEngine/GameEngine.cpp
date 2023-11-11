@@ -435,19 +435,19 @@ void GameEngine::reinforcementPhase()
         // if the number of territories owned / 3 is less than 3, number of reinforcement army units for the player is 3
         if (((players[i]->getPlayerTerritories().size()) / 3) < 3)
         {
-            // players[i]->setReinforcementPool(players[i]->getReinforcementPool() + 3);
-            // cout << players[i]->getReinforcementPool();
+            players[i]->setReinforcementPool(players[i]->getReinforcementPool() + 3);
+            cout << "Player: " << players[i]->getName() << " has a reinforcement pool of" << players[i]->getReinforcementPool();
         }
         // else if the player owns all the territories of an entire continent, the player is given a number of army units corresponding to the continent’s control bonus value
         else if (players[i]->ownAllTerritoryInContinent())
         {
-            // players[i]->setReinforcementPool(players[i]->getReinforcementPool() + 10);
-            // cout << players[i]->getReinforcementPool();
+            players[i]->setReinforcementPool(players[i]->getReinforcementPool() + 10);
+            cout << "Player: " << players[i]->getName() << " has a reinforcement pool of" << players[i]->getReinforcementPool();
         }
         else
         {
-            // players[i]->setReinforcementPool(players[i]->getReinforcementPool() + ((players[i]->getPlayerTerritories().size()) / 3));
-            // cout << players[i]->getReinforcementPool();
+            players[i]->setReinforcementPool(players[i]->getReinforcementPool() + ((players[i]->getPlayerTerritories().size()) / 3));
+            cout << "Player: " << players[i]->getName() << " has a reinforcement pool of" << players[i]->getReinforcementPool();
         }
     }
 }
@@ -544,19 +544,24 @@ void testMainGameLoop()
 
     string name1 = "Player 1";
     string name2 = "Player 2";
+    string name3 = "Player 3";
     Map *map = new Map();
     Deck *deck = new Deck();
     Hand *hand = new Hand(deck);
     Hand *hand2 = new Hand(deck);
+    Hand *hand3 = new Hand(deck);
     OrdersList *player1OrderList = new OrdersList();
     OrdersList *player2OrderList = new OrdersList();
+    OrdersList *player3OrderList = new OrdersList();
 
     Player player1(name1, map, hand, player1OrderList);
     Player player2(name2, map, hand2, player2OrderList);
+    Player player3(name3, map, hand3, player3OrderList);
 
     vector<Player *> p;
     p.push_back(&player1);
     p.push_back(&player2);
+    p.push_back(&player3);
     engine->setPlayers(p);
 
     // Adding territories to map
@@ -574,6 +579,5 @@ void testMainGameLoop()
     player2.addPlayerTerritories(map->getTerritory("TerritoryC"));
     player2.addPlayerTerritories(map->getTerritory("TerritoryD"));
 
-    cout << engine->getPlayers().at(0)->getName();
-    cout << engine->getPlayers().at(0)->getName();
+    engine->mainGameLoop();
 }
