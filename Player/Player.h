@@ -48,7 +48,14 @@ public:
   // Setter for playerHand
   void setPlayerHand(Hand *hand);
 
+  int getReinforcementPool() const;
+
+  void setReinforcementPool(int reinforcementPool);
+
   void printOrderList();
+
+  // Getter for playerTerritories
+  vector<Territory *> getPlayerTerritories() const;
 
   // Getter for playerTerritories
   vector<Territory *> getPlayerTerritories() const;
@@ -64,8 +71,13 @@ public:
   // issueOrder() function declaration
   void issueOrder(string type);
 
-  // Get Player Order List
-  OrdersList *getOrderList();
+private:
+  int reinforcementPool;
+  vector<Territory *> playerTerritories;
+  Hand *playerHand;
+  string playerName;
+  OrdersList *orderList;
+  Map *map;
 
   // Test State
   void testState(string s);
