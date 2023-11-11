@@ -75,6 +75,8 @@ private:
     MapLoader* mapLoader;
 
     string currentMap;
+
+    Map map;
 };
 
 //test for game engine in part 5 of assignment 1

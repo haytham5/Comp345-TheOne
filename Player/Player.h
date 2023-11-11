@@ -48,6 +48,10 @@ class Player{
     //Setter for playerHand
     void setPlayerHand(Hand* hand);
 
+    int getReinforcementPool() const;
+
+    void setReinforcementPool(int reinforcementPool);
+
     void printOrderList();
     
     //Getter for playerTerritories
@@ -71,7 +75,8 @@ class Player{
     void play();
 
  private:
-   vector<Territory*> playerTerritories;
+    int reinforcementPool;
+    vector<Territory*> playerTerritories;
     Hand* playerHand;
     string playerName;
     OrdersList* orderList;
