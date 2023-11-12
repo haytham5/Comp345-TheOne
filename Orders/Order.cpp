@@ -5,7 +5,7 @@
 #define NEUTRAL "Unassigned"
 
 Order &Order::operator=(const Order &other)
- {
+{
     description = other.description;
     isExecuted = other.isExecuted;
     return *this;
@@ -15,8 +15,9 @@ std::string Order::getDescription() const
     return description;
 }
 
-bool Order::hasExecuted() const { 
-    return isExecuted; 
+bool Order::hasExecuted() const
+{
+    return isExecuted;
 }
 
 //For game log
@@ -28,41 +29,56 @@ string Order::stringToLog()
 OrdersList::OrdersList() {}
 
 // Copy constructor
-OrdersList::OrdersList(const OrdersList& other) {
-    for (Order* order : other.orders) {
+OrdersList::OrdersList(const OrdersList &other)
+{
+    for (Order *order : other.orders)
+    {
         // Deep copy: create a new order and copy its content.
-        this->orders.push_back(new DeployOrder(*dynamic_cast<DeployOrder*>(order)));
+        this->orders.push_back(new DeployOrder(*dynamic_cast<DeployOrder *>(order)));
     }
 }
 
 // Destructor
-OrdersList::~OrdersList() {
-    cout << "Deleting Orderlist..."<<endl;
-    for (Order* order : orders) {
+OrdersList::~OrdersList()
+{
+    cout << "Deleting Orderlist..." << endl;
+    for (Order *order : orders)
+    {
         delete order;
     }
     orders.clear();
 }
 
 // Methods
-void OrdersList::addOrder(Order* order) {
+void OrdersList::addOrder(Order *order)
+{
     orders.push_back(order);
     //Notifies observers
     notify(this);
 }
 
-void OrdersList::removeOrder(Order* order) {
-    for (auto it = orders.begin(); it != orders.end(); ++it) {
-        if (*it == order) {
-            delete *it;  // Free the memory of the order object
-            orders.erase(it);  // Remove the pointer from the list
+int OrdersList::getOrdersListSize()
+{
+    return orders.size();
+}
+
+void OrdersList::removeOrder(Order *order)
+{
+    for (auto it = orders.begin(); it != orders.end(); ++it)
+    {
+        if (*it == order)
+        {
+            delete *it;       // Free the memory of the order object
+            orders.erase(it); // Remove the pointer from the list
             return;
         }
     }
 }
 
-void OrdersList::moveOrder(int fromIndex, int toIndex) {
-    if (fromIndex < 0 || fromIndex >= orders.size() || toIndex < 0 || toIndex >= orders.size()) {
+void OrdersList::moveOrder(int fromIndex, int toIndex)
+{
+    if (fromIndex < 0 || fromIndex >= orders.size() || toIndex < 0 || toIndex >= orders.size())
+    {
         throw std::out_of_range("Index out of range.");
     }
     std::iter_swap(orders.begin() + fromIndex, orders.begin() + toIndex);
@@ -74,7 +90,8 @@ OrdersList &OrdersList::operator=(const OrdersList &other)
     return *this;
 }
 
-const std::vector<Order*>& OrdersList::getOrders() const {
+const std::vector<Order *> &OrdersList::getOrders() const
+{
     return orders;
 }
 
@@ -102,45 +119,30 @@ std::ostream& operator<<(std::ostream& os, const OrdersList& ordersList) {
 
 ostream &operator<<(ostream &out, const DeployOrder &object)
 {
-    out << object.description << "; Executed: " << 
-    object.isExecuted << "; Target Territory: " << 
-    object.targetTerritory << "; Number of Armies: " <<
-    object.numberOfArmies << endl;
+    out << object.description << "; Executed: " << object.isExecuted << "; Target Territory: " << object.targetTerritory << "; Number of Armies: " << object.numberOfArmies << endl;
     return out;
 }
 
 ostream &operator<<(ostream &out, const AdvanceOrder &object)
 {
-    out << object.description << "; Executed: " << 
-    object.isExecuted << "; Target Territory: " << 
-    object.targetTerritory << "; Source Territory : " << 
-    object.sourceTerritory << "; Number of Armies: " <<
-    object.numberOfArmies << endl;
+    out << object.description << "; Executed: " << object.isExecuted << "; Target Territory: " << object.targetTerritory << "; Source Territory : " << object.sourceTerritory << "; Number of Armies: " << object.numberOfArmies << endl;
     return out;
 }
 
 ostream &operator<<(ostream &out, const AirliftOrder &object)
 {
-    out << object.description << "; Executed: " << 
-    object.isExecuted << "; Target Territory: " << 
-    object.targetTerritory << "; Source Territory : " << 
-    object.sourceTerritory << "; Number of Armies: " <<
-    object.numberOfArmies << endl;
+    out << object.description << "; Executed: " << object.isExecuted << "; Target Territory: " << object.targetTerritory << "; Source Territory : " << object.sourceTerritory << "; Number of Armies: " << object.numberOfArmies << endl;
     return out;
 }
 
 ostream &operator<<(ostream &out, const BlockadeOrder &object)
 {
-    out << object.description << "; Executed: " << 
-    object.isExecuted << "; Target Territory: " << 
-    object.targetTerritory << "; Source Territory : " << endl;
+    out << object.description << "; Executed: " << object.isExecuted << "; Target Territory: " << object.targetTerritory << "; Source Territory : " << endl;
     return out;
 }
 ostream &operator<<(ostream &out, const BombOrder &object)
 {
-    out << object.description << "; Executed: " << 
-    object.isExecuted << "; Target Territory: " << 
-    object.targetTerritory << "; Source Territory : " << endl;
+    out << object.description << "; Executed: " << object.isExecuted << "; Target Territory: " << object.targetTerritory << "; Source Territory : " << endl;
     return out;
 }
 AdvanceOrder::AdvanceOrder()
@@ -191,13 +193,13 @@ void AdvanceOrder::execute() {
             sourceTerritory->setArmies(sourceTerritory->getArmies() - numberOfArmies);
             targetTerritory->setArmies(targetTerritory->getArmies() + numberOfArmies);
         }
-
+        notify(this);
         isExecuted = true;
     } else {
         std::cout << "Advance order is invalid and cannot be executed." << std::endl;
     }
 
-    notify(this);
+    
 }
 
 AirliftOrder::AirliftOrder()
@@ -244,11 +246,12 @@ void AirliftOrder::execute() {
         } else {
             std::cout << "Not enough armies in the source territory to execute airlift." << std::endl;
         }
+        notify(this);
     } else {
         std::cout << "Airlift order is invalid and cannot be executed." << std::endl;
     }
     }
-    notify(this);
+    
 }
 
 BlockadeOrder::BlockadeOrder()
@@ -290,13 +293,14 @@ void BlockadeOrder::execute() {
         // Transfer ownership to Neutral
         // Assuming "Neutral" is a special player identifier for neutral territories
         targetTerritory->setPlayer("Neutral");
+        notify(this);
 
         isExecuted = true;
         cout << "Blockade executed on " << targetTerritory->getName() << ". Armies doubled and ownership transferred to Neutral." << endl;
     } else {
         cout << "Blockade order is invalid and cannot be executed." << endl;
     }
-    notify(this);
+    
 }
 
 
@@ -333,7 +337,7 @@ void DeployOrder::execute() {
         // Add the specified number of armies to the target territory
         int currentArmies = targetTerritory->getArmies();
         targetTerritory->setArmies(currentArmies + numberOfArmies);
-
+        notify(this);
         // Set the order as executed
         isExecuted = true;
 
@@ -395,13 +399,15 @@ void BombOrder::execute()  {
         targetTerritory->setArmies(currentArmies / 2);  // Halve the armies
         isExecuted = true;
         std::cout << "Successfully bombed " << targetTerritory->getName() << ". Armies reduced to " << targetTerritory->getArmies() << std::endl;
+        notify(this);
     } else {
         std::cout << "Bomb order is invalid and cannot be executed." << std::endl;
     }
     notify(this);
 }
 
-void testOrdersList() {
+void testOrdersList()
+{
     std::cout << "===== Testing Orders Lists =====" << std::endl;
 
     // Creating territories and players for testing
@@ -428,7 +434,7 @@ void testOrdersList() {
     orders.addOrder(bombOrder);
     orders.addOrder(blockadeOrder);
     orders.addOrder(airliftOrder);
-    //orders.addOrder(negotiateOrder);
+    // orders.addOrder(negotiateOrder);
 
     // Display orders before execution
     std::cout << "\nOrders List before execution:" << std::endl;
@@ -437,33 +443,36 @@ void testOrdersList() {
     std::cout << "\nExecuting All orders after validation:" << endl;
 
     // Validate and execute orders
-    for (Order* order : orders.getOrders()) {
-        if (order->validate()) {
+    for (Order *order : orders.getOrders())
+    {
+        if (order->validate())
+        {
             order->execute();
             std::cout << order->getDescription() << " executed successfully!" << std::endl;
-        } else {
+        }
+        else
+        {
             std::cout << order->getDescription() << " validation failed!" << std::endl;
         }
     }
 
-
     // Show territory stats after order execution
     // std::cout << "\nTerritory stats after executing orders:" << std::endl;
-    //std::cout << territory1.getName() << " has " << territory1.getArmies() << " armies. Neutral: " << (territory1.isNeutral() ? "Yes" : "No") << std::endl;
+    // std::cout << territory1.getName() << " has " << territory1.getArmies() << " armies. Neutral: " << (territory1.isNeutral() ? "Yes" : "No") << std::endl;
     // std::cout << territory2.getName() << " has " << territory2.getArmies() << " armies." << std::endl;
 
     // Move orders for demonstration
     std::cout << "\nMoving orders..." << std::endl;
     orders.moveOrder(0, 1);
-    
-    cout <<"\nOrders after movement (first Order placed second): " << endl;
+
+    cout << "\nOrders after movement (first Order placed second): " << endl;
     std::cout << orders;
 
     // Remove orders for demonstration
     std::cout << "\nRemoving orders..." << std::endl;
     orders.removeOrder(deployOrder);
 
-    cout <<"\nOrders after removal (removing second order): " << endl;
+    cout << "\nOrders after removal (removing second order): " << endl;
     std::cout << orders;
 
     std::cout << "===== Testing Complete =====" << std::endl;
