@@ -4,6 +4,7 @@
 #include "../CommandProcessing/CommandProcessing.h"
 #include "../Player/Player.h"
 #include "../LoggingObserver/LoggingObserver.h"
+#include "../Map/Map.h"
 
 using namespace std;
 
@@ -35,6 +36,9 @@ public:
 
     //function to get current state of game
     GameState getGameState();
+
+    void startupPhase();
+
     //Transition states
     void transition(GameEngine::GameState);
     
@@ -68,6 +72,13 @@ private:
     FileCommandProcessorAdapter* fileProcessor;
 
     vector<Player*> players;
+    int currentPlayerIndex;
+
+    MapLoader* mapLoader;
+
+    string currentMap;
+
+    Map map;
 };
 
 //test for game engine in part 5 of assignment 1

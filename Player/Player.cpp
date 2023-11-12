@@ -70,6 +70,15 @@ void Player::setPlayerHand(Hand* hand) {
     playerHand = hand;
 }
 
+int Player::getReinforcementPool() const {
+    return reinforcementPool;
+
+}
+
+void Player::setReinforcementPool(int reinforcementPool) {
+    this->reinforcementPool = reinforcementPool;
+}
+
 void Player::printOrderList(){
     for(auto elem: orderList->getOrders()){
         cout<<elem->getDescription()<<endl;
