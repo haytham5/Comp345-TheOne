@@ -266,32 +266,22 @@ void Player::issueOrder(string type)
         }
     }
 
-    /*
-if (type == "Deploy")
-{
-    order = new DeployOrder();
-}
-else if (type == "Bomb")
-{
-    order = new BombOrder();
-}
-else if (type == "Advance")
-{
-    order = new AdvanceOrder();
-}
-else if (type == "Airlift")
-{
-    order = new AirliftOrder();
-}
-else if (type == "Blockade")
-{
-    order = new BlockadeOrder();
-}
-else
-{
-    return;
-}
-*/
+    if (type == "Bomb")
+    {
+        order = new BombOrder();
+    }
+    else if (type == "Airlift")
+    {
+        order = new AirliftOrder();
+    }
+    else if (type == "Blockade")
+    {
+        order = new BlockadeOrder();
+    }
+    else
+    {
+        return;
+    }
     orderList->addOrder(order);
 }
 
