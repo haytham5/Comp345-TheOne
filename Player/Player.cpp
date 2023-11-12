@@ -128,7 +128,11 @@ void Player::issueOrder(string type){
     else if(type=="Blockade"){
         order=new BlockadeOrder();
     }
+   // else if(type=="Negotiate"){
+     //   order=new NegotiateOrder();
+    //}
     else{
+        cout<<"Invalid type in issueOrder(type), no order instance was created."<<endl;
         return;
     }
 

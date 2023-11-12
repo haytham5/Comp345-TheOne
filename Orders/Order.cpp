@@ -19,6 +19,12 @@ bool Order::hasExecuted() const {
     return isExecuted; 
 }
 
+//For game log
+string Order::stringToLog()
+{
+    return "Order: "+getDescription()+" was just executed.";
+}
+
 OrdersList::OrdersList() {}
 
 // Copy constructor
@@ -41,6 +47,8 @@ OrdersList::~OrdersList() {
 // Methods
 void OrdersList::addOrder(Order* order) {
     orders.push_back(order);
+    //Notifies observers
+    notify(this);
 }
 
 void OrdersList::removeOrder(Order* order) {
@@ -68,6 +76,21 @@ OrdersList &OrdersList::operator=(const OrdersList &other)
 
 const std::vector<Order*>& OrdersList::getOrders() const {
     return orders;
+}
+
+//For game log
+string OrdersList::stringToLog()
+{
+    if(!orders.empty()) {
+        Order* lastOrder= orders.back();
+        string logString;
+        
+        logString= "Order: "+lastOrder->getDescription() + " was just issued (added to OrdersList).";
+        return logString;
+    } else {
+        cout<< "No orders in the vector to log."<<endl;
+        return "No orders in the vector to log.";
+    }
 }
 
 std::ostream& operator<<(std::ostream& os, const OrdersList& ordersList) {
@@ -173,6 +196,8 @@ void AdvanceOrder::execute() {
     } else {
         std::cout << "Advance order is invalid and cannot be executed." << std::endl;
     }
+
+    notify(this);
 }
 
 AirliftOrder::AirliftOrder()
@@ -223,6 +248,7 @@ void AirliftOrder::execute() {
         std::cout << "Airlift order is invalid and cannot be executed." << std::endl;
     }
     }
+    notify(this);
 }
 
 BlockadeOrder::BlockadeOrder()
@@ -270,6 +296,7 @@ void BlockadeOrder::execute() {
     } else {
         cout << "Blockade order is invalid and cannot be executed." << endl;
     }
+    notify(this);
 }
 
 
@@ -314,6 +341,7 @@ void DeployOrder::execute() {
     } else {
         std::cout << "Deploy order is invalid and cannot be executed." << std::endl;
     }
+    notify(this);
 }
 
 BombOrder::BombOrder()
@@ -370,6 +398,7 @@ void BombOrder::execute()  {
     } else {
         std::cout << "Bomb order is invalid and cannot be executed." << std::endl;
     }
+    notify(this);
 }
 
 void testOrdersList() {

@@ -32,6 +32,8 @@ GameEngine::GameState GameEngine::getGameState()
 void GameEngine::transition(GS state)
 {
     this->state = state;
+    //Notifies observers
+    notify(this);
 }
 
 //execute the state change based on which state the game is currrently in
@@ -71,7 +73,6 @@ std::string GameEngine::stateToString()
         return "Error reading state.\n";
     }
 }
-
 
 //function to covert string to enum
 GameEngine::GameState GameEngine::stringToState(string s)
@@ -138,7 +139,6 @@ bool GameEngine::executeCommand(Command command)
 }
 
 GameEngine& GameEngine::operator=(GameEngine& gameEngine) {
-
   this->state = gameEngine.getGameState();
   return *this;
 }
@@ -237,3 +237,18 @@ void testGameEngine()
 
     engine->run();
 }
+
+//For game log
+string GameEngine::stringToLog()
+{
+    return "Game State is now: "+stateToString();
+}
+
+
+
+/*void testGameEngine()
+{
+    GameEngine *engine = new GameEngine();
+
+    engine->run();
+}*/

@@ -101,6 +101,8 @@ ostream &operator<<(ostream &out, const Command &object)
 void Command::saveEffect(string e)
 {
     effect = e;
+    //Notifies observers
+    notify(this);
 }
 
 string Command::getEffect()
@@ -111,6 +113,12 @@ string Command::getEffect()
 string Command::getCommand()
 {
     return command;
+}
+
+//For game log
+string Command::stringToLog()
+{
+    return "Commands Effect: "+ effect+" was just saved.";
 }
 
 //CONSOLE COMMAND PROCESSING
@@ -176,6 +184,26 @@ ostream &operator<<(ostream &out, const CommandProcessor &object)
 {
     out << "The command processor is of type " << object.type << "." << endl;
     return out;
+}
+
+//For game log
+string CommandProcessor::stringToLog()
+{
+    if(!commands.empty()) {
+        Command lastCommand= commands.back();
+        string logString;
+        
+        logString= "Command: "+ lastCommand.getCommand() + " was just saved.";
+        return logString;
+    } else {
+        cout<< "No commands in the vector to log."<<endl;
+        return "No commands in the vector to log.";
+    }
+}
+
+void CommandProcessor::testSaveCommand(string c, string e)
+{
+    saveCommand(c,e);
 }
 
 istream &operator>>(istream &in, CommandProcessor &cproc)
@@ -257,8 +285,10 @@ void CommandProcessor::saveCommand(string command, string effect)
 
     commands.push_back(Command(command, effect));
 
-    cout << "Saved Console command: " << commands.back() << endl;
+    //Notifies observers
+    notify(this);
 
+    cout << "Saved Console command: " << commands.back() << endl;
 }
 
 //FILE COMMAND ADAPTER
@@ -337,7 +367,7 @@ istream &operator>>(istream &in, FileCommandProcessorAdapter &object)
         in >> s;
     }
 
-    object.readCommmand(s);
+   object.readCommmand(s); 
 
     return in;
 }

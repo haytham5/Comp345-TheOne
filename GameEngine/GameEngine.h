@@ -3,10 +3,11 @@
 #include <vector>
 #include "../CommandProcessing/CommandProcessing.h"
 #include "../Player/Player.h"
+#include "../LoggingObserver/LoggingObserver.h"
 
 using namespace std;
 
-class GameEngine
+class GameEngine : public ILoggable, public Subject
 {
 public:
     //different states the game can be in
@@ -52,6 +53,8 @@ public:
     GameEngine& operator=(GameEngine& gameEngine);
 
     friend ostream& operator<<(ostream& os, GameEngine& gameEngine);
+
+    virtual string stringToLog() override;
 private:
     //Game started
     bool gameStarted;

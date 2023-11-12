@@ -3,12 +3,13 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "../LoggingObserver/LoggingObserver.h"
 
 using namespace std;
 
 void testCommandProcessor();
 
-class Command {
+class Command : public ILoggable, public Subject {
     public:
         //Constructor
         Command();
@@ -32,12 +33,16 @@ class Command {
 
         string getCommand();
 
+        virtual string stringToLog() override;
+
+        
+
     private:
         string command;
         string effect;
 };
 
-class CommandProcessor {
+class CommandProcessor : public ILoggable, public Subject {
     public: 
         //Constructor
         CommandProcessor();
@@ -64,6 +69,10 @@ class CommandProcessor {
         bool hasNew();
 
         void removeNew();
+
+        virtual string stringToLog() override;
+
+        void testSaveCommand(string c, string e);
 
     protected: 
         char type;
