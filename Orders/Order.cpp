@@ -2,6 +2,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+
 #define NEUTRAL "Unassigned"
 
 Order &Order::operator=(const Order &other)
@@ -406,8 +407,41 @@ void BombOrder::execute()  {
     notify(this);
 }
 
-void testOrdersList()
-{
+NegotiateOrder::NegotiateOrder(const std::string& player1, const std::string& player2)
+    : issuingPlayer(player1), targetPlayer(player2) {
+    description = "Negotiate between " + player1 + " and " + player2;
+}
+
+
+bool NegotiateOrder::validate() {
+    if (issuingPlayer == targetPlayer) {
+        return false; // Cannot negotiate with oneself
+    }
+
+    Player* issuer = Player::getPlayerByName(issuingPlayer);
+    return issuer != nullptr && issuer->hasCard("Diplomacy");
+}
+
+void NegotiateOrder::execute() {
+    if (validate()) {
+        Player* issuer = Player::getPlayerByName(issuingPlayer);
+        Player* target = Player::getPlayerByName(targetPlayer);
+
+        if (issuer != nullptr && target != nullptr) {
+            issuer->setInNegotiationWith(target);
+            target->setInNegotiationWith(issuer);
+
+            std::cout << "Negotiation established between " 
+                      << issuingPlayer << " and " 
+                      << targetPlayer << std::endl;
+        }
+    } else {
+        std::cout << "Negotiate order is invalid and cannot be executed." << std::endl;
+    }
+}
+
+
+void testOrdersList() {
     std::cout << "===== Testing Orders Lists =====" << std::endl;
 
     // Creating territories and players for testing
@@ -425,6 +459,8 @@ void testOrdersList()
     BombOrder* bombOrder = new BombOrder(&territory2, "Player1", &gameMap);
     BlockadeOrder* blockadeOrder = new BlockadeOrder(&territory1, "Player1");
     AirliftOrder* airliftOrder = new AirliftOrder(&territory1, &territory2, 2, "Player1");
+    //NegotiateOrder* negotiateOrder("Player1", "Player2");
+
     //NegotiateOrder* negotiateOrder = new NegotiateOrder(&player2);
 
     // Add orders to an OrdersList
@@ -497,6 +533,7 @@ void testOrderExecution() {
     BlockadeOrder blockadeOrder(&territory1, "Player1");
     BombOrder bombOrder(&territory2, "Player1", &gameMap);
     AirliftOrder airliftOrder(&territory1, &territory3, 4, "Player1");
+    NegotiateOrder negotiateOrder("Player1", "Player2");
 
     // Execute DeployOrder
     std::cout << "Executing Deploy Order..." << std::endl;
@@ -542,6 +579,15 @@ void testOrderExecution() {
         std::cout << "Airlift order is invalid and cannot be executed." << std::endl;
     }
 
+
+    // Execute NegotiateOrder
+    std::cout << "Executing Negotiate Order..." << std::endl;
+    if (negotiateOrder.validate()) {
+        negotiateOrder.execute();
+    // Additional logic to verify that attacks are now invalid
+    } else {
+        std::cout << "Negotiate order is invalid and cannot be executed." << std::endl;
+    }
 
     std::cout << "===== Testing Complete =====" << std::endl;
 }

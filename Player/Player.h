@@ -67,6 +67,12 @@ public:
 
   // toDefend() function declaration
   vector<Territory *> toDefend() const;
+  
+  bool hasCard(const std::string& cardType);
+  void setInNegotiationWith(Player* otherPlayer);
+  bool isInNegotiationWith(Player* otherPlayer);
+
+  static Player* getPlayerByName(const std::string& name);
 
   // toAttack() function declaration
   vector<Territory *> toAttack() const;
@@ -107,6 +113,10 @@ private:
   Map *map;
   string phase;
 
+  static std::vector<Player*> allPlayers; // Static list of all players
+
+
+  std::unordered_set<Player*> negotiationPartners;
   // Processor
   CommandProcessor *processor;
 };

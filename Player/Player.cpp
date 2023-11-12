@@ -304,6 +304,31 @@ string Player::getPhase()
     return phase;
 }
 
+std::vector<Player*> Player::allPlayers;
+
+Player* Player::getPlayerByName(const std::string& name) {
+    for (Player* player : allPlayers) {
+        if (player != nullptr && player->getName() == name) {
+            return player;
+        }
+    }
+    return nullptr; // Player not found
+}
+
+bool Player::hasCard(const std::string& cardType) {
+    return playerHand != nullptr && playerHand->hasCard(cardType);
+}
+
+void Player::setInNegotiationWith(Player* otherPlayer) {
+    // Add the other player to the negotiation partners set
+    negotiationPartners.insert(otherPlayer);
+}
+
+bool Player::isInNegotiationWith(Player* otherPlayer) {
+    // Check if the other player is in the negotiation partners set
+    return negotiationPartners.find(otherPlayer) != negotiationPartners.end();
+}
+
 void Player::setPhase(string ph)
 {
     phase = ph;

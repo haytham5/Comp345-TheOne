@@ -172,6 +172,15 @@ void Hand::print() {
     for (auto elem : hand) elem->print();
 }
 
+bool Hand::hasCard(const std::string& cardType) {
+    for (Card* card : hand) {
+        if (card != nullptr && card->getType() == cardType) {
+            return true;
+        }
+    }
+    return false;
+}
+
 // Function to get the size of the hand
 int Hand::size() {
     return hand.size();
