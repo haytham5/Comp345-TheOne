@@ -353,15 +353,10 @@ void GameEngine::run()
         {
             break;
         }
-        else
-        {
-            if (gameStarted)
+        
+        else {
+            if (gameStarted && !startupTest)
             {
-                // MAIN GAMEPLAYLOOP (PART 3)
-                // Run through Players collection and call each playerprocessor
-                // EXAMPLE:
-                //  cout << "Player 1, enter your command: ";
-
                 cout << "Enter command to trigger state change: ";
 
                 if (processor != NULL)
@@ -390,19 +385,33 @@ void GameEngine::run()
                     }
                 }
             }
+
             else if(state != "END" && state != "WIN")
             {
                 startupPhase();
             }
+
+            if (gameStarted && startupTest) {
+                break;
+            }
         }
     }
-    cout << "Game Over";
+    cout << "Game Over" << endl;
 }
 
 void testGameEngine()
 {
     GameEngine *engine = new GameEngine();
 
+    engine->run();
+}
+
+void testStartupPhase()
+{    
+    GameEngine *engine = new GameEngine();
+    
+    engine->startupTest = true;
+    
     engine->run();
 }
 
@@ -413,7 +422,7 @@ string GameEngine::stringToLog()
 }
 
 // round robin fashion cycle through 3 phases -> reinforcement, issue orders and execute orders
-void GameEngine::mainGameLoop()
+void GameEngine::mainGameLoop(bool test = false)
 {
 
     while (players.size() != 1)
@@ -440,6 +449,8 @@ void GameEngine::mainGameLoop()
         reinforcementPhase();
         issueOrdersPhase();
         executeOrdersPhase();
+
+        if(test) break;
     }
 }
 
@@ -599,5 +610,5 @@ void testMainGameLoop()
     player2.addPlayerTerritories(map->getTerritory("TerritoryC"));
     player2.addPlayerTerritories(map->getTerritory("TerritoryD"));
 
-    engine->mainGameLoop();
+    engine->mainGameLoop(true);
 }

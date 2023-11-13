@@ -52,11 +52,6 @@ void testCommandProcessor()
     p->testState("ISSUE_ORDERS");
 
     p->play();
-
-    cout << "TESTING FILE PROCESSOR AND CONSOLE COMMANDS: " << endl;
-    GameEngine *engine = new GameEngine();
-    
-    engine->run();
 }
 
 // COMMAND
@@ -299,7 +294,7 @@ FileCommandProcessorAdapter::FileCommandProcessorAdapter(const string& filename)
     newCommand = false;
     fileEmptyFlag = false;
 
-    ifstream file(filename);
+    ifstream file(".\\" + filename);
 
     if (!file.is_open()) {
         throw runtime_error("Error: Unable to open file " + filename);

@@ -61,7 +61,7 @@ public:
     void setPlayers(vector<Player *> p);
 
     // Main game loop to cycle through the Reinforcement, Issue Orders and Order Execution Phases
-    void mainGameLoop();
+    void mainGameLoop(bool t);
 
     // Reinforcement Phase
     void reinforcementPhase();
@@ -79,9 +79,12 @@ public:
     friend ostream &operator<<(ostream &os, GameEngine &gameEngine);
 
     virtual string stringToLog() override;
+    
+    bool startupTest = false;
 private:
     // Game started
     bool gameStarted;
+
 
     // state of the game
     GameState state;
@@ -103,6 +106,8 @@ private:
 
 // test for game engine in part 5 of assignment 1
 void testGameEngine();
+
+void testStartupPhase();
 
 // test for main game loop in part 3 of assignment 2
 void testMainGameLoop();

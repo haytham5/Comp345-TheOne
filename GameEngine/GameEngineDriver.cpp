@@ -6,7 +6,8 @@
 using namespace std;
 
 int main()
-{
+{   
+    testStartupPhase();
     testMainGameLoop();
     return 0;
 }
