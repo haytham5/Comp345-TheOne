@@ -30,11 +30,13 @@ void Subject::attach(Observer *observer){
 
 //Deletes a given observer in the observers vector
 void Subject::detach(Observer *observer){
+    int eraseIndex = -1;
     //Finds the observer in the observers vector and remove it
-    auto it= find(observers.begin(),observers.end(),observer);
-    if (it!= observers.end()) {
-        observers.erase(it);
+    for(int i = 0; i < sizeof(observers); i++) {
+        if(observers.at(i) == observer) eraseIndex = i;
     }
+    
+    if(eraseIndex != -1) observers.erase(observers.begin() + eraseIndex -1);
 }
 
 //Allows subjects to notify observers of the necessary events
@@ -213,7 +215,7 @@ void testLoggingObserver(){
     CommandProcessor* cmdP= new CommandProcessor();
     GameEngine* game = new GameEngine();
     OrdersList* oList= new OrdersList();
-    BlockadeOrder* blockOrder= new BlockadeOrder(terr);
+    BlockadeOrder* blockOrder= new BlockadeOrder(terr, "Player 1");
 
     //Instantiating concrete observer
     LogObserver* logO = new LogObserver(cmd);

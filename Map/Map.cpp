@@ -378,9 +378,9 @@ bool MapLoader::testAddEdge(){
 
 bool testLoadMaps(){
   bool valid = true;
-  valid = valid && MapLoader::isValidMapFile("Map/resources/ABC_Map.map");
-  valid = valid && MapLoader::isValidMapFile("Map/resources/Asia.map");
-  valid = valid && !MapLoader::isValidMapFile("Map/resources/ABC_MapInvalid.map"); //Invalid Map
+  valid = valid && MapLoader::isValidMapFile("resources/ABC_Map.map");
+  valid = valid && MapLoader::isValidMapFile("resources/Asia.map");
+  valid = valid && !MapLoader::isValidMapFile("resources/ABC_MapInvalid.map"); //Invalid Map
   if(valid){
     std::cout << "All test passed!" << endl;
     return true;

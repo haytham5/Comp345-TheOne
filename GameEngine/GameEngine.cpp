@@ -7,11 +7,12 @@
 #include <ctime>
 #include <algorithm>
 #include <random>
-
-using namespace std;
 #include "GameEngine.h"
 #include "../Player/Player.h"
 #include "../CommandProcessing/CommandProcessing.h"
+
+using namespace std;
+
 
 typedef GameEngine::GameState GS;
 
@@ -41,6 +42,13 @@ void GameEngine::startupPhase()
     std::cout << "Startup Phase\n";
     while (!this->gameStarted)
     {
+        string state = stateToString();
+        cout << "You are now in the state: " << stateToString() << "\n";
+        if (processor != NULL)
+            processor->setState(state);
+        else
+            fileProcessor->setState(state);
+
         cout << "Enter command to trigger state change: ";
         if (processor != NULL)
         {
@@ -165,15 +173,6 @@ bool GameEngine::executeCommand(Command command)
     string c = command.getCommand();
     string e = command.getEffect();
 
-    // TODO: ENGINE ACTIONS BASED ON STATE (PART 2)
-    // IF LOADMAP, ASK FOR MAP FILENAME
-
-    // IF VALIDATEMAP, VALIDATE MAP
-
-    // IF ADDPLAYER, ASK FOR PLAYER NAMES, ETC...
-
-    // RETURN FALSE IF THERE IS PROBLEM EXECUTING COMMAND
-
     if (c == "loadmap")
     {
         // string map_name;
@@ -203,6 +202,9 @@ bool GameEngine::executeCommand(Command command)
 
     if (c == "addplayer")
     {
+        Deck* d = new Deck();
+        Map* m = new Map();
+
         if (currentPlayerIndex != 5)
         {
             string playerName;
@@ -222,7 +224,7 @@ bool GameEngine::executeCommand(Command command)
 
             if (!nameExists)
             {
-                players.push_back(new Player(playerName, nullptr, nullptr, nullptr));
+                players.push_back(new Player(playerName, m, new Hand(d), new OrdersList()));
                 currentPlayerIndex++;
                 cout << "Player " << playerName << " added." << endl;
             }
@@ -269,13 +271,13 @@ bool GameEngine::executeCommand(Command command)
         for (Player *player : players)
         {
             player->setReinforcementPool(50);
-            cout << player->getName() << " has been assigned" << player->getReinforcementPool() << "armies." << endl;
+            cout << player->getName() << " has been assigned " << player->getReinforcementPool() << " armies." << endl;
         }
 
         for (Player *player : players)
         {
-            player->getPlayerHand()->draw();
-            player->getPlayerHand()->draw();
+            player->draw();
+            player->draw();
 
             cout << player->getName() << " has been drawned 2 cards." << endl;
         }
@@ -283,7 +285,7 @@ bool GameEngine::executeCommand(Command command)
         gameStarted = true;
     }
 
-    if (c == "win")
+    if (c == "quit" || c == "replay")
     {
         gameStarted = false;
     }
@@ -304,6 +306,7 @@ ostream &operator<<(ostream &os, GameEngine &gameEngine)
 
 void GameEngine::run()
 {
+    string state = "";
     cout << "!~~ WELCOME TO WARZONE ~~!" << endl;
     cout << "--------------------------\n"
          << endl;
@@ -337,9 +340,9 @@ void GameEngine::run()
 
     cout << "Game Started.\n--------------" << endl;
 
-    while (true)
+    while (state != "END")
     {
-        string state = stateToString();
+        state = stateToString();
         cout << "You are now in the state: " << stateToString() << "\n";
         if (processor != NULL)
             processor->setState(state);
@@ -387,7 +390,7 @@ void GameEngine::run()
                     }
                 }
             }
-            else
+            else if(state != "END" && state != "WIN")
             {
                 startupPhase();
             }
@@ -417,14 +420,22 @@ void GameEngine::mainGameLoop()
     {
         cout << "Players in the game:  ";
         // if player territories list size is 0, they are removed from game
+        vector<int> deleteIndexes;
+
         for (int i = 0; i < players.size(); i++)
         {
             if (players[i]->getPlayerTerritories().empty())
             {
-                delete players[i];
+                players[i]->setName(players[i]->getName() + " - Empty Territories, will be removed from the game");
+                deleteIndexes.push_back(i);
             }
-            cout << players[i]->getName() << ", ";
+
+            cout << players[i]->getName();
+            if(i == players.size() -1 ) cout << "." << endl;
+            else cout << ", ";
         }
+
+        for(auto it : deleteIndexes) players.erase(players.begin() + it);
 
         reinforcementPhase();
         issueOrdersPhase();
@@ -437,23 +448,24 @@ void GameEngine::reinforcementPhase()
 
     for (int i = 0; i < players.size(); i++)
     {
-        cout << "Player: " << players[i]->getName() << "'s updated reinforcement pool:";
+        cout << "Player: " << players[i]->getName() << "'s updated reinforcement pool:"<< endl;
         // if the number of territories owned / 3 is less than 3, number of reinforcement army units for the player is 3
         if (((players[i]->getPlayerTerritories().size()) / 3) < 3)
         {
-            players[i]->setReinforcementPool(players[i]->getReinforcementPool() + 3);
-            cout << "Player: " << players[i]->getName() << " has a reinforcement pool of" << players[i]->getReinforcementPool();
+            players[i]->setReinforcementPool(3);
+            cout << "Player: " << players[i]->getName() << " has a reinforcement pool of " << players[i]->getReinforcementPool() << endl;
         }
         // else if the player owns all the territories of an entire continent, the player is given a number of army units corresponding to the continent’s control bonus value
         else if (players[i]->ownAllTerritoryInContinent())
         {
-            players[i]->setReinforcementPool(players[i]->getReinforcementPool() + 10);
-            cout << "Player: " << players[i]->getName() << " has a reinforcement pool of" << players[i]->getReinforcementPool();
+            players[i]->setReinforcementPool(10);
+            cout << "Player: " << players[i]->getName() << " has a reinforcement pool of " << players[i]->getReinforcementPool()<< endl;
         }
         else
         {
-            players[i]->setReinforcementPool(players[i]->getReinforcementPool() + ((players[i]->getPlayerTerritories().size()) / 3));
-            cout << "Player: " << players[i]->getName() << " has a reinforcement pool of" << players[i]->getReinforcementPool();
+            int mod = ((players[i]->getPlayerTerritories().size()) / 3);
+            players[i]->setReinforcementPool(mod);
+            cout << "Player: " << players[i]->getName() << " has a reinforcement pool of" << players[i]->getReinforcementPool()<< endl;
         }
     }
 }
@@ -466,14 +478,14 @@ void GameEngine::issueOrdersPhase()
         string order;
         string answer;
         string name = players[i]->getName();
-        vector<Card *> currentPlayerCards = players[i]->getPlayerHand()->HandCards;
+        vector<Card *> currentPlayerCards = players[i]->getPlayerHand()->getCards();
 
         while (answer != "NO")
         {
             cout << "Player: " << name << " your cards are: \n";
             for (int j = 0; j < currentPlayerCards.size(); j++)
             {
-                cout << "Card " << (j + 1) << ": " << currentPlayerCards[j]->getType();
+                cout << "Card " << (j + 1) << ": " << currentPlayerCards.at(j)->getType()<< endl;
             }
             cout << "Player: " << name << " input your order here: ";
             cin >> order;
@@ -481,15 +493,15 @@ void GameEngine::issueOrdersPhase()
             {
                 if (order == "Advance" || order == "Deploy" || order == "Bomb" || order == "Blockade" || order == "Airlift" || order == "Negotiate")
                 {
-                    for (int j = 0; j < currentPlayerCards.size(); j++)
+                    for (int k = 0; k < currentPlayerCards.size(); k++)
                     {
-                        if (order == currentPlayerCards[j]->getType())
+                        if (order == currentPlayerCards.at(k)->getType())
                         {
                             players[i]->issueOrder(order);
                         }
                         else
                         {
-                            cout << "Invalid Order! Try Again";
+                            cout << "Invalid Order! Try Again"<< endl;
                             cin >> order;
                         }
                     }

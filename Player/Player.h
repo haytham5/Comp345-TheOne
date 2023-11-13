@@ -3,14 +3,17 @@
 
 #include <string>
 #include <vector>
-#include "../Map/Map.h"
+#include "../Map/Map.h"  
+#include "../LoggingObserver/LoggingObserver.h"
 #include "../Orders/Order.h"
 #include "../Card/Card.h"
 #include "../CommandProcessing/CommandProcessing.h"
 
+
 using namespace std;
 
 void testPlayers();
+class OrdersList;
 
 class Player
 {
@@ -45,6 +48,8 @@ public:
   // Getter for playerHand
   Hand *getPlayerHand() const;
 
+  void draw();
+
   // Setter for playerHand
   void setPlayerHand(Hand *hand);
 
@@ -57,10 +62,7 @@ public:
   // Check if player owns all territories in continent
   bool ownAllTerritoryInContinent();
 
-  OrdersList *Player::getOrderList();
-
-  // Getter for playerTerritories
-  vector<Territory *> getPlayerTerritories() const;
+  OrdersList* getOrderList();
 
   // Getter for playerTerritories
   vector<Territory *> getPlayerTerritories() const;
@@ -82,17 +84,6 @@ public:
   // issueOrder() function declaration
   void issueOrder(string type);
 
-  // Check if player owns all territories in a continent
-  bool ownAllTerritoryInContinent();
-
-private:
-  int reinforcementPool;
-  vector<Territory *> playerTerritories;
-  Hand *playerHand;
-  string playerName;
-  OrdersList *orderList;
-  Map *map;
-
   // Test State
   void testState(string s);
 
@@ -106,6 +97,7 @@ private:
   string getPhase();
 
 private:
+  int reinforcementPool;
   vector<Territory *> playerTerritories;
   Hand *playerHand;
   string playerName;

@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "../Map/Map.h"  // Assuming Territory is in a separate file named Territory.h
+#include "../Map/Map.h"  
 #include "../LoggingObserver/LoggingObserver.h"
 #include "../Player/Player.h"
 

@@ -10,6 +10,7 @@ Player::Player()
     this->playerHand = nullptr;
     this->orderList = nullptr;
     this->processor = new CommandProcessor('p');
+    this->reinforcementPool = 0;
     phase;
 }
 
@@ -21,6 +22,7 @@ Player::Player(const string &name, Map *gameMap, Hand *hand, OrdersList *orderLi
     this->playerHand = hand;
     this->orderList = orderList;
     this->processor = new CommandProcessor('p');
+    this->reinforcementPool = 0;
     phase;
 }
 
@@ -32,6 +34,7 @@ Player::Player(const string &name, Map *gameMap, Hand *hand, OrdersList *orderLi
     this->playerHand = hand;
     this->orderList = orderList;
     this->processor = processor;
+    this->reinforcementPool = 0;
     phase;
 }
 
@@ -42,6 +45,7 @@ Player::Player(const Player &other)
     this->map = new Map(*other.map);
     this->playerHand = other.playerHand;
     this->orderList = new OrdersList(*other.orderList);
+    reinforcementPool = other.reinforcementPool;
 }
 
 Player &Player::operator=(const Player &other)
@@ -50,6 +54,7 @@ Player &Player::operator=(const Player &other)
     playerHand = other.playerHand;
     playerName = other.playerName;
     orderList = other.orderList;
+    reinforcementPool = other.reinforcementPool;
     return *this;
 }
 
@@ -77,6 +82,11 @@ Hand *Player::getPlayerHand() const
     return playerHand;
 }
 
+void Player::draw()
+{
+    playerHand->draw();
+}
+
 void Player::setPlayerHand(Hand *hand)
 {
     playerHand = hand;
@@ -87,9 +97,9 @@ int Player::getReinforcementPool() const
     return reinforcementPool;
 }
 
-void Player::setReinforcementPool(int reinforcementPool)
+void Player::setReinforcementPool(int modifier)
 {
-    this->reinforcementPool = reinforcementPool;
+    reinforcementPool += modifier;
 }
 
 void Player::printOrderList()
@@ -100,7 +110,7 @@ void Player::printOrderList()
     }
 }
 
-OrdersList *Player::getOrderList()
+OrdersList* Player::getOrderList()
 {
     return orderList;
 }
@@ -133,12 +143,12 @@ vector<Territory *> Player::toAttack() const
     vector<Territory *> territoriesToAttack; // Create empty vector
     for (int i = 0; i < playerTerritories.size(); i++)
     {
-        vector<string> neighbours = map->getNeighbors(playerTerritories[i]->getName());
+        vector<string> neighbours = map->getNeighbors(playerTerritories.at(i)->getName());
         for (int j = 0; j < neighbours.size(); j++)
         {
-            if (map->getTerritory(neighbours[i])->getPlayer() != this->playerName)
+            if (map->getTerritory(neighbours[j])->getPlayer() != this->playerName)
             {
-                territoriesToAttack.push_back(map->getTerritory(neighbours[i]));
+                territoriesToAttack.push_back(map->getTerritory(neighbours[j]));
             }
         }
     }
@@ -155,19 +165,17 @@ void Player::issueOrder(string type)
     Order *order;
     vector<Territory *> toAttackList = toAttack();
     vector<Territory *> toDefendList = toDefend();
-    // temporary reinforcement pool while
-    int reinforcementPool = 0;
+
 
     while (reinforcementPool != 0)
     {
         for (int i = 0; i < toDefendList.size(); i++)
         {
-            // TODO deploy orders on its owns territories from toDefendList
             int deployAmount;
             cout << "Player: " << getName() << " has " << reinforcementPool << " army units available to deploy  and has " << toDefendList.size() << " territories \n";
             cout << "How many units would you like to deploy to territory: " << toDefendList[i]->getName() << "?";
             cin >> deployAmount;
-            order = new DeployOrder(toDefendList[i], deployAmount);
+            order = new DeployOrder(toDefendList[i], deployAmount, "Player1");
         }
     }
 
@@ -208,7 +216,7 @@ void Player::issueOrder(string type)
                     if (territory2 == toDefendList[i]->getName())
                     {
                         int armies = numToMove + toDefendList[i]->getArmies();
-                        order = new DeployOrder(toDefendList[i], armies);
+                        order = new DeployOrder(toDefendList[i], armies, "Player1");
                         cout << "Territory: " << territory2 << " now has " << toDefendList[i]->getArmies() << " army units\n";
                     }
                 }
@@ -253,7 +261,8 @@ void Player::issueOrder(string type)
                 {
                     if (territory2 == toAttackList[i]->getName())
                     {
-                        order = new AdvanceOrder(sourceTeritory, toAttackList[i], numToMove);
+                        const string& c = "Player1";
+                        order = new AdvanceOrder(sourceTeritory, toAttackList[i], numToMove, map, c);
                         cout << numToMove << " army units have been advanced to territory " << territory2 << "\n";
                     }
                 }
@@ -332,12 +341,6 @@ bool Player::isInNegotiationWith(Player* otherPlayer) {
 void Player::setPhase(string ph)
 {
     phase = ph;
-}
-
-bool Player::ownAllTerritoryInContinent()
-{
-    // TODO check if player owns all territories in continent
-    return false;
 }
 
 // Free function
@@ -436,11 +439,15 @@ void testPlayers()
     player2.getPlayerHand()->print();
 
     // Calling issue order player 1 and player 2 to add orders to their orderlist
+
+    cout << "DEBUG FROM HERE: " << endl;
+
     cout << "\nPlayer 1 is playing: " << endl;
     player1.issueOrder(player1.getPlayerHand()->play(0));
     cout << "\n"
          << player1.getName() << "'s hand:" << endl;
     player1.getPlayerHand()->print();
+
     player1.issueOrder(player1.getPlayerHand()->play(1));
     cout << "\n"
          << player1.getName() << "'s hand:" << endl;
@@ -451,6 +458,7 @@ void testPlayers()
     cout << "\n"
          << player2.getName() << "'s hand:" << endl;
     player2.getPlayerHand()->print();
+    
     player2.issueOrder(player2.getPlayerHand()->play(1));
     cout << "\n"
          << player2.getName() << "'s hand:" << endl;

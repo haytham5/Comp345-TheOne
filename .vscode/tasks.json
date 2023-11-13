@@ -7,13 +7,14 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${workspaceFolder}\\CommandProcessing\\CommandProcessing.cpp",
                 "${workspaceFolder}\\Card\\Card.cpp",
+                "${workspaceFolder}\\CommandProcessing\\CommandProcessing.cpp",
+                "${workspaceFolder}\\GameEngine\\GameEngine.cpp",
+                "${workspaceFolder}\\LoggingObserver\\LoggingObserver.cpp",
                 "${workspaceFolder}\\Map\\Map.cpp",
                 "${workspaceFolder}\\Orders\\Order.cpp",
-                "${workspaceFolder}\\Player\\Player.cpp",
-                "${workspaceFolder}\\GameEngine\\GameEngine.cpp",
-                "${workspaceFolder}\\CommandProcessing\\CommandProcessingDriver.cpp",
+                //"${workspaceFolder}\\Player\\Player.cpp",
+                "${fileDirname}\\**.cpp",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],

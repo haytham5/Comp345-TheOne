@@ -237,7 +237,8 @@ string CommandProcessor::validate(string command)
             if(acceptedConsoleCommands[i][0] == command) {
 
                 cout << "Correct Console command: " << command << "." << endl;
-
+                cout << state;
+                
                 if(acceptedConsoleCommands[i][1] == state) {
                     cout << "Correct state " << state << ". Validated." << endl;
                     return acceptedConsoleCommands[i][2];

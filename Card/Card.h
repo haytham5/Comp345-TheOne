@@ -106,10 +106,12 @@ public:
     int size();
 
     // vector of card pointers
-    vector<Card *> HandCards;
+    vector<Card *> getCards();
 
     // Ostream
     friend ostream &operator<<(ostream &out, const Hand &object);
+
+    bool hasCard(const std::string& cardType);
 
 private:
     Deck *deck;

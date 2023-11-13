@@ -404,7 +404,10 @@ void BombOrder::execute()  {
     } else {
         std::cout << "Bomb order is invalid and cannot be executed." << std::endl;
     }
-    notify(this);
+}
+
+NegotiateOrder::NegotiateOrder() {
+    description = "Negotiate";
 }
 
 NegotiateOrder::NegotiateOrder(const std::string& player1, const std::string& player2)
@@ -447,8 +450,8 @@ void testOrdersList() {
     // Creating territories and players for testing
     Territory territory1("Territory1", 0, 0, "ContinentA");
     Territory territory2("Territory2", 1, 1, "ContinentA");
-    // Player player1("Player1");
-    // Player player2("Player2");
+    // Player player1();
+    // Player player2();
     // Creating a map and adding territories (and possibly setting adjacency)
     Map gameMap;
     gameMap.addTerritory("Territory1", 0, 0, "ContinentA");
@@ -462,6 +465,7 @@ void testOrdersList() {
     //NegotiateOrder* negotiateOrder("Player1", "Player2");
 
     //NegotiateOrder* negotiateOrder = new NegotiateOrder(&player2);
+    NegotiateOrder* negotiateOrder = new NegotiateOrder("Player1", "Player2");
 
     // Add orders to an OrdersList
     OrdersList orders;
@@ -470,7 +474,7 @@ void testOrdersList() {
     orders.addOrder(bombOrder);
     orders.addOrder(blockadeOrder);
     orders.addOrder(airliftOrder);
-    // orders.addOrder(negotiateOrder);
+    orders.addOrder(negotiateOrder);
 
     // Display orders before execution
     std::cout << "\nOrders List before execution:" << std::endl;
