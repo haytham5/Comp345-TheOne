@@ -32,11 +32,11 @@ void Subject::attach(Observer *observer){
 void Subject::detach(Observer *observer){
     int eraseIndex = -1;
     //Finds the observer in the observers vector and remove it
-    for(int i = 0; i < sizeof(observers); i++) {
-        if(observers.at(i) == observer) eraseIndex = i;
+    for(int i = 0; i < observers.size(); i++) {
+        if(observers.at(i) == observer) {eraseIndex = i;break;}
     }
     
-    if(eraseIndex != -1) observers.erase(observers.begin() + eraseIndex -1);
+    if(eraseIndex != -1) observers.erase(observers.begin() + eraseIndex);
 }
 
 //Allows subjects to notify observers of the necessary events
