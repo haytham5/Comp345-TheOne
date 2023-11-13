@@ -171,141 +171,147 @@ void Player::issueOrder(string type)
     vector<Territory *> toAttackList = toAttack();
     vector<Territory *> toDefendList = toDefend();
 
-    while (reinforcementPool > 0)
-    {
-        cout << "Player: " << getName() << " has " << reinforcementPool << " army units available to deploy and has " << toDefendList.size() << " territories \n";
-
-        for (int i = 0; i < toDefendList.size(); i++)
+    if(reinforcementPool > 0) {
+        while (reinforcementPool > 0)
         {
-            int deployAmount;
-            cout << "How many units would you like to deploy to territory: " << toDefendList[i]->getName() << "?";
-            cin >> deployAmount;
-            order = new DeployOrder(toDefendList.at(i), deployAmount, playerName);
-            reinforcementPool -= deployAmount;
+            cout << "Player: " << getName() << " has " << reinforcementPool << " army units available to deploy and has " << toDefendList.size() << " territories \n";
+
+            for (int i = 0; i < toDefendList.size(); i++)
+            {
+                int deployAmount;
+                cout << "How many units would you like to deploy to territory: " << toDefendList[i]->getName() << "?";
+                cin >> deployAmount;
+                order = new DeployOrder(toDefendList.at(i), deployAmount, playerName);
+                reinforcementPool -= deployAmount;
+            }
+        }
+
+        orderList->addOrder(order);
+
+        Order *order2;
+
+        if (type == "Advance")
+        {
+            string attackOrDefend;
+            cout << "Player: " << getName() << " would you like to move units to defend or attack teritories? Enter Defend or Attack: ";
+            cin >> attackOrDefend;
+            while (attackOrDefend != "")
+            {
+                if (attackOrDefend == "Defend")
+                {
+                    cout << "Player : " << getName() << " your territories are: ";
+                    for (int i = 0; i < toDefendList.size(); i++)
+                    {
+                        cout << toDefendList[i]->getName() << ": " << toDefendList[i]->getArmies() << " army units\n";
+                    }
+                    string territory1;
+                    int territory1Size;
+                    string territory2;
+                    int numToMove;
+                    cout << "Which territory would you like to move army units from?";
+                    cin >> territory1;
+                    for (int i = 0; i < toDefendList.size(); i++)
+                    {
+                        if (territory1 == toDefendList[i]->getName())
+                        {
+                            territory1Size = toDefendList.size();
+                        }
+                    }
+                    cout << "Territory: " << territory1 << " currently has " << territory1Size << " army units\n";
+                    cout << "How many army units would you like to move?";
+                    cin >> numToMove;
+                    cout << "To which territory would you like to send them to?";
+                    cin >> territory2;
+                    for (int i = 0; i < toDefendList.size(); i++)
+                    {
+                        if (territory2 == toDefendList[i]->getName())
+                        {
+                            int armies = numToMove + toDefendList[i]->getArmies();
+                            order = new DeployOrder(toDefendList[i], armies, "Player1");
+                            cout << "Territory: " << territory2 << " now has " << toDefendList[i]->getArmies() << " army units\n";
+                        }
+                    }
+                    for (int i = 0; i < toDefendList.size(); i++)
+                    {
+                        if (territory1 == toDefendList[i]->getName())
+                        {
+                            int armies = toDefendList[i]->getArmies() - numToMove;
+                            toDefendList[i]->setArmies(armies);
+                        }
+                    }
+                }
+                else if (attackOrDefend == "Attack")
+                {
+                    cout << "Player : " << getName() << " your territories are: ";
+                    for (int i = 0; i < toDefendList.size(); i++)
+                    {
+                        cout << toDefendList[i]->getName() << ": " << toDefendList[i]->getArmies() << " army units\n";
+                    }
+                    string territory1;
+                    int numToMove;
+                    string territory2;
+                    cout << "From which territory would you like to move your army units from?";
+                    cin >> territory1;
+                    Territory *sourceTeritory;
+                    for (int i = 0; i < toDefendList.size(); i++)
+                    {
+                        if (territory1 == toDefendList[i]->getName())
+                        {
+                            sourceTeritory = toDefendList[i];
+                        }
+                    }
+                    cout << "How many army units from territory " << territory1 << " would you like to move?";
+                    cin >> numToMove;
+                    cout << "Which of the following neighboring territories would you like to attack? \n";
+                    for (int i = 0; i < toAttackList.size(); i++)
+                    {
+                        cout << toAttackList[i]->getName() << "\n";
+                    }
+                    cin >> territory2;
+                    for (int i = 0; i < toAttackList.size(); i++)
+                    {
+                        if (territory2 == toAttackList[i]->getName())
+                        {
+                            const string& c = "Player1";
+                            order = new AdvanceOrder(sourceTeritory, toAttackList[i], numToMove, map, c);
+                            cout << numToMove << " army units have been advanced to territory " << territory2 << "\n";
+                        }
+                    }
+                }
+                else
+                {
+                    cout << "Invalid command. Try again";
+                    cin >> attackOrDefend;
+                }
+            }
+        }
+
+        if (type == "Bomb")
+        {
+            order2 = new BombOrder();orderList->addOrder(order2);
+        }
+        else if (type == "Airlift")
+        {
+            order2 = new AirliftOrder();
+            orderList->addOrder(order2);
+        }
+        else if (type == "Blockade")
+        {
+            order2 = new BlockadeOrder();
+            orderList->addOrder(order2);
+        }
+        else if(type=="Negotiate"){
+            order2 = new NegotiateOrder();
+            orderList->addOrder(order2);
+        }
+        else{
+            cout<<"Invalid type in issueOrder(type), no order instance was created."<<endl;
+            return;
         }
     }
 
-    orderList->addOrder(order);
-
-    Order *order2;
-
-    if (type == "Advance")
-    {
-        string attackOrDefend;
-        cout << "Player: " << getName() << " would you like to move units to defend or attack teritories? Enter Defend or Attack: ";
-        cin >> attackOrDefend;
-        while (attackOrDefend != "")
-        {
-            if (attackOrDefend == "Defend")
-            {
-                cout << "Player : " << getName() << " your territories are: ";
-                for (int i = 0; i < toDefendList.size(); i++)
-                {
-                    cout << toDefendList[i]->getName() << ": " << toDefendList[i]->getArmies() << " army units\n";
-                }
-                string territory1;
-                int territory1Size;
-                string territory2;
-                int numToMove;
-                cout << "Which territory would you like to move army units from?";
-                cin >> territory1;
-                for (int i = 0; i < toDefendList.size(); i++)
-                {
-                    if (territory1 == toDefendList[i]->getName())
-                    {
-                        territory1Size = toDefendList.size();
-                    }
-                }
-                cout << "Territory: " << territory1 << " currently has " << territory1Size << " army units\n";
-                cout << "How many army units would you like to move?";
-                cin >> numToMove;
-                cout << "To which territory would you like to send them to?";
-                cin >> territory2;
-                for (int i = 0; i < toDefendList.size(); i++)
-                {
-                    if (territory2 == toDefendList[i]->getName())
-                    {
-                        int armies = numToMove + toDefendList[i]->getArmies();
-                        order = new DeployOrder(toDefendList[i], armies, "Player1");
-                        cout << "Territory: " << territory2 << " now has " << toDefendList[i]->getArmies() << " army units\n";
-                    }
-                }
-                for (int i = 0; i < toDefendList.size(); i++)
-                {
-                    if (territory1 == toDefendList[i]->getName())
-                    {
-                        int armies = toDefendList[i]->getArmies() - numToMove;
-                        toDefendList[i]->setArmies(armies);
-                    }
-                }
-            }
-            else if (attackOrDefend == "Attack")
-            {
-                cout << "Player : " << getName() << " your territories are: ";
-                for (int i = 0; i < toDefendList.size(); i++)
-                {
-                    cout << toDefendList[i]->getName() << ": " << toDefendList[i]->getArmies() << " army units\n";
-                }
-                string territory1;
-                int numToMove;
-                string territory2;
-                cout << "From which territory would you like to move your army units from?";
-                cin >> territory1;
-                Territory *sourceTeritory;
-                for (int i = 0; i < toDefendList.size(); i++)
-                {
-                    if (territory1 == toDefendList[i]->getName())
-                    {
-                        sourceTeritory = toDefendList[i];
-                    }
-                }
-                cout << "How many army units from territory " << territory1 << " would you like to move?";
-                cin >> numToMove;
-                cout << "Which of the following neighboring territories would you like to attack? \n";
-                for (int i = 0; i < toAttackList.size(); i++)
-                {
-                    cout << toAttackList[i]->getName() << "\n";
-                }
-                cin >> territory2;
-                for (int i = 0; i < toAttackList.size(); i++)
-                {
-                    if (territory2 == toAttackList[i]->getName())
-                    {
-                        const string& c = "Player1";
-                        order = new AdvanceOrder(sourceTeritory, toAttackList[i], numToMove, map, c);
-                        cout << numToMove << " army units have been advanced to territory " << territory2 << "\n";
-                    }
-                }
-            }
-            else
-            {
-                cout << "Invalid command. Try again";
-                cin >> attackOrDefend;
-            }
-        }
-    }
-
-    if (type == "Bomb")
-    {
-        order2 = new BombOrder();orderList->addOrder(order2);
-    }
-    else if (type == "Airlift")
-    {
-        order2 = new AirliftOrder();
-        orderList->addOrder(order2);
-    }
-    else if (type == "Blockade")
-    {
-        order2 = new BlockadeOrder();
-        orderList->addOrder(order2);
-    }
-    else if(type=="Negotiate"){
-        order2 = new NegotiateOrder();
-        orderList->addOrder(order2);
-    }
-    else{
-        cout<<"Invalid type in issueOrder(type), no order instance was created."<<endl;
-        return;
+    else {
+        cout << "User has no reinforcements!" << endl;
     }
     
 }
@@ -457,14 +463,15 @@ void testPlayers()
 
     cout << "\nPlayer 1 is playing: " << endl;
     player1.issueOrder(player1.getPlayerHand()->play(0));
-    cout << "\n"
-         << player1.getName() << "'s hand:" << endl;
+    cout << "\n" << player1.getName() << "'s hand:" << endl;
     player1.getPlayerHand()->print();
 
     player1.issueOrder(player1.getPlayerHand()->play(1));
-    cout << "\n"
-         << player1.getName() << "'s hand:" << endl;
+    cout << "\n" << player1.getName() << "'s hand:" << endl;
     player1.getPlayerHand()->print();
+
+
+
 
     cout << "\nPlayer 2 is playing: " << endl;
     player2.issueOrder(player2.getPlayerHand()->play(0));
@@ -476,6 +483,8 @@ void testPlayers()
     cout << "\n"
          << player2.getName() << "'s hand:" << endl;
     player2.getPlayerHand()->print();
+
+
 
     // Print out player 1's and 2's orderLists
     cout << "\nPlayer 1's order list:" << endl;
