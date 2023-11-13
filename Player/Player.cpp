@@ -459,8 +459,6 @@ void testPlayers()
 
     // Calling issue order player 1 and player 2 to add orders to their orderlist
 
-    cout << "DEBUG FROM HERE: " << endl;
-
     cout << "\nPlayer 1 is playing: " << endl;
     player1.issueOrder(player1.getPlayerHand()->play(0));
     cout << "\n" << player1.getName() << "'s hand:" << endl;

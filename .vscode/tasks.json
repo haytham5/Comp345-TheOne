@@ -13,7 +13,7 @@
                 "${workspaceFolder}\\LoggingObserver\\LoggingObserver.cpp",
                 "${workspaceFolder}\\Map\\Map.cpp",
                 "${workspaceFolder}\\Orders\\Order.cpp",
-                //"${workspaceFolder}\\Player\\Player.cpp",
+                "${workspaceFolder}\\Player\\Player.cpp",
                 "${fileDirname}\\**.cpp",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
