@@ -380,7 +380,6 @@ void DeployOrder::execute() {
     } else {
         std::cout << "Deploy order is invalid and cannot be executed." << std::endl;
     }
-    notify(this);
 }
 
 BombOrder::BombOrder()
@@ -481,6 +480,8 @@ void NegotiateOrder::execute() {
                       << issuingPlayer << " and " 
                       << targetPlayer << std::endl;
         }
+
+        notify(this);
     } else {
         std::cout << "Negotiate order is invalid and cannot be executed." << std::endl;
     }
