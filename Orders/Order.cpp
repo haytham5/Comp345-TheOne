@@ -63,6 +63,16 @@ int OrdersList::getOrdersListSize()
     return orders.size();
 }
 
+Order *OrdersList::getOrderAt(int i)
+{
+    return orders.at(i);
+}
+
+void OrdersList::erase(int i)
+{
+    orders.erase(orders.begin() + i);
+}
+
 void OrdersList::removeOrder(Order *order)
 {
     for (auto it = orders.begin(); it != orders.end(); ++it)
@@ -149,12 +159,19 @@ ostream &operator<<(ostream &out, const BombOrder &object)
 AdvanceOrder::AdvanceOrder()
 {
     description = "Advance";
+    baseType = "Advance";
+    targetTerritory = new Territory();
+    sourceTerritory = new Territory();
+    issuingPlayer = "TEST";
+    numberOfArmies = 0;
+    gameMap = new Map();
 }
 
 AdvanceOrder::AdvanceOrder(Territory *source, Territory *target, int armies, Map* gameMap, const std::string& player)
     : sourceTerritory(source), targetTerritory(target), numberOfArmies(armies), gameMap(gameMap), issuingPlayer(player)
 {
     description = "Advance " + std::to_string(armies) + " from " + source->getName() + " to " + target->getName() + " by player " + issuingPlayer;
+    baseType = "Advance";
 }
 
 AdvanceOrder &AdvanceOrder::operator=(const AdvanceOrder &other)
@@ -206,12 +223,18 @@ void AdvanceOrder::execute() {
 AirliftOrder::AirliftOrder()
 {
     description = "Airlift";
+    baseType = "Airlift";
+    targetTerritory = new Territory();
+    sourceTerritory = new Territory();
+    issuingPlayer = "TEST";
+    numberOfArmies = 0;
 }
 
 AirliftOrder::AirliftOrder(Territory *source, Territory *target, int armies, const std::string& player)
     : sourceTerritory(source), targetTerritory(target), numberOfArmies(armies), issuingPlayer(player)
 {
     description = "Airlift " + std::to_string(armies) + " from " + source->getName() + " to " + target->getName() + " by " + issuingPlayer;
+    baseType = "Airlift";
 }
 
 AirliftOrder &AirliftOrder::operator=(const AirliftOrder &other)
@@ -258,12 +281,16 @@ void AirliftOrder::execute() {
 BlockadeOrder::BlockadeOrder()
 {
     description = "Blockade";
+    baseType = "Blockade";
+    targetTerritory = new Territory();
+    issuingPlayer = "TEST";
 }
 
 BlockadeOrder::BlockadeOrder(Territory *target, const std::string& player)
     : targetTerritory(target), issuingPlayer(player)
 {
     description = "Blockade " + target->getName() + " by " + issuingPlayer;
+    baseType = "Blockade";
 }
 
 BlockadeOrder &BlockadeOrder::operator=(const BlockadeOrder &other)
@@ -304,10 +331,13 @@ void BlockadeOrder::execute() {
     
 }
 
-
 DeployOrder::DeployOrder()
 {
     description = "Deploy";
+    baseType = "Deploy";
+    targetTerritory = new Territory();
+    issuingPlayer = "TEST";
+    numberOfArmies = 0;
 }
 
 //added Player to the constructor
@@ -315,6 +345,10 @@ DeployOrder::DeployOrder(Territory *target, int armies, const std::string& playe
    
 {
     description = "Deploy " + std::to_string(armies) + " to " + target->getName() + "by player " + issuingPlayer;
+    baseType = "Deploy";
+    targetTerritory = target;
+    this->issuingPlayer = player;
+    numberOfArmies = armies;
 }
 
 DeployOrder &DeployOrder::operator=(const DeployOrder &other)
@@ -351,12 +385,17 @@ void DeployOrder::execute() {
 
 BombOrder::BombOrder()
 {
-    description = "bomb";
+    description = "Bomb";
+    baseType = "Bomb";
+    targetTerritory = new Territory();
+    issuingPlayer = "TEST";
+    gameMap = new Map();
 }
 
 BombOrder::BombOrder(Territory *target, const std::string& player, Map* gameMap)
  : targetTerritory(target), issuingPlayer(player), gameMap(gameMap) {
     description = "Bomb " + target->getName() + " by " + issuingPlayer;
+    baseType = "Bomb";
 }
 
 BombOrder &BombOrder::operator=(const BombOrder &other)
@@ -408,11 +447,15 @@ void BombOrder::execute()  {
 
 NegotiateOrder::NegotiateOrder() {
     description = "Negotiate";
+    baseType =" Negotiate";
+    issuingPlayer = "TEST";
+    targetPlayer = "TEST";
 }
 
 NegotiateOrder::NegotiateOrder(const std::string& player1, const std::string& player2)
     : issuingPlayer(player1), targetPlayer(player2) {
     description = "Negotiate between " + player1 + " and " + player2;
+    baseType =" Negotiate";
 }
 
 

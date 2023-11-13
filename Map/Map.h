@@ -37,17 +37,19 @@ class Territory {
     void setLocationY(const int locationY);
     string getContinent() const;
     void setContinent(const string& continent);
-    string getPlayer() const;
+    string getPlayer();
     void setPlayer(const string& player);
     int getArmies() const;
     void setArmies(const int armies);
 
     // Assignment operator for Territory class
     Territory& operator=(const Territory& territory);
+
+    friend ostream& operator<<(std::ostream& os, const Territory& territory);
 };
 
 // Overload the << operator for Territory to allow printing
-ostream& operator<<(std::ostream& os, const Territory& territory);
+
 
 // Map Class
 class Map {

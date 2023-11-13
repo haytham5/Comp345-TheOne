@@ -13,11 +13,12 @@ protected:
     std::string description;
     bool isExecuted = false;
 
+
 public:
     virtual bool validate() = 0; // Check if the order is valid.
     virtual void execute() = 0;  // Execute the order action.
     virtual ~Order() {}          // Virtual destructor to ensure proper cleanup for derived classes.
-
+    std::string baseType;
     Order &operator=(const Order &other);
 
     // Ostream
@@ -48,6 +49,8 @@ public:
     // Getters
     const std::vector<Order *> &getOrders() const;
     int getOrdersListSize();
+    Order* getOrderAt(int i);
+    void erase(int i);
 
     // Overload stream insertion operator
     friend std::ostream& operator<<(std::ostream& os, const OrdersList& ordersList);

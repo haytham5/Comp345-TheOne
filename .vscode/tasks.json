@@ -9,11 +9,11 @@
                 "-g",
                 "${workspaceFolder}\\Card\\Card.cpp",
                 "${workspaceFolder}\\CommandProcessing\\CommandProcessing.cpp",
-                "${workspaceFolder}\\GameEngine\\GameEngine.cpp",
+                //"${workspaceFolder}\\GameEngine\\GameEngine.cpp",
                 "${workspaceFolder}\\LoggingObserver\\LoggingObserver.cpp",
                 "${workspaceFolder}\\Map\\Map.cpp",
                 "${workspaceFolder}\\Orders\\Order.cpp",
-                //"${workspaceFolder}\\Player\\Player.cpp",
+                "${workspaceFolder}\\Player\\Player.cpp",
                 "${fileDirname}\\**.cpp",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"

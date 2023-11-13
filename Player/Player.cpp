@@ -87,6 +87,11 @@ void Player::draw()
     playerHand->draw();
 }
 
+void Player::EraseOrder(int i)
+{
+   orderList->erase(i);
+}
+
 void Player::setPlayerHand(Hand *hand)
 {
     playerHand = hand;
@@ -166,23 +171,28 @@ void Player::issueOrder(string type)
     vector<Territory *> toAttackList = toAttack();
     vector<Territory *> toDefendList = toDefend();
 
-
-    while (reinforcementPool != 0)
+    while (reinforcementPool > 0)
     {
+        cout << "Player: " << getName() << " has " << reinforcementPool << " army units available to deploy and has " << toDefendList.size() << " territories \n";
+
         for (int i = 0; i < toDefendList.size(); i++)
         {
             int deployAmount;
-            cout << "Player: " << getName() << " has " << reinforcementPool << " army units available to deploy  and has " << toDefendList.size() << " territories \n";
             cout << "How many units would you like to deploy to territory: " << toDefendList[i]->getName() << "?";
             cin >> deployAmount;
-            order = new DeployOrder(toDefendList[i], deployAmount, "Player1");
+            order = new DeployOrder(toDefendList.at(i), deployAmount, playerName);
+            reinforcementPool -= deployAmount;
         }
     }
+
+    orderList->addOrder(order);
+
+    Order *order2;
 
     if (type == "Advance")
     {
         string attackOrDefend;
-        cout << "Player: " << getName() << " would you like to move units to defend or attack teritories? Enter Defend or Attack";
+        cout << "Player: " << getName() << " would you like to move units to defend or attack teritories? Enter Defend or Attack: ";
         cin >> attackOrDefend;
         while (attackOrDefend != "")
         {
@@ -277,24 +287,27 @@ void Player::issueOrder(string type)
 
     if (type == "Bomb")
     {
-        order = new BombOrder();
+        order2 = new BombOrder();orderList->addOrder(order2);
     }
     else if (type == "Airlift")
     {
-        order = new AirliftOrder();
+        order2 = new AirliftOrder();
+        orderList->addOrder(order2);
     }
     else if (type == "Blockade")
     {
-        order = new BlockadeOrder();
+        order2 = new BlockadeOrder();
+        orderList->addOrder(order2);
     }
     else if(type=="Negotiate"){
-       order=new NegotiateOrder();
+        order2 = new NegotiateOrder();
+        orderList->addOrder(order2);
     }
     else{
         cout<<"Invalid type in issueOrder(type), no order instance was created."<<endl;
         return;
     }
-    orderList->addOrder(order);
+    
 }
 
 void Player::testState(string s)

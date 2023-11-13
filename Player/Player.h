@@ -50,6 +50,8 @@ public:
 
   void draw();
 
+  void EraseOrder(int i );
+
   // Setter for playerHand
   void setPlayerHand(Hand *hand);
 

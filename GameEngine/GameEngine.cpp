@@ -499,36 +499,33 @@ void GameEngine::issueOrdersPhase()
                         {
                             players[i]->issueOrder(order);
                         }
-                        else
-                        {
-                            cout << "Invalid Order! Try Again"<< endl;
-                            cin >> order;
-                        }
                     }
                 }
                 else
                 {
-                    cout << "Invalid Order! Try Again" << endl;
+                    cout << "Invalid Order! Try Again: ";
                     cin >> order;
                 }
+
+                break;
             }
 
-            cout << "Would you like to issue another order? YES or NO" << endl;
+            cout << "Would you like to issue another order? YES or NO: " << endl;
             cin >> answer;
+
             if (answer == "NO")
             {
                 break;
             }
-            cout << "\n"
-                 << endl;
-        }
+
+            cout << "\n" << endl;
+            }
     }
 }
 
 // Executes the orders for each player
 void GameEngine::executeOrdersPhase()
 {
-
     // game engine should execute all deploy orders before any other orders
     for (int i = 0; i < players.size(); i++)
     {
@@ -536,10 +533,10 @@ void GameEngine::executeOrdersPhase()
 
         for (int j = 0; j < playerOrderList->getOrdersListSize(); j++)
         {
-            Order *order = playerOrderList->getOrders().at(j);
-            if (order->getDescription() == "Deploy")
+            Order *order = players[i]->getOrderList()->getOrderAt(j);
+            if (order->baseType == "Deploy")
             {
-                cout << "Player: " << players[i]->getName() << " executes deploy orders";
+                cout << "Player: " << players[i]->getName() << " executes deploy orders...";
                 order->execute();
             }
         }
@@ -550,9 +547,14 @@ void GameEngine::executeOrdersPhase()
     {
         OrdersList *playerOrderList = players[i]->getOrderList();
 
-        Order *order = playerOrderList->getOrders().at(0);
-        cout << "Player: " << players[i]->getName() << " executes order: " << order->getDescription();
-        order->execute();
+        Order *order = playerOrderList->getOrderAt(i);
+        if(order->baseType != "Deploy") {
+            cout << "Player: " << players[i]->getName() << " executes order:\n" << order->getDescription();
+
+            if(order->getDescription() != "")
+                order->execute();
+            else cout << "Error occured." << endl;
+        }
     }
 }
 
