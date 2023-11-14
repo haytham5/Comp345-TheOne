@@ -21,7 +21,7 @@
 - Game log observer: commands and orders **(Ricky)** 
 
 ## A3 Tasks:
-- Player Strategy Pattern - Aggressive Player and Benevolent Player
+- Player Strategy Pattern - Aggressive Player and Benevolent Player **(Ricky)** 
 - Player Strategy Pattern - Neutral Player and Cheater Player
 - Final Merge **(Haytham)**
 - Tournament mode 1
