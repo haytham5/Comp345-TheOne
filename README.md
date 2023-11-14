@@ -22,7 +22,7 @@
 
 ## A3 Tasks:
 - Player Strategy Pattern - Aggressive Player and Benevolent Player **(Ricky)** 
-- Player Strategy Pattern - Neutral Player and Cheater Player
+- Player Strategy Pattern - Neutral Player and Cheater Player **(Mouhamed)**
 - Final Merge **(Haytham)**
 - Tournament mode 1
 - Tournament mode 2
