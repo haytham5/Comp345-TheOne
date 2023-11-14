@@ -23,7 +23,7 @@
 ## A3 Tasks:
 - Player Strategy Pattern - Aggressive Player and Benevolent Player
 - Player Strategy Pattern - Neutral Player and Cheater Player
-- Game Engine Readjustments **(Haytham)**
+- Final Merge **(Haytham)**
 - Tournament mode 1
 - Tournament mode 2
 
