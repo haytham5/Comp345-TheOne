@@ -50,11 +50,11 @@ Deck::Deck()
     srand((unsigned) time(NULL));
 
     // Array of possible card types
-    string types[5] = {"Bomb", "Airlift", "Blockade", "Deploy", "Advance"};
+    string types[6] = {"Bomb", "Airlift", "Blockade", "Deploy", "Advance", "Negotiate"};
 
     // Create 52 cards with random types and add them to the deck
     for(int i = 0; i < 52; i++) {
-        Card * c = new Card(types[rand() % 5]);
+        Card * c = new Card(types[rand() % 6]);
         deck.push_back(c);
     }
 
@@ -172,9 +172,23 @@ void Hand::print() {
     for (auto elem : hand) elem->print();
 }
 
+bool Hand::hasCard(const std::string& cardType) {
+    for (Card* card : hand) {
+        if (card != nullptr && card->getType() == cardType) {
+            return true;
+        }
+    }
+    return false;
+}
+
 // Function to get the size of the hand
 int Hand::size() {
     return hand.size();
+}
+
+vector<Card *> Hand::getCards()
+{
+    return hand;
 }
 
 // Function to test the Card, Deck, and Hand classes

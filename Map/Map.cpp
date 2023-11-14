@@ -10,6 +10,7 @@
 #include <algorithm>
 
 Territory::Territory(){
+  player = "TEST";
 }
 
 Territory::Territory(const string& name, const int locationX, const int locationY, const string& continent)
@@ -21,7 +22,7 @@ Territory::Territory(const string& name, const int locationX, const int location
 }
 
 Territory::Territory(const Territory& territory)
-  : name(territory.getName()), continent(territory.getContinent()), player(territory.getPlayer()), armies(territory.getArmies()) {
+  : name(territory.getName()), continent(territory.getContinent()), player(territory.player), armies(territory.getArmies()) {
 }
 
 Territory::~Territory(){
@@ -59,8 +60,9 @@ void Territory::setContinent(const string& continent) {
   this->continent = continent;
 }
 
-string Territory::getPlayer() const {
-  return this->player;
+string Territory::getPlayer() {
+  cout << player << endl;
+  return player;
 }
 
 void Territory::setPlayer(const string& player) {
@@ -91,7 +93,7 @@ Territory& Territory::operator=(const Territory& territory) {
 ostream& operator<<(ostream& os, const Territory& territory) {
   os << "Name: " << territory.getName()
       << "\nContinent: " << territory.getContinent() 
-      << "\nOwner: " << territory.getPlayer() 
+      << "\nOwner: " << territory.player
       << "\nArmies: " << territory.getArmies();
   return os;
 }
@@ -378,9 +380,9 @@ bool MapLoader::testAddEdge(){
 
 bool testLoadMaps(){
   bool valid = true;
-  valid = valid && MapLoader::isValidMapFile("Map/resources/ABC_Map.map");
-  valid = valid && MapLoader::isValidMapFile("Map/resources/Asia.map");
-  valid = valid && !MapLoader::isValidMapFile("Map/resources/ABC_MapInvalid.map"); //Invalid Map
+  valid = valid && MapLoader::isValidMapFile("resources/ABC_Map.map");
+  valid = valid && MapLoader::isValidMapFile("resources/Asia.map");
+  valid = valid && !MapLoader::isValidMapFile("resources/ABC_MapInvalid.map"); //Invalid Map
   if(valid){
     std::cout << "All test passed!" << endl;
     return true;

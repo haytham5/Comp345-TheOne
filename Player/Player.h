@@ -1,85 +1,118 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include<string>
-#include<vector>
-#include "../Map/Map.h"
+#include <string>
+#include <vector>
+#include "../Map/Map.h"  
+#include "../LoggingObserver/LoggingObserver.h"
 #include "../Orders/Order.h"
 #include "../Card/Card.h"
 #include "../CommandProcessing/CommandProcessing.h"
 
+
 using namespace std;
 
 void testPlayers();
+class OrdersList;
 
-class Player{
- public:
+class Player
+{
+public:
+  // Default constructor
+  Player();
 
-   //Default constructor
-    Player();
+  // Parameterized constructor
+  Player(const string &name, Map *gameMap, Hand *hand, OrdersList *orderList);
 
-    //Parameterized constructor
-    Player(const string& name, Map* gameMap, Hand* hand, OrdersList* orderList);
+  // Parameterized constructor with processor
+  Player(const string &name, Map *gameMap, Hand *hand, OrdersList *orderList, CommandProcessor *processor);
 
-   //Parameterized constructor with processor
-    Player(const string& name, Map* gameMap, Hand* hand, OrdersList* orderList, CommandProcessor* processor);
-    
-    //Copy constructor
-    Player(const Player& other);
+  // Copy constructor
+  Player(const Player &other);
 
-    //Operator
-    Player& operator = (const Player& other);
+  // Operator
+  Player &operator=(const Player &other);
 
-    //Ostream
-    friend ostream & operator << (ostream &out, const Player &object);
+  // Ostream
+  friend ostream &operator<<(ostream &out, const Player &object);
 
-    //Destructor
-    ~Player();
+  // Destructor
+  ~Player();
 
-    //Getter for playerName
-    string getName() const;
+  // Getter for playerName
+  string getName() const;
 
-    //Setter for playerName
-    void setName(string name);
+  // Setter for playerName
+  void setName(string name);
 
-   //Getter for playerHand
-    Hand* getPlayerHand() const;
+  // Getter for playerHand
+  Hand *getPlayerHand() const;
 
-    //Setter for playerHand
-    void setPlayerHand(Hand* hand);
+  void draw();
 
-    void printOrderList();
-    
-    //Getter for playerTerritories
-    vector<Territory*> getPlayerTerritories() const;
+  void EraseOrder(int i );
 
-    //toDefend() function declaration
-    vector<Territory*> toDefend() const;
+  // Setter for playerHand
+  void setPlayerHand(Hand *hand);
 
-    //toAttack() function declaration
-    vector<Territory*> toAttack() const;
+  int getReinforcementPool() const;
 
-    void addPlayerTerritories(Territory* territory);
-    
-    //issueOrder() function declaration
-    void issueOrder(string type);
+  void setReinforcementPool(int reinforcementPool);
 
-    //Test State
-    void testState(string s);
+  void printOrderList();
 
-    //Get Player Command
-    void play();
+  // Check if player owns all territories in continent
+  bool ownAllTerritoryInContinent();
 
- private:
-   vector<Territory*> playerTerritories;
-    Hand* playerHand;
-    string playerName;
-    OrdersList* orderList;
-    Map* map;
+  OrdersList* getOrderList();
 
-    //Processor
-    CommandProcessor* processor;
+  // Getter for playerTerritories
+  vector<Territory *> getPlayerTerritories() const;
 
+  // toDefend() function declaration
+  vector<Territory *> toDefend() const;
+  
+  bool hasCard(const std::string& cardType);
+  void setInNegotiationWith(Player* otherPlayer);
+  bool isInNegotiationWith(Player* otherPlayer);
+
+  static Player* getPlayerByName(const std::string& name);
+
+  // toAttack() function declaration
+  vector<Territory *> toAttack() const;
+
+  void addPlayerTerritories(Territory *territory);
+
+  // issueOrder() function declaration
+  void issueOrder(string type);
+
+  // Test State
+  void testState(string s);
+
+  // Get Player Command
+  void play();
+
+  // Set Player Phase
+  void setPhase(string ph);
+
+  // Get Player Phase
+  string getPhase();
+
+private:
+  int reinforcementPool;
+  vector<Territory *> playerTerritories;
+  Hand *playerHand;
+  string playerName;
+  OrdersList *orderList;
+  Map *map;
+  string phase;
+
+  static std::vector<Player*> allPlayers; // Static list of all players
+
+
+  std::unordered_set<Player*> negotiationPartners;
+  // Processor
+  CommandProcessor *processor;
 };
 
 #endif

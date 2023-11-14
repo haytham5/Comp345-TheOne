@@ -30,16 +30,18 @@ void Subject::attach(Observer *observer){
 
 //Deletes a given observer in the observers vector
 void Subject::detach(Observer *observer){
+    int eraseIndex = -1;
     //Finds the observer in the observers vector and remove it
-    auto it= find(observers.begin(),observers.end(),observer);
-    if (it!= observers.end()) {
-        observers.erase(it);
+    for(int i = 0; i < observers.size(); i++) {
+        if(observers.at(i) == observer) {eraseIndex = i;break;}
     }
+    
+    if(eraseIndex != -1) observers.erase(observers.begin() + eraseIndex);
 }
 
 //Allows subjects to notify observers of the necessary events
 void Subject::notify(ILoggable *loggable){
-    cout<< "Notifying..."<<endl;
+     cout<< "Notifying..."<<endl;
     for(auto elem : observers){
         elem->update(loggable);
     }
@@ -216,9 +218,7 @@ void testLoggingObserver(){
     CommandProcessor* cmdP= new CommandProcessor();
     GameEngine* game = new GameEngine();
     OrdersList* oList= new OrdersList();
-    BlockadeOrder* blockOrder= new BlockadeOrder(terr);
-    DeployOrder* deployOrder= new DeployOrder(terr2, 3);
-
+    BlockadeOrder* blockOrder= new BlockadeOrder(terr, "Player 1");
 
     //Instantiating concrete observer
     LogObserver* logO = new LogObserver(cmd);
@@ -228,7 +228,6 @@ void testLoggingObserver(){
     game->attach(logO);
     oList->attach(logO);
     blockOrder->attach(logO);
-    deployOrder->attach(logO);
 
     //Testing that gamelog successfully writes the information for CommandProcessing and Command class
     cmdP->testSaveCommand("blue","red");
@@ -240,9 +239,8 @@ void testLoggingObserver(){
 
     //Testing that gamelog successfully writes the information for Order and OrdersList class
     oList->addOrder(blockOrder);
+    //Will not be printed since execute() will fail validation and thus will not be executed
     blockOrder->execute();
-    oList->addOrder(deployOrder);
-    deployOrder->execute();
 
     cout<<"Done testing, check gamelog.txt"<<endl;
 

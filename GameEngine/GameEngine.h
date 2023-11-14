@@ -4,13 +4,14 @@
 #include "../CommandProcessing/CommandProcessing.h"
 #include "../Player/Player.h"
 #include "../LoggingObserver/LoggingObserver.h"
+#include "../Map/Map.h"
 
 using namespace std;
 
 class GameEngine : public ILoggable, public Subject
 {
 public:
-    //different states the game can be in
+    // different states the game can be in
     enum GameState
     {
         START,
@@ -24,51 +25,89 @@ public:
         WIN,
         END
     };
-    //default constructor
+    // default constructor
     GameEngine();
-    
-    //copy constructor
-    GameEngine(GameEngine& gameEngine);
 
-    //Run
+    // copy constructor
+    GameEngine(GameEngine &gameEngine);
+
+    // Run
     void run();
 
-    //function to get current state of game
+    // function to get current state of game
     GameState getGameState();
-    //Transition states
+
+    void startupPhase();
+
+    // Transition states
     void transition(GameEngine::GameState);
-    
-    //function to convert states to string
+
+    // function to convert states to string
     std::string stateToString();
-    
-    //Function to convert string to state
+
+    // Function to convert string to state
     GameState stringToState(string s);
 
-    //Executes command, if command needs to be executed
+    // Executes command, if command needs to be executed
     bool executeCommand(Command command);
 
-    //Changes state
+    // Changes state
     void executeStateChange(string stateChange);
 
-    GameEngine& operator=(GameEngine& gameEngine);
+    // Method that returns a vector of current players
+    vector<Player *> getPlayers();
 
-    friend ostream& operator<<(ostream& os, GameEngine& gameEngine);
+    // Method that sets the current players
+    void setPlayers(vector<Player *> p);
+
+    // Main game loop to cycle through the Reinforcement, Issue Orders and Order Execution Phases
+    void mainGameLoop(bool t);
+
+    // Reinforcement Phase
+    void reinforcementPhase();
+
+    // Issuing Orders Phase
+    void issueOrdersPhase();
+
+    // Orders Execution Phase
+    void executeOrdersPhase();
+
+    GameEngine &operator=(GameEngine &gameEngine);
+
+    friend ostream &operator<<(ostream &os, GameEngine &gameEngine);
+
+    friend ostream &operator<<(ostream &os, GameEngine &gameEngine);
 
     virtual string stringToLog() override;
+    
+    bool startupTest = false;
 private:
-    //Game started
+    // Game started
     bool gameStarted;
 
-    //state of the game
+
+    // state of the game
     GameState state;
 
-    //Processor
-    CommandProcessor* processor;
+    // Processor
+    CommandProcessor *processor;
 
-    FileCommandProcessorAdapter* fileProcessor;
+    FileCommandProcessorAdapter *fileProcessor;
 
-    vector<Player*> players;
+    vector<Player *> players;
+    int currentPlayerIndex;
+
+    MapLoader *mapLoader;
+
+    string currentMap;
+
+    Map map;
 };
 
-//test for game engine in part 5 of assignment 1
+// test for game engine in part 5 of assignment 1
 void testGameEngine();
+
+void testStartupPhase();
+
+// test for main game loop in part 3 of assignment 2
+void testMainGameLoop();

@@ -6,8 +6,8 @@
 using namespace std;
 
 int main()
-{
-    testGameEngine();
-
+{   
+    testStartupPhase();
+    testMainGameLoop();
     return 0;
 }
