@@ -20,3 +20,10 @@
 - Order execution implementation **(Mouhamed)**
 - Game log observer: commands and orders **(Ricky)** 
 
+## A3 Tasks:
+- Player Strategy Pattern - Aggressive Player and Benevolent Player
+- Player Strategy Pattern - Neutral Player and Cheater Player
+- Game Engine Readjustments **(Haytham)**
+- Tournament mode 1
+- Tournament mode 2
+
