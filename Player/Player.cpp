@@ -11,6 +11,7 @@ Player::Player()
     this->orderList = nullptr;
     this->processor = new CommandProcessor('p');
     this->reinforcementPool = 0;
+    this->ps=nullptr;
     phase;
 }
 
@@ -36,6 +37,19 @@ Player::Player(const string &name, Map *gameMap, Hand *hand, OrdersList *orderLi
     this->processor = processor;
     this->reinforcementPool = 0;
     phase;
+}
+
+// Parameterized constructor with processor and player strategy
+Player::Player(const string &name, Map *gameMap, Hand *hand, OrdersList *orderList, CommandProcessor *processor, PlayerStrategy *ps)
+{
+    this->playerName = name;
+    this->map = gameMap;
+    this->playerHand = hand;
+    this->orderList = orderList;
+    this->processor = processor;
+    this->reinforcementPool = 0;
+    phase;
+    this->ps=ps;
 }
 
 // Copy constructor
@@ -64,6 +78,7 @@ Player::~Player()
     cout << "Deleting Player: " << endl;
     delete playerHand;
     delete orderList;
+    delete ps;
     cout << endl;
 }
 
@@ -95,6 +110,14 @@ void Player::EraseOrder(int i)
 void Player::setPlayerHand(Hand *hand)
 {
     playerHand = hand;
+}
+
+void Player::setPlayerStrategy(PlayerStrategy *newStrategy)
+{
+    if(ps!=nullptr){ 
+        delete ps; //Delete previous strategy
+    }
+    ps= newStrategy;
 }
 
 int Player::getReinforcementPool() const
@@ -134,18 +157,25 @@ vector<Territory *> Player::getPlayerTerritories() const
 vector<Territory *> Player::toDefend() const
 {
 
-    vector<Territory *> territoriesToDefend; // Create empty vector
+    /*vector<Territory *> territoriesToDefend; // Create empty vector
     for (int i = 0; i < playerTerritories.size(); i++)
     {
         territoriesToDefend.push_back(playerTerritories[i]);
     }
-    return territoriesToDefend;
+    return territoriesToDefend;*/
+    if(ps){
+        return ps->toDefend();
+    }
+    else{
+        cout<<"Cannot call toDefend since ps is null"<<endl;
+        return vector<Territory*>();
+    }
 }
 
 // Returns arbitrary list of territories to attack
 vector<Territory *> Player::toAttack() const
 {
-    vector<Territory *> territoriesToAttack; // Create empty vector
+    /*vector<Territory *> territoriesToAttack; // Create empty vector
     for (int i = 0; i < playerTerritories.size(); i++)
     {
         vector<string> neighbours = map->getNeighbors(playerTerritories.at(i)->getName());
@@ -157,7 +187,14 @@ vector<Territory *> Player::toAttack() const
             }
         }
     }
-    return territoriesToAttack;
+    return territoriesToAttack;*/
+    if(ps){
+        return ps->toAttack();
+    }
+    else{
+        cout<<"Cannot call toAttack since ps is null"<<endl;
+        return vector<Territory*>();
+    }
 }
 
 void Player::addPlayerTerritories(Territory *territory)
@@ -165,7 +202,7 @@ void Player::addPlayerTerritories(Territory *territory)
     playerTerritories.push_back(territory);
 }
 
-void Player::issueOrder(string type)
+/*void Player::issueOrder(string type)
 {
     Order *order;
     vector<Territory *> toAttackList = toAttack();
@@ -314,6 +351,16 @@ void Player::issueOrder(string type)
         cout << "User has no reinforcements!" << endl;
     }
     
+}*/
+
+void Player::issueOrder(){
+    //Checks to ensure that ps is not nullptr
+    if(ps){
+        ps->issueOrder();
+    }
+    else{
+        cout<< "Cannot call issueOrder since ps is null"<<endl;
+    }
 }
 
 void Player::testState(string s)
@@ -363,7 +410,7 @@ void Player::setPhase(string ph)
 }
 
 // Free function
-void testPlayers()
+/*void testPlayers()
 {
     string name1 = "Player 1";
     string name2 = "Player 2";
@@ -495,7 +542,7 @@ void testPlayers()
     cout << endl;
     delete deck;
     cout << endl;
-}
+}*/
 
 ostream &operator<<(ostream &out, const Player &object)
 {

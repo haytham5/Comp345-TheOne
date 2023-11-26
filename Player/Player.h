@@ -8,6 +8,7 @@
 #include "../Orders/Order.h"
 #include "../Card/Card.h"
 #include "../CommandProcessing/CommandProcessing.h"
+#include "../PlayerStrategies/PlayerStrategies.h"
 
 
 using namespace std;
@@ -26,6 +27,9 @@ public:
 
   // Parameterized constructor with processor
   Player(const string &name, Map *gameMap, Hand *hand, OrdersList *orderList, CommandProcessor *processor);
+
+   // Parameterized constructor with processor and player strategy
+  Player(const string &name, Map *gameMap, Hand *hand, OrdersList *orderList, CommandProcessor *processor, PlayerStrategy* ps);
 
   // Copy constructor
   Player(const Player &other);
@@ -55,6 +59,8 @@ public:
   // Setter for playerHand
   void setPlayerHand(Hand *hand);
 
+  void setPlayerStrategy(PlayerStrategy* newStrategy);
+
   int getReinforcementPool() const;
 
   void setReinforcementPool(int reinforcementPool);
@@ -83,8 +89,11 @@ public:
 
   void addPlayerTerritories(Territory *territory);
 
-  // issueOrder() function declaration
-  void issueOrder(string type);
+ 
+  //void issueOrder(string type);
+
+  //issueOrder() function declaration
+  void issueOrder();
 
   // Test State
   void testState(string s);
@@ -99,6 +108,7 @@ public:
   string getPhase();
 
 private:
+  PlayerStrategy* ps;
   int reinforcementPool;
   vector<Territory *> playerTerritories;
   Hand *playerHand;
