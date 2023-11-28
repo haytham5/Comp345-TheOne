@@ -13,7 +13,7 @@ class PlayerStrategy{
         virtual ~PlayerStrategy();
         PlayerStrategy& operator=(const PlayerStrategy& other);
         friend ostream& operator<<(ostream& out, const PlayerStrategy& playerStrategy);
-        virtual void issueOrder()=0;
+        virtual void issueOrder(string type)=0;
        virtual vector<Territory *> toAttack()=0;
        virtual vector<Territory *> toDefend()=0;
        
@@ -30,7 +30,7 @@ class HumanPlayer : public PlayerStrategy{
         ~HumanPlayer();
         HumanPlayer& operator=(const HumanPlayer& other);
         friend ostream& operator<<(ostream& out, const HumanPlayer& humanPlayer);
-        virtual void issueOrder() override;
+        virtual void issueOrder(string type) override;
         virtual vector<Territory *> toAttack() override;
         virtual vector<Territory *> toDefend() override;
 };
@@ -42,7 +42,7 @@ class AggressivePlayer : public PlayerStrategy{
         ~AggressivePlayer();
         AggressivePlayer& operator=(const AggressivePlayer& other);
         friend ostream& operator<<(ostream& out, const AggressivePlayer& aggressivePlayer);
-        virtual void issueOrder() override;
+        virtual void issueOrder(string type) override;
         virtual vector<Territory *> toAttack() override;
         virtual vector<Territory *> toDefend() override;
 };
@@ -54,7 +54,7 @@ class BenevolentPlayer : public PlayerStrategy{
         ~BenevolentPlayer();
         BenevolentPlayer& operator=(const BenevolentPlayer& other);
         friend ostream& operator<<(ostream& out, const BenevolentPlayer& benevolentPlayer);
-        virtual void issueOrder() override;
+        virtual void issueOrder(string type) override;
         virtual vector<Territory *> toAttack() override;
         virtual vector<Territory *> toDefend() override;
 };
@@ -66,7 +66,7 @@ class NeutralPlayer : public PlayerStrategy{
         ~NeutralPlayer();
         NeutralPlayer& operator=(const NeutralPlayer& other);
         friend ostream& operator<<(ostream& out, const NeutralPlayer& neutralPlayer);
-        virtual void issueOrder() override;
+        virtual void issueOrder(string type) override;
         virtual vector<Territory *> toAttack() override;
         virtual vector<Territory *> toDefend() override;
 };
@@ -78,7 +78,7 @@ class CheaterPlayer : public PlayerStrategy{
         ~CheaterPlayer();
         CheaterPlayer& operator=(const CheaterPlayer& other);
         friend ostream& operator<<(ostream& out, const CheaterPlayer& cheaterPlayer);
-        virtual void issueOrder() override;
+        virtual void issueOrder(string type) override;
         virtual vector<Territory *> toAttack() override;
         virtual vector<Territory *> toDefend() override;
 };

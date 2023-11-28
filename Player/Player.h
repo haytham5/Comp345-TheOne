@@ -89,11 +89,8 @@ public:
 
   void addPlayerTerritories(Territory *territory);
 
- 
-  //void issueOrder(string type);
-
-  //issueOrder() function declaration
-  void issueOrder();
+   //issueOrder() function declaration
+  void issueOrder(string type);
 
   // Test State
   void testState(string s);

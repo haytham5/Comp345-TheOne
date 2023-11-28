@@ -56,7 +56,7 @@ ostream &operator<<(ostream &out, const HumanPlayer &humanPlayer){
     return out;
 }
 
-void HumanPlayer::issueOrder(){
+void HumanPlayer::issueOrder(string type){
     //TODO
 }
 
@@ -94,7 +94,7 @@ ostream &operator<<(ostream &out, const AggressivePlayer &aggressivePlayer){
     return out;
 }
 
-void AggressivePlayer::issueOrder(){
+void AggressivePlayer::issueOrder(string type){
     //TODO
 }
 
@@ -132,7 +132,7 @@ ostream &operator<<(ostream &out, const BenevolentPlayer &benevolentPlayer){
     return out;
 }
 
-void BenevolentPlayer::issueOrder(){
+void BenevolentPlayer::issueOrder(string type){
     //TODO
 }
 
@@ -170,7 +170,7 @@ ostream &operator<<(ostream &out, const NeutralPlayer &neutralPlayer){
     return out;
 }
 
-void NeutralPlayer::issueOrder(){
+void NeutralPlayer::issueOrder(string type){
     //TODO
 }
 
@@ -208,7 +208,7 @@ ostream &operator<<(ostream &out, const CheaterPlayer &cheaterPlayer){
     return out;
 }
 
-void CheaterPlayer::issueOrder(){
+void CheaterPlayer::issueOrder(string type){
     //TODO
 }
 

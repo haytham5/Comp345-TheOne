@@ -353,10 +353,31 @@ void Player::addPlayerTerritories(Territory *territory)
     
 }*/
 
-void Player::issueOrder(){
+void Player::issueOrder(string type){
     //Checks to ensure that ps is not nullptr
     if(ps){
-        ps->issueOrder();
+        if(type=="Deploy"){
+            ps->issueOrder("Deploy");
+        }
+        else if(type=="Advance"){
+            ps->issueOrder("Advance");
+        }
+        else if(type=="Bomb"){
+            ps->issueOrder("Bomb");
+        }
+        else if(type=="Airlift"){
+            ps->issueOrder("Airlift");
+        }
+        else if(type=="Blockade"){
+            ps->issueOrder("Blockade");
+        }
+        else if(type=="Negotiate"){
+            ps->issueOrder("Negotiate");
+        }
+        else{
+            cout<< "Error: Invalid parameter in issueOrder"<<endl;
+        }
+        
     }
     else{
         cout<< "Cannot call issueOrder since ps is null"<<endl;
