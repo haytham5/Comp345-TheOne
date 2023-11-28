@@ -10,7 +10,7 @@
 using namespace std;
 
 int main() {    
-    // string s = "";
+    string s = "";
     // cout << "======= TEST CARDS =======" << endl;
     // testCards();
 
@@ -29,12 +29,12 @@ int main() {
     // cout << "\n======= TEST PLAYERS =======" << endl;
     // testPlayers();
 
-    // cout << "End Test. type 'next' and Enter to continue to ENGINE:";
-    // cin >> s;
-    // cout << "\n======= TEST ENGINE =======" << endl;
-    // testGameEngine();
+    cout << "End Test. type 'next' and Enter to continue to ENGINE:";
+    cin >> s;
+    cout << "\n======= TEST ENGINE =======" << endl;
+    testGameEngine();
 
-    string s = "";
+    // string s = "";
     cout << "======= TEST COMMAND PROCESSOR =======" << endl;
     testCommandProcessor();
 

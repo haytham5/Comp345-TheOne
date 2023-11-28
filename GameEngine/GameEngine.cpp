@@ -308,6 +308,54 @@ void GameEngine::run()
 {
     string state = "";
     cout << "!~~ WELCOME TO WARZONE ~~!" << endl;
+    cout << "Would you like to enable tournament mode? (-tournament)\n" << endl;
+
+    string tournamentMode = "";
+    cin >> tournamentMode;
+
+    if (tournamentMode == "-tournament")
+    {
+        cout << "Tournament mode enabled." << endl;
+        cout << "Enter the number of maps you would like to play on: ";
+        int maps = 0;
+        cin >> maps;
+        while (maps < 1 || maps > 5)
+        {
+            cout << "Invalid number of maps, please enter a number between 1 and 5: ";
+            cin >> maps;
+        }
+
+        cout << "Enter the number of players you would like to play with: ";
+        int players = 0;
+        cin >> players;
+        while (players < 2 || players > 4)
+        {
+            cout << "Invalid number of players, please enter a number between 2 and 4: ";
+            cin >> players;
+        }
+
+        cout << "Enter the number of games you would like to play per map: ";
+        int games = 0;
+        cin >> games;
+        while (games < 1 || games > 5)
+        {
+            cout << "Invalid number of games, please enter a number between 1 and 5: ";
+            cin >> games;
+        }
+
+        cout << "Enter the number of turns you would like to play per game: ";
+        int turns = 0;
+        cin >> turns;
+        while (turns < 10 || turns > 50)
+        {
+            cout << "Invalid number of turns, please enter a number between 10 and 50: ";
+            cin >> turns;
+        }
+
+        runTournament(maps, players, games, turns);
+        return;
+    }
+
     cout << "--------------------------\n"
          << endl;
     cout << "This application requires input.\nEnable console commands or read from file? (-command or -file)" << endl;
@@ -568,6 +616,36 @@ void GameEngine::executeOrdersPhase()
         }
     }
 }
+
+void GameEngine::runGame(int map, int players, int turns) {
+    // Add game logic here
+}
+
+void GameEngine::runTournament(int maps, int players, int games, int turns) {
+    std::ofstream logFile("tournament_log.txt");
+
+    if (!logFile.is_open()) {
+        std::cerr << "Error opening log file." << std::endl;
+        return;
+    }
+
+    logFile << "Tournament started with " << maps << " maps, " << players << " players, "
+            << games << " games per map, and " << turns << " turns per game." << std::endl;
+
+    // Run the tournament
+    for (int map = 1; map <= maps; ++map) {
+        for (int game = 1; game <= games; ++game) {
+            logFile << "Map " << map << ", Game " << game << ":" << std::endl;
+            this->runGame(map, players, turns);
+            // Add logic to record and output game results to the log file
+        }
+    }
+
+    logFile << "Tournament completed." << std::endl;
+    logFile.close();
+}
+
+
 
 void testMainGameLoop()
 {

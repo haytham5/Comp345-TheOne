@@ -72,6 +72,13 @@ public:
     // Orders Execution Phase
     void executeOrdersPhase();
 
+    // Run a Single Game
+    void runGame(int map, int players, int turns);
+    
+    // Run Tournament
+    void runTournament(int maps, int players, int games, int turns);
+
+
     GameEngine &operator=(GameEngine &gameEngine);
 
     friend ostream &operator<<(ostream &os, GameEngine &gameEngine);

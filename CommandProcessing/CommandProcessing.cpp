@@ -13,7 +13,8 @@
 
 using namespace std;
 
-const string acceptedConsoleCommands[14][3] = {
+const string acceptedConsoleCommands[15][3] = {
+    {"tournament", "START", "WIN"},
     {"loadmap", "START", "MAP_LOADED"},
     {"loadmap", "MAP_LOADED", "MAP_LOADED"},
     {"validatemap", "MAP_LOADED", "MAP_VALIDATED"},
