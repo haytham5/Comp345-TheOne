@@ -75,6 +75,9 @@ public:
   // Getter for playerTerritories
   vector<Territory *> getPlayerTerritories() const;
 
+  Map* getPlayerMap() const;
+
+
   // toDefend() function declaration
   vector<Territory *> toDefend() const;
   

@@ -153,6 +153,11 @@ vector<Territory *> Player::getPlayerTerritories() const
     return playerTerritories;
 }
 
+Map *Player::getPlayerMap() const
+{
+    return this->map;
+}
+
 // Returns arbitrary list of territories to defend (in this case, I made it defend all territories owned ny the player)
 vector<Territory *> Player::toDefend() const
 {
@@ -220,10 +225,11 @@ void Player::addPlayerTerritories(Territory *territory)
                 cin >> deployAmount;
                 order = new DeployOrder(toDefendList.at(i), deployAmount, playerName);
                 reinforcementPool -= deployAmount;
+                orderList->addOrder(order);//TODO: delete this line?
             }
         }
 
-        orderList->addOrder(order);
+        //orderList->addOrder(order);
 
         Order *order2;
 
@@ -431,7 +437,7 @@ void Player::setPhase(string ph)
 }
 
 // Free function
-/*void testPlayers()
+void testPlayers()
 {
     string name1 = "Player 1";
     string name2 = "Player 2";
@@ -563,7 +569,7 @@ void Player::setPhase(string ph)
     cout << endl;
     delete deck;
     cout << endl;
-}*/
+}
 
 ostream &operator<<(ostream &out, const Player &object)
 {

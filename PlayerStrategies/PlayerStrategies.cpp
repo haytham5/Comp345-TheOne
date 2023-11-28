@@ -58,6 +58,15 @@ ostream &operator<<(ostream &out, const HumanPlayer &humanPlayer){
 
 void HumanPlayer::issueOrder(string type){
     //TODO
+    Order *order;
+    vector<Territory *> toAttackList = toAttack();
+    vector<Territory *> toDefendList = toDefend();
+    if(type=="Deploy"){
+
+    }
+    else if(type=="Advance"){
+
+    }
 }
 
 vector<Territory *> HumanPlayer::toDefend(){
@@ -99,11 +108,28 @@ void AggressivePlayer::issueOrder(string type){
 }
 
 vector<Territory *> AggressivePlayer::toDefend(){
-    //TODO
+    //Aggressive Player does NOT defend
+    return vector<Territory*>();
 }
 
+//Returns all neighbouring territories since aggressive player always advances until it cannot anymore
 vector<Territory *> AggressivePlayer::toAttack(){
-    //TODO
+    vector<Territory *> territoriesToAttack; // Create empty vector
+    vector<Territory*> playerTerritories=p->getPlayerTerritories();
+    string playerName=p->getName();
+    Map* map=p->getPlayerMap();
+    for (int i = 0; i < playerTerritories.size(); i++)
+    {
+        vector<string> neighbours = map->getNeighbors(playerTerritories.at(i)->getName());
+        for (int j = 0; j < neighbours.size(); j++)
+        {
+            if (map->getTerritory(neighbours[j])->getPlayer() != playerName)
+            {
+                territoriesToAttack.push_back(map->getTerritory(neighbours[j]));
+            }
+        }
+    }
+    return territoriesToAttack;
 }
 
 //BENEVOLENT PLAYER
@@ -136,12 +162,34 @@ void BenevolentPlayer::issueOrder(string type){
     //TODO
 }
 
+//Returns the weakest territory owned by the player
 vector<Territory *> BenevolentPlayer::toDefend(){
-    //TODO
+    vector<Territory *> territoriesToDefend; //Creates empty vector
+    vector<Territory *> playerTerritories = p->getPlayerTerritories();
+    
+    //Finding the weakest territory
+    Territory* weakestTerritory = nullptr;
+    int minArmies = numeric_limits<int>::max();//Setting minArmies to max int
+
+    for (Territory* territory : playerTerritories) {
+        int territoryArmies = territory->getArmies();
+        if (territoryArmies < minArmies) {
+            minArmies = territoryArmies;
+            weakestTerritory = territory;
+        }
+    }
+
+    //If a weakest territory is found, add it to the vector
+    if (weakestTerritory != nullptr) {
+        territoriesToDefend.push_back(weakestTerritory);
+    }
+
+    return territoriesToDefend;
 }
 
 vector<Territory *> BenevolentPlayer::toAttack(){
-    //TODO
+    //Benevolent player does NOT attack
+    return vector<Territory*>();
 }
 
 // NEUTRAL PLAYER

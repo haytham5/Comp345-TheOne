@@ -14,8 +14,8 @@ class PlayerStrategy{
         PlayerStrategy& operator=(const PlayerStrategy& other);
         friend ostream& operator<<(ostream& out, const PlayerStrategy& playerStrategy);
         virtual void issueOrder(string type)=0;
-       virtual vector<Territory *> toAttack()=0;
-       virtual vector<Territory *> toDefend()=0;
+        virtual vector<Territory *> toAttack()=0;
+        virtual vector<Territory *> toDefend()=0;
        
     protected:
        Player* p;
