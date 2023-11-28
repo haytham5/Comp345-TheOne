@@ -58,15 +58,6 @@ ostream &operator<<(ostream &out, const HumanPlayer &humanPlayer){
 
 void HumanPlayer::issueOrder(string type){
     //TODO
-    Order *order;
-    vector<Territory *> toAttackList = toAttack();
-    vector<Territory *> toDefendList = toDefend();
-    if(type=="Deploy"){
-
-    }
-    else if(type=="Advance"){
-
-    }
 }
 
 vector<Territory *> HumanPlayer::toDefend(){
@@ -105,6 +96,15 @@ ostream &operator<<(ostream &out, const AggressivePlayer &aggressivePlayer){
 
 void AggressivePlayer::issueOrder(string type){
     //TODO
+    Order *order;
+    vector<Territory *> toAttackList = toAttack();
+    vector<Territory *> toDefendList = toDefend();
+    if(type=="Deploy"){
+
+    }
+    else if(type=="Advance"){
+
+    }
 }
 
 vector<Territory *> AggressivePlayer::toDefend(){
