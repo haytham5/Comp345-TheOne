@@ -92,6 +92,11 @@ void Player::setName(string name)
     this->playerName = name;
 }
 
+vector<Player*>  Player::getAllPlayers()
+{
+    return allPlayers;
+}
+
 Hand *Player::getPlayerHand() const
 {
     return playerHand;
