@@ -249,7 +249,6 @@ ostream &operator<<(ostream &out, const AggressivePlayer &aggressivePlayer){
 }
 
 void AggressivePlayer::issueOrder(string type){
-    //TODO
     Order *order;
     vector<Territory *> toAttackList = toAttack();
     vector<Territory *> toDefendList = toDefend();
@@ -419,6 +418,96 @@ ostream &operator<<(ostream &out, const BenevolentPlayer &benevolentPlayer){
 
 void BenevolentPlayer::issueOrder(string type){
     //TODO
+     Order *order;
+    vector<Territory *> toAttackList = toAttack();//Empty for benevolent player
+    vector<Territory *> toDefendList = toDefend();
+    int reinforcementPool = p->getReinforcementPool();
+    OrdersList *orderList = p->getOrderList();
+    Map *map = p->getPlayerMap();
+
+    //For deploy
+    if (reinforcementPool > 0) {
+        while (reinforcementPool > 0) {
+            //Benevolent player deploys armies on its weakest country
+            Territory* weakestTerritory = toDefendList.front();
+            int deployAmount = reinforcementPool;
+            order = new DeployOrder(weakestTerritory, deployAmount, p->getName());
+            reinforcementPool -= deployAmount;
+            orderList->addOrder(order);
+        }
+
+         Order *order2;
+
+        if(type=="Advance"){
+            vector<Territory *> toDefendList = toDefend();
+
+            //Benevolent player advances armies from the strongest adjacent territory to the weakest
+            Territory *targetTerritory = toDefendList.front() ;
+            //Find the strongest territory adjacent to the targetTerritory
+            Territory *strongestAdjacentTerritory = nullptr;
+            int maxArmies = 0;
+
+            for (Territory *adjTerritory : map->getNeighborsPointers(targetTerritory->getName())) {
+                if (adjTerritory->getPlayer() == p->getName() && adjTerritory->getArmies() > maxArmies) {
+                    maxArmies = adjTerritory->getArmies();
+                    strongestAdjacentTerritory = adjTerritory;
+                }
+            }
+
+            //If a strongest adjacent territory is found, advance armies from it
+            if (strongestAdjacentTerritory != nullptr) {
+                int armiesToAdvance = strongestAdjacentTerritory->getArmies() / 2;
+                order = new AdvanceOrder(strongestAdjacentTerritory, targetTerritory, armiesToAdvance, map, p->getName());
+                orderList->addOrder(order);
+            }
+            
+        }
+        else if(type=="Bomb"){
+            //Benevolent player never bombs territories
+            cout << "Benevolent player does not bomb territories." << endl;
+        }
+        else if(type=="Airlift"){
+            //Randomly select a source territory for the AirliftOrder
+            random_device rd;
+            mt19937 gen(rd());
+            uniform_int_distribution<int> sourceDistribution(0, p->getPlayerTerritories().size() - 1);
+            Territory *sourceTerritory = p->getPlayerTerritories().at(sourceDistribution(gen));
+
+            // Move armies from source to the front of toDefendList using AirliftOrder
+            int airliftArmies = sourceTerritory->getArmies() / 2; //Move half of the armies
+            Territory *targetTerritory = toDefend().front();
+            order = new AirliftOrder(sourceTerritory, targetTerritory, airliftArmies, p->getName());
+            orderList->addOrder(order);
+        }
+        else if(type=="Blockade"){
+            //Get the weakest territory owned by the player
+            vector<Territory*> toDefendList = toDefend();
+            if (!toDefendList.empty()) {
+                Territory* targetTerritory = toDefendList.front();
+
+                //Create and add the BlockadeOrder to the order list
+                order = new BlockadeOrder(targetTerritory, p->getName());
+                orderList->addOrder(order);
+            } 
+            else {
+                cout << "Blockade order is invalid. No territories to defend." << endl;
+            }
+        }
+        else if(type=="Negotiate"){
+            //Randomly select a target player for the NegotiateOrder
+            random_device rd;
+            mt19937 gen(rd());
+            uniform_int_distribution<int> playerDistribution(0, p->getAllPlayers().size() - 1);
+            string targetPlayer = p->getAllPlayers().at(playerDistribution(gen))->getName();
+
+            //Create and add the NegotiateOrder to the order list
+            order = new NegotiateOrder(p->getName(), targetPlayer);
+            orderList->addOrder(order);
+        }
+    }
+    else {
+        cout << "User has no reinforcements!" << endl;
+    }
 }
 
 //Returns the weakest territory owned by the player

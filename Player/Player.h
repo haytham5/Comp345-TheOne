@@ -49,7 +49,7 @@ public:
   // Setter for playerName
   void setName(string name);
 
-  void getAllPlayers();
+  vector<Player*>  getAllPlayers();
 
   // Getter for playerHand
   Hand *getPlayerHand() const;
