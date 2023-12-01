@@ -185,26 +185,136 @@ void HumanPlayer::issueOrder(string type){
 
     if (type == "Bomb")
     {
-        //TODO
-        order = new BombOrder();
-        p->getOrderList()->addOrder(order);
+        cout << "Player " << p->getName() << ", you have chosen to play the Bomb order." << endl;
+        cout << "Select a territory to bomb:" << endl;
+
+        //Display the territories that can be targeted
+        vector<Territory*> targetableTerritories = p->toAttack();
+        cout << "Available territories to bomb:" << endl;
+        for (int i = 0; i < targetableTerritories.size(); ++i) {
+            cout << i + 1 << ". " << targetableTerritories[i]->getName() << endl;
+        }
+
+        //Get user input for the territory to bomb
+        int choice;
+        cout << "Enter the number of the territory to bomb: ";
+        cin >> choice;
+
+        // Check if the choice is valid
+        if (choice >= 1 && choice <= targetableTerritories.size()) {
+            //Create and add the Bomb order to the player's order list
+            Order* order = new BombOrder(targetableTerritories[choice - 1],p->getName(),map);
+            p->getOrderList()->addOrder(order);
+        } else {
+            cout << "Invalid choice. Bomb order not issued." << endl;
+        }
     }
     else if (type == "Airlift")
     {
-        //TODO (with reinforcement pool?)
-        order = new AirliftOrder();
-        orderList->addOrder(order);
+        cout << "Player " << p->getName() << ", you have chosen to play the Airlift order." << endl;
+
+        //Display the territories that can be used as source
+        vector<Territory*> sourceTerritories = p->toDefend();
+
+        cout << "Available source territories for airlift:" << endl;
+        for (int i = 0; i < sourceTerritories.size(); ++i) {
+            cout << i + 1 << ". " << sourceTerritories[i]->getName() << endl;
+        }
+
+        //Get user input for the source territory
+        int sourceChoice;
+        cout << "Enter the number of the source territory: ";
+        cin >> sourceChoice;
+
+        // Check if the source choice is valid
+        if (sourceChoice >= 1 && sourceChoice <= sourceTerritories.size()) {
+            // Display all territories (own and enemy) as potential targets
+            vector<Territory*> allTargetTerritories = p->toDefend();
+            vector<Territory*> enemyTargetTerritories = p->toAttack();
+
+            allTargetTerritories.insert(allTargetTerritories.end(), enemyTargetTerritories.begin(), enemyTargetTerritories.end());
+
+            cout << "Available target territories for airlift:" << endl;
+            for (int i = 0; i < allTargetTerritories.size(); ++i) {
+                cout << i + 1 << ". " << allTargetTerritories[i]->getName() << endl;
+            }
+
+            //Get user input for the target territory
+            int targetChoice;
+            cout << "Enter the number of the target territory: ";
+            cin >> targetChoice;
+
+            //Check if the target choice is valid
+            if (targetChoice >= 1 && targetChoice <= allTargetTerritories.size()) {
+                //Get user input for the number of armies to airlift
+                int numArmies;
+                cout << "Enter the number of armies to airlift: ";
+                cin >> numArmies;
+
+                //Create and add the Airlift order to the player's order list
+                Order* order = new AirliftOrder(sourceTerritories[sourceChoice - 1], allTargetTerritories[targetChoice - 1], numArmies, p->getName());
+                p->getOrderList()->addOrder(order);
+            } else {
+                cout << "Invalid target choice. Airlift order not issued." << endl;
+            }
+        } else {
+            cout << "Invalid source choice. Airlift order not issued." << endl;
+        }
     }
     else if (type == "Blockade")
     {
-        //TODO
-        order = new BlockadeOrder();
-        orderList->addOrder(order);
+        cout << "Player " << p->getName() << ", you have chosen to play the Blockade order." << endl;
+
+        // Display the territories that can be blockaded
+        vector<Territory*> territoriesToBlockade = p->toDefend();
+
+        cout << "Available territories to blockade:" << endl;
+        for (int i = 0; i < territoriesToBlockade.size(); ++i) {
+            cout << i + 1 << ". " << territoriesToBlockade[i]->getName() << endl;
+        }
+
+        // Get user input for the territory to blockade
+        int blockadeChoice;
+        cout << "Enter the number of the territory to blockade: ";
+        cin >> blockadeChoice;
+
+        // Check if the blockade choice is valid
+        if (blockadeChoice >= 1 && blockadeChoice <= territoriesToBlockade.size()) {
+            //Create and add the Blockade order to the player's order list
+            Order* order = new BlockadeOrder(territoriesToBlockade[blockadeChoice - 1],p->getName());
+            p->getOrderList()->addOrder(order);
+        } else {
+            cout << "Invalid blockade choice. Blockade order not issued." << endl;
+        }
     }
     else if(type=="Negotiate"){
-        //TODO
-        order = new NegotiateOrder();
-        orderList->addOrder(order);
+        cout << "Player " << p->getName() << ", you have chosen to play the Negotiate order." << endl;
+
+        //Display the other players in the game
+        vector<Player*> allPlayers = p->getAllPlayers();
+
+        cout << "Other players in the game:" << endl;
+        for (int i = 0; i < allPlayers.size(); ++i) {
+            if (allPlayers[i] != p) {
+                cout << i + 1 << ". " << allPlayers[i]->getName() << endl;
+            }
+        }
+
+        //Get user input for the player to negotiate with
+        int negotiateChoice;
+        cout << "Enter the number of the player to negotiate with: ";
+        cin >> negotiateChoice;
+
+        //Check if the negotiate choice is valid
+        if (negotiateChoice >= 1 && negotiateChoice <= allPlayers.size() - 1) {
+            Player* otherPlayer = allPlayers[negotiateChoice - 1];
+
+            //Create and add the Negotiate order to the player's order list
+            Order* order = new NegotiateOrder(p->getName(),otherPlayer->getName());//Issuing player is first param, targetPlayer is second param
+            p->getOrderList()->addOrder(order);
+        } else {
+            cout << "Invalid negotiate choice. Negotiate order not issued." << endl;
+        }
     }
     else{
         cout<<"Invalid type in issueOrder(type), no order instance was created."<<endl;
