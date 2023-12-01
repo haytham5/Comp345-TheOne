@@ -163,16 +163,8 @@ Map *Player::getPlayerMap() const
     return this->map;
 }
 
-// Returns arbitrary list of territories to defend (in this case, I made it defend all territories owned ny the player)
 vector<Territory *> Player::toDefend() const
 {
-
-    /*vector<Territory *> territoriesToDefend; // Create empty vector
-    for (int i = 0; i < playerTerritories.size(); i++)
-    {
-        territoriesToDefend.push_back(playerTerritories[i]);
-    }
-    return territoriesToDefend;*/
     if(ps){
         return ps->toDefend();
     }
@@ -182,22 +174,8 @@ vector<Territory *> Player::toDefend() const
     }
 }
 
-// Returns arbitrary list of territories to attack
 vector<Territory *> Player::toAttack() const
 {
-    /*vector<Territory *> territoriesToAttack; // Create empty vector
-    for (int i = 0; i < playerTerritories.size(); i++)
-    {
-        vector<string> neighbours = map->getNeighbors(playerTerritories.at(i)->getName());
-        for (int j = 0; j < neighbours.size(); j++)
-        {
-            if (map->getTerritory(neighbours[j])->getPlayer() != this->playerName)
-            {
-                territoriesToAttack.push_back(map->getTerritory(neighbours[j]));
-            }
-        }
-    }
-    return territoriesToAttack;*/
     if(ps){
         return ps->toAttack();
     }

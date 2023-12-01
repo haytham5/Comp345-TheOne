@@ -214,13 +214,33 @@ void HumanPlayer::issueOrder(string type){
 
     
 
-
+//Returns all territories owned by player
 vector<Territory *> HumanPlayer::toDefend(){
-    //TODO
+    vector<Territory *> playerTerritories=p->getPlayerTerritories();
+    vector<Territory *> territoriesToDefend; // Create empty vector
+    for (int i = 0; i < playerTerritories.size(); i++)
+    {
+        territoriesToDefend.push_back(playerTerritories[i]);
+    }
+    return territoriesToDefend;
 }
 
 vector<Territory *> HumanPlayer::toAttack(){
-    //TODO
+    vector<Territory *> playerTerritories=p->getPlayerTerritories();
+    vector<Territory *> territoriesToAttack; // Create empty vector
+    Map* map=p->getPlayerMap();
+    for (int i = 0; i < playerTerritories.size(); i++)
+    {
+        vector<string> neighbours = map->getNeighbors(playerTerritories.at(i)->getName());
+        for (int j = 0; j < neighbours.size(); j++)
+        {
+            if (map->getTerritory(neighbours[j])->getPlayer() != p->getName())
+            {
+                territoriesToAttack.push_back(map->getTerritory(neighbours[j]));
+            }
+        }
+    }
+    return territoriesToAttack;
 }
 
 //AGGRESSIVE PLAYER
@@ -273,14 +293,19 @@ void AggressivePlayer::issueOrder(string type){
         }
     }
 
-    if(type=="Advance"){//TODO, add reinforcement pool here?
+    if(type=="Advance"){
         vector<Territory *> toAttackList = toAttack();
         vector<Territory *> toDefendList = toDefend();
         //Aggressive player always advances to enemy territories until it cannot do so anymore
         for (Territory *sourceTerritory : toDefendList) {
             for (Territory *targetTerritory : toAttackList) {
-                order = new AdvanceOrder(sourceTerritory, targetTerritory, sourceTerritory->getArmies(), map, p->getName());
-                orderList->addOrder(order);
+                if(sourceTerritory->getArmies()>0){
+                    order = new AdvanceOrder(sourceTerritory, targetTerritory, sourceTerritory->getArmies(), map, p->getName());
+                    orderList->addOrder(order);
+                }
+                else{
+                    cout<<"Source territory has no armies"<<endl;
+                }
             }
         }
     }
@@ -305,7 +330,7 @@ void AggressivePlayer::issueOrder(string type){
             cout << "No enemy territories to bomb." << endl;
         }
     }
-    else if(type=="Airlift"){//TODO, add reinforcemnet pool here?
+    else if(type=="Airlift"){//Armies are already checked in the execute() method, so no need to check armies here
         //Randomly select a source territory for the AirliftOrder
         random_device rd;
         mt19937 gen(rd());
@@ -440,7 +465,7 @@ void BenevolentPlayer::issueOrder(string type){
         }
     }
 
-    if(type=="Advance"){//TODO add reinforcement pool?
+    if(type=="Advance"){
         vector<Territory *> toDefendList = toDefend();
 
         //Benevolent player advances armies from the strongest adjacent territory to the weakest
@@ -458,9 +483,14 @@ void BenevolentPlayer::issueOrder(string type){
 
         //If a strongest adjacent territory is found, advance armies from it
         if (strongestAdjacentTerritory != nullptr) {
-            int armiesToAdvance = strongestAdjacentTerritory->getArmies() / 2;
-            order = new AdvanceOrder(strongestAdjacentTerritory, targetTerritory, armiesToAdvance, map, p->getName());
-            orderList->addOrder(order);
+            if(strongestAdjacentTerritory->getArmies()>0){
+                int armiesToAdvance = strongestAdjacentTerritory->getArmies() / 2;
+                order = new AdvanceOrder(strongestAdjacentTerritory, targetTerritory, armiesToAdvance, map, p->getName());
+                orderList->addOrder(order);
+            }
+            else{
+                cout<<"Source Territory has no armies"<<endl;
+            }
         }
         
     }
@@ -468,7 +498,7 @@ void BenevolentPlayer::issueOrder(string type){
         //Benevolent player never bombs territories
         cout << "Benevolent player does not bomb territories." << endl;
     }
-    else if(type=="Airlift"){//TODO add reinforcement pool?
+    else if(type=="Airlift"){//Armies are already checked in the execute() method, so no need to check armies here
         vector<Territory *> toDefendList = toDefend();
 
         //Randomly select a source territory for the AirliftOrder
