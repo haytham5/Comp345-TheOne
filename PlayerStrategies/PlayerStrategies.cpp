@@ -722,41 +722,45 @@ vector<Territory*> NeutralPlayer::toAttack(){
 }
 
 //CHEATER PLAYER
-CheaterPlayer::CheaterPlayer(Player *player) : PlayerStrategy(player){}
-
-CheaterPlayer::CheaterPlayer(const CheaterPlayer& other) : PlayerStrategy(other) {}
-
-CheaterPlayer::~CheaterPlayer(){
-
-}
-
-CheaterPlayer& CheaterPlayer::operator=(const CheaterPlayer& other) {
-    if (this!= &other) {
-        PlayerStrategy::operator=(other);
-    }
-    return *this;
-}
-
-ostream &operator<<(ostream &out, const CheaterPlayer &cheaterPlayer){
-    //If p is not null, print information using Player's stream insertion operator
-    if (cheaterPlayer.p) {
-        out << "CheaterPlayer (using Player's information): " << *(cheaterPlayer.p);
-    } else {
-        out << "CheaterPlayer (null pointer)";
-    }
-    return out;
-}
-
+// CheaterPlayer Implementation
 void CheaterPlayer::issueOrder(string type){
-    //TODO
+    if (type == "Conquer") {
+        auto playerTerritories = p->getPlayerTerritories();
+        Map* map = p->getPlayerMap();
+        for (auto& territory : playerTerritories) {
+            vector<string> neighbors = map->getNeighbors(territory->getName());
+            for (auto& neighborName : neighbors) {
+                Territory* neighbor = map->getTerritory(neighborName);
+                if (neighbor->getPlayer() != p->getName()) {
+                    // Automatically conquer neighbor territory
+                    neighbor->setPlayer(p->getName());
+                    cout << "Cheater player has conquered " << neighborName << endl;
+                }
+            }
+        }
+    } else {
+        cout << "Cheater player does not issue '" << type << "' orders." << endl;
+    }
 }
 
-vector<Territory *> CheaterPlayer::toDefend(){
-    //TODO
+vector<Territory*> CheaterPlayer::toDefend(){
+    return p->getPlayerTerritories(); // Returns all owned territories.
 }
 
-vector<Territory *> CheaterPlayer::toAttack(){
-    //TODO
+vector<Territory*> CheaterPlayer::toAttack(){
+    vector<Territory*> attackableTerritories;
+    auto playerTerritories = p->getPlayerTerritories();
+    Map* map = p->getPlayerMap();
+    for (auto& territory : playerTerritories) {
+        vector<string> neighbors = map->getNeighbors(territory->getName());
+        for (auto& neighborName : neighbors) {
+            Territory* neighbor = map->getTerritory(neighborName);
+            if (neighbor->getPlayer() != p->getName()) {
+                attackableTerritories.push_back(neighbor);
+            }
+        }
+    }
+    return attackableTerritories; // Returns neighboring enemy territories.
 }
 
 //Free function
