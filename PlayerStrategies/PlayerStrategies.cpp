@@ -708,16 +708,17 @@ ostream &operator<<(ostream &out, const NeutralPlayer &neutralPlayer){
     return out;
 }
 
+// NeutralPlayer Implementation
 void NeutralPlayer::issueOrder(string type){
-    //TODO
+    cout << "Neutral player does not issue any orders." << endl;
 }
 
-vector<Territory *> NeutralPlayer::toDefend(){
-    //TODO
+vector<Territory*> NeutralPlayer::toDefend(){
+    return vector<Territory*>(); // Returns an empty vector as Neutral player doesn't defend.
 }
 
-vector<Territory *> NeutralPlayer::toAttack(){
-    //TODO
+vector<Territory*> NeutralPlayer::toAttack(){
+    return vector<Territory*>(); // Returns an empty vector as Neutral player doesn't attack.
 }
 
 //CHEATER PLAYER
