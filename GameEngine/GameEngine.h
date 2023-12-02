@@ -111,6 +111,8 @@ private:
     string currentMap;
 
     Map map;
+
+    bool tournamentMode;
 };
 
 // test for game engine in part 5 of assignment 1

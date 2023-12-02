@@ -23,6 +23,8 @@ GameEngine::GameEngine()
     this->gameStarted = false;
 
     this->mapLoader = new MapLoader();
+
+    this->tournamentMode = false;
 }
 // copy constructor
 GameEngine::GameEngine(GameEngine &gameEngine)
@@ -308,14 +310,17 @@ void GameEngine::run()
 {
     string state = "";
     cout << "!~~ WELCOME TO WARZONE ~~!" << endl;
-    /*
-    cout << "Would you like to enable tournament mode? (-tournament)\n"
+
+    cout << "Would you like to enable tournament mode? YES or NO\n"
          << endl;
 
-    string tournamentMode = "";
-    cin >> tournamentMode;
-
-
+    string tournamentModeAnswer = "";
+    cin >> tournamentModeAnswer;
+    if (tournamentModeAnswer == "YES")
+    {
+        tournamentMode = true;
+    }
+    /*
     if (tournamentMode == "-tournament")
     {
         cout << "Tournament mode enabled." << endl;
@@ -542,53 +547,70 @@ void GameEngine::reinforcementPhase()
 // each player adds orders to their order list
 void GameEngine::issueOrdersPhase()
 {
-    for (int i = 0; i < players.size(); i++)
-    {
-        string order;
-        string answer;
-        string name = players[i]->getName();
-        vector<Card *> currentPlayerCards = players[i]->getPlayerHand()->getCards();
+    string order;
+    string answer;
 
-        while (answer != "NO")
+    if (tournamentMode = false)
+    {
+        for (int i = 0; i < players.size(); i++)
         {
-            cout << "Player: " << name << " your cards are: \n";
-            for (int j = 0; j < currentPlayerCards.size(); j++)
+            string name = players[i]->getName();
+            vector<Card *> currentPlayerCards = players[i]->getPlayerHand()->getCards();
+
+            while (answer != "NO")
             {
-                cout << "Card " << (j + 1) << ": " << currentPlayerCards.at(j)->getType() << endl;
-            }
-            cout << "Player: " << name << " input your order here: ";
-            cin >> order;
-            while (order != "")
-            {
-                if (order == "Advance" || order == "Deploy" || order == "Bomb" || order == "Blockade" || order == "Airlift" || order == "Negotiate")
+                cout << "Player: " << name << " your cards are: \n";
+                for (int j = 0; j < currentPlayerCards.size(); j++)
                 {
-                    for (int k = 0; k < currentPlayerCards.size(); k++)
+                    cout << "Card " << (j + 1) << ": " << currentPlayerCards.at(j)->getType() << endl;
+                }
+                cout << "Player: " << name << " input your order here: ";
+                cin >> order;
+                while (order != "")
+                {
+                    if (order == "Advance" || order == "Deploy" || order == "Bomb" || order == "Blockade" || order == "Airlift" || order == "Negotiate")
                     {
-                        if (order == currentPlayerCards.at(k)->getType())
+                        for (int k = 0; k < currentPlayerCards.size(); k++)
                         {
-                            players[i]->issueOrder(order);
+                            if (order == currentPlayerCards.at(k)->getType())
+                            {
+                                players[i]->issueOrder(order);
+                            }
                         }
                     }
+                    else
+                    {
+                        cout << "Invalid Order! Try Again: ";
+                        cin >> order;
+                    }
+
+                    break;
                 }
-                else
+
+                cout << "Would you like to issue another order? YES or NO: " << endl;
+                cin >> answer;
+
+                if (answer == "NO")
                 {
-                    cout << "Invalid Order! Try Again: ";
-                    cin >> order;
+                    break;
                 }
 
-                break;
+                cout << "\n"
+                     << endl;
             }
-
-            cout << "Would you like to issue another order? YES or NO: " << endl;
-            cin >> answer;
-
-            if (answer == "NO")
+        }
+    }
+    else
+    {
+        for (int i = 0; i < players.size(); i++)
+        {
+            string name = players[i]->getName();
+            vector<Card *> currentPlayerCards = players[i]->getPlayerHand()->getCards();
+            for (int j = 0; j < currentPlayerCards.size(); j++)
             {
-                break;
+                string order = currentPlayerCards.at(j)->getType();
+                players[i]->issueOrder(order);
             }
-
-            cout << "\n"
-                 << endl;
         }
     }
 }
@@ -688,6 +710,7 @@ void GameEngine::runTournament(vector<string> maps, vector<string> playerStrateg
     // Run the tournament
     for (int map = 1; map < maps.size(); map++)
     {
+        mapLoader->loadMapFromFile(maps[map]);
         for (int game = 1; game <= games; ++game)
         {
             logFile << "Map " << map << ", Game " << game << ":" << std::endl;
