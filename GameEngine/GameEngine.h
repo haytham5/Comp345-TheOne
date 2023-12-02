@@ -74,10 +74,12 @@ public:
 
     // Run a Single Game
     void runGame(int map, int players, int turns);
-    
-    // Run Tournament
-    void runTournament(int maps, int players, int games, int turns);
 
+    // Validate the tournament parameters
+    void validateTournament();
+
+    // Run Tournament
+    void runTournament(vector<string> maps, vector<string> playerStrategies, int games, int turns);
 
     GameEngine &operator=(GameEngine &gameEngine);
 
@@ -86,12 +88,12 @@ public:
     friend ostream &operator<<(ostream &os, GameEngine &gameEngine);
 
     virtual string stringToLog() override;
-    
+
     bool startupTest = false;
+
 private:
     // Game started
     bool gameStarted;
-
 
     // state of the game
     GameState state;

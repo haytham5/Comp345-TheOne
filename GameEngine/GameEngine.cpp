@@ -13,7 +13,6 @@
 
 using namespace std;
 
-
 typedef GameEngine::GameState GS;
 
 // default constructor
@@ -82,7 +81,7 @@ void GameEngine::startupPhase()
 void GameEngine::transition(GS state)
 {
     this->state = state;
-    //Notifies observers
+    // Notifies observers
     notify(this);
 }
 
@@ -124,7 +123,7 @@ std::string GameEngine::stateToString()
     }
 }
 
-//function to covert string to enum
+// function to covert string to enum
 GameEngine::GameState GameEngine::stringToState(string s)
 {
     GameState gsArray[10] = {
@@ -202,8 +201,8 @@ bool GameEngine::executeCommand(Command command)
 
     if (c == "addplayer")
     {
-        Deck* d = new Deck();
-        Map* m = new Map();
+        Deck *d = new Deck();
+        Map *m = new Map();
 
         if (currentPlayerIndex != 5)
         {
@@ -293,9 +292,10 @@ bool GameEngine::executeCommand(Command command)
     return true;
 }
 
-GameEngine& GameEngine::operator=(GameEngine& gameEngine) {
-  this->state = gameEngine.getGameState();
-  return *this;
+GameEngine &GameEngine::operator=(GameEngine &gameEngine)
+{
+    this->state = gameEngine.getGameState();
+    return *this;
 }
 
 ostream &operator<<(ostream &os, GameEngine &gameEngine)
@@ -308,10 +308,13 @@ void GameEngine::run()
 {
     string state = "";
     cout << "!~~ WELCOME TO WARZONE ~~!" << endl;
-    cout << "Would you like to enable tournament mode? (-tournament)\n" << endl;
+    /*
+    cout << "Would you like to enable tournament mode? (-tournament)\n"
+         << endl;
 
     string tournamentMode = "";
     cin >> tournamentMode;
+
 
     if (tournamentMode == "-tournament")
     {
@@ -355,6 +358,7 @@ void GameEngine::run()
         runTournament(maps, players, games, turns);
         return;
     }
+    */
 
     cout << "--------------------------\n"
          << endl;
@@ -401,8 +405,9 @@ void GameEngine::run()
         {
             break;
         }
-        
-        else {
+
+        else
+        {
             if (gameStarted && !startupTest)
             {
                 cout << "Enter command to trigger state change: ";
@@ -434,12 +439,13 @@ void GameEngine::run()
                 }
             }
 
-            else if(state != "END" && state != "WIN")
+            else if (state != "END" && state != "WIN")
             {
                 startupPhase();
             }
 
-            if (gameStarted && startupTest) {
+            if (gameStarted && startupTest)
+            {
                 break;
             }
         }
@@ -455,18 +461,18 @@ void testGameEngine()
 }
 
 void testStartupPhase()
-{    
+{
     GameEngine *engine = new GameEngine();
-    
+
     engine->startupTest = true;
-    
+
     engine->run();
 }
 
-//For game log
+// For game log
 string GameEngine::stringToLog()
 {
-    return "Game State is now: "+stateToString();
+    return "Game State is now: " + stateToString();
 }
 
 // round robin fashion cycle through 3 phases -> reinforcement, issue orders and execute orders
@@ -488,17 +494,21 @@ void GameEngine::mainGameLoop(bool test = false)
             }
 
             cout << players[i]->getName();
-            if(i == players.size() -1 ) cout << "." << endl;
-            else cout << ", ";
+            if (i == players.size() - 1)
+                cout << "." << endl;
+            else
+                cout << ", ";
         }
 
-        for(auto it : deleteIndexes) players.erase(players.begin() + it);
+        for (auto it : deleteIndexes)
+            players.erase(players.begin() + it);
 
         reinforcementPhase();
         issueOrdersPhase();
         executeOrdersPhase();
 
-        if(test) break;
+        if (test)
+            break;
     }
 }
 
@@ -507,7 +517,7 @@ void GameEngine::reinforcementPhase()
 
     for (int i = 0; i < players.size(); i++)
     {
-        cout << "Player: " << players[i]->getName() << "'s updated reinforcement pool:"<< endl;
+        cout << "Player: " << players[i]->getName() << "'s updated reinforcement pool:" << endl;
         // if the number of territories owned / 3 is less than 3, number of reinforcement army units for the player is 3
         if (((players[i]->getPlayerTerritories().size()) / 3) < 3)
         {
@@ -518,13 +528,13 @@ void GameEngine::reinforcementPhase()
         else if (players[i]->ownAllTerritoryInContinent())
         {
             players[i]->setReinforcementPool(10);
-            cout << "Player: " << players[i]->getName() << " has a reinforcement pool of " << players[i]->getReinforcementPool()<< endl;
+            cout << "Player: " << players[i]->getName() << " has a reinforcement pool of " << players[i]->getReinforcementPool() << endl;
         }
         else
         {
             int mod = ((players[i]->getPlayerTerritories().size()) / 3);
             players[i]->setReinforcementPool(mod);
-            cout << "Player: " << players[i]->getName() << " has a reinforcement pool of" << players[i]->getReinforcementPool()<< endl;
+            cout << "Player: " << players[i]->getName() << " has a reinforcement pool of" << players[i]->getReinforcementPool() << endl;
         }
     }
 }
@@ -544,7 +554,7 @@ void GameEngine::issueOrdersPhase()
             cout << "Player: " << name << " your cards are: \n";
             for (int j = 0; j < currentPlayerCards.size(); j++)
             {
-                cout << "Card " << (j + 1) << ": " << currentPlayerCards.at(j)->getType()<< endl;
+                cout << "Card " << (j + 1) << ": " << currentPlayerCards.at(j)->getType() << endl;
             }
             cout << "Player: " << name << " input your order here: ";
             cin >> order;
@@ -577,8 +587,9 @@ void GameEngine::issueOrdersPhase()
                 break;
             }
 
-            cout << "\n" << endl;
-            }
+            cout << "\n"
+                 << endl;
+        }
     }
 }
 
@@ -607,45 +618,87 @@ void GameEngine::executeOrdersPhase()
         OrdersList *playerOrderList = players[i]->getOrderList();
 
         Order *order = playerOrderList->getOrderAt(i);
-        if(order->baseType != "Deploy") {
-            cout << "Player: " << players[i]->getName() << " executes order:\n" << order->getDescription();
+        if (order->baseType != "Deploy")
+        {
+            cout << "Player: " << players[i]->getName() << " executes order:\n"
+                 << order->getDescription();
 
-            if(order->getDescription() != "")
+            if (order->getDescription() != "")
                 order->execute();
-            else cout << "Error occured." << endl;
+            else
+                cout << "Error occured." << endl;
         }
     }
 }
 
-void GameEngine::runGame(int map, int players, int turns) {
+void GameEngine::runGame(int map, int players, int turns)
+{
     // Add game logic here
 }
 
-void GameEngine::runTournament(int maps, int players, int games, int turns) {
+void GameEngine::validateTournament()
+{
+    int numOfGames = processor->getTournamentNumberOfGames();
+    int numOfTurns = processor->getTournamentMaxNumberOfTurns();
+    vector<string> listOfMaps = processor->getTournamentListOfMapFiles();
+    vector<string> listOfPlayerStrategies = processor->getTournamentListOfPlayerStrategies();
+
+    if (listOfMaps.size() < 1 || listOfMaps.size() > 5)
+    {
+        cout << "GameEngine::validateTournament:: Error | Number of maps must be between 1 and 5";
+        exit(0);
+    }
+    if (listOfPlayerStrategies.size() < 2 || listOfPlayerStrategies.size() > 4)
+    {
+        cout << "GameEngine::validateTournament:: Error | Number of players must be between 2 and 4";
+        exit(0);
+    }
+    if (numOfGames < 1 || numOfGames > 5)
+    {
+        cout << "GameEngine::validateTournament:: Error | Number of games must be between 1 and 5";
+        exit(0);
+    }
+    if (numOfTurns < 10 || numOfGames > 50)
+    {
+        cout << "GameEngine::validateTournament:: Error | Number of turns must be between 10 and 50";
+        exit(0);
+    }
+
+    runTournament(listOfMaps, listOfPlayerStrategies, numOfGames, numOfTurns);
+}
+
+void GameEngine::runTournament(vector<string> maps, vector<string> playerStrategies, int games, int turns)
+{
     std::ofstream logFile("tournament_log.txt");
 
-    if (!logFile.is_open()) {
+    if (!logFile.is_open())
+    {
         std::cerr << "Error opening log file." << std::endl;
         return;
     }
 
-    logFile << "Tournament started with " << maps << " maps, " << players << " players, "
+    logFile << "Tournament started with " << maps.size() << " maps, " << players.size() << " players, "
             << games << " games per map, and " << turns << " turns per game." << std::endl;
 
+    for (int i = 0; i < players.size(); i++)
+    {
+        // add logic to create a player with specific strategy and add to players
+    }
+
     // Run the tournament
-    for (int map = 1; map <= maps; ++map) {
-        for (int game = 1; game <= games; ++game) {
+    for (int map = 1; map < maps.size(); map++)
+    {
+        for (int game = 1; game <= games; ++game)
+        {
             logFile << "Map " << map << ", Game " << game << ":" << std::endl;
-            this->runGame(map, players, turns);
-            // Add logic to record and output game results to the log file
+            // this->runGame(map, players, turns);
+            //  Add logic to record and output game results to the log file
         }
     }
 
     logFile << "Tournament completed." << std::endl;
     logFile.close();
 }
-
-
 
 void testMainGameLoop()
 {

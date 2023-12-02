@@ -131,6 +131,10 @@ CommandProcessor::CommandProcessor(char type)
 {
     this->type = type;
     newCommand = false;
+    this->tournamentListOfMapFiles;
+    this->tournamentListOfPlayerStrategies;
+    this->tournamentNumberOfGames;
+    this->tournamentMaxNumberOfTurns;
 }
 
 CommandProcessor::~CommandProcessor()
@@ -430,6 +434,7 @@ int CommandProcessor::getTournamentMaxNumberOfTurns()
     return tournamentMaxNumberOfTurns;
 }
 
+// Command must be in format: tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>
 void CommandProcessor::processTournamentCommand(string input)
 {
     vector<string> tournamentCommand = split(input, " ");
