@@ -749,15 +749,45 @@ void GameEngine::runTournament(vector<string> maps, vector<string> playerStrateg
     logFile << "Tournament started with " << maps.size() << " maps, " << players.size() << " players, "
             << games << " games per map, and " << turns << " turns per game." << std::endl;
 
-    for (int i = 0; i < players.size(); i++)
-    {
-        // TODO add logic to create a player with specific strategy and add to players
-    }
-
     // Run the tournament
     for (int map = 1; map < maps.size(); map++)
     {
+        Map *m = new Map();
         mapLoader->loadMapFromFile(maps[map]);
+        Deck *deck = new Deck();
+        Hand *hand = new Hand(deck);
+        OrdersList *playerOrderList = new OrdersList();
+        for (int i = 0; i < playerStrategies.size(); i++)
+        {
+            if (playerStrategies[i] == "Aggressive" || playerStrategies[i] == "aggressive")
+            {
+                Player p("Aggressive", m, hand, playerOrderList);
+                PlayerStrategy *ps = new AggressivePlayer(&p);
+                p.setPlayerStrategy(ps);
+            }
+            else if (playerStrategies[i] == "Benevolent" || playerStrategies[i] == "benevolent")
+            {
+                Player p("Benevolent", m, hand, playerOrderList);
+                PlayerStrategy *ps = new BenevolentPlayer(&p);
+                p.setPlayerStrategy(ps);
+            }
+            else if (playerStrategies[i] == "Neutral" || playerStrategies[i] == "neutral")
+            {
+                Player p("Neutral", m, hand, playerOrderList);
+                PlayerStrategy *ps = new NeutralPlayer(&p);
+                p.setPlayerStrategy(ps);
+            }
+            else if (playerStrategies[i] == "Cheater" || playerStrategies[i] == "cheater")
+            {
+                Player p("Cheater", m, hand, playerOrderList);
+                PlayerStrategy *ps = new CheaterPlayer(&p);
+                p.setPlayerStrategy(ps);
+            }
+            else
+            {
+                cout << "GameEngine::runTournament:: Error: player strategy does not exist";
+            }
+        }
         for (int game = 1; game <= games; ++game)
         {
             mainGameLoop();
