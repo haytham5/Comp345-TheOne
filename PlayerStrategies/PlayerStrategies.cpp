@@ -87,7 +87,7 @@ void HumanPlayer::issueOrder(string type){
     }
         //orderList->addOrder(order);TODO Uncomment this?
 
-    if (type == "Advance")//TODO, add reinforcement pool?
+    if (type == "Advance")//TODO, check territory armies?
     {
         string attackOrDefend;
         cout << "Player: " << p->getName() << " would you like to move units to defend or attack teritories? Enter Defend or Attack: ";
@@ -170,8 +170,13 @@ void HumanPlayer::issueOrder(string type){
                     if (territory2 == toAttackList[i]->getName())
                     {
                         const string& c = "Player1";
-                        order = new AdvanceOrder(sourceTeritory, toAttackList[i], numToMove, map, c);
-                        cout << numToMove << " army units have been advanced to territory " << territory2 << "\n";
+                        if(sourceTeritory->getArmies()>0){
+                            order = new AdvanceOrder(sourceTeritory, toAttackList[i], numToMove, map, c);
+                            cout << numToMove << " army units have been advanced to territory " << territory2 << "\n";
+                        }
+                        else{
+                            cout<<"Source territory has no armies"<<endl;
+                        }
                     }
                 }
             }
