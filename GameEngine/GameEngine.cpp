@@ -319,6 +319,12 @@ void GameEngine::run()
     if (tournamentModeAnswer == "YES")
     {
         tournamentMode = true;
+        string command;
+        cout << "Game is now in tournament mode \n";
+        cout << "Enter the tournament mode command in the format: tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>";
+        cin >> command;
+        processor->processTournamentCommand(command);
+        validateTournament();
     }
     /*
     if (tournamentMode == "-tournament")
@@ -483,37 +489,77 @@ string GameEngine::stringToLog()
 // round robin fashion cycle through 3 phases -> reinforcement, issue orders and execute orders
 void GameEngine::mainGameLoop(bool test = false)
 {
+    int turns = processor->getTournamentMaxNumberOfTurns();
 
-    while (players.size() != 1)
+    if (tournamentMode = false)
     {
-        cout << "Players in the game:  ";
-        // if player territories list size is 0, they are removed from game
-        vector<int> deleteIndexes;
-
-        for (int i = 0; i < players.size(); i++)
+        while (players.size() != 1)
         {
-            if (players[i]->getPlayerTerritories().empty())
+            cout << "Players in the game:  ";
+            // if player territories list size is 0, they are removed from game
+            vector<int> deleteIndexes;
+
+            for (int i = 0; i < players.size(); i++)
             {
-                players[i]->setName(players[i]->getName() + " - Empty Territories, will be removed from the game");
-                deleteIndexes.push_back(i);
+                if (players[i]->getPlayerTerritories().empty())
+                {
+                    players[i]->setName(players[i]->getName() + " - Empty Territories, will be removed from the game");
+                    deleteIndexes.push_back(i);
+                }
+
+                cout << players[i]->getName();
+                if (i == players.size() - 1)
+                    cout << "." << endl;
+                else
+                    cout << ", ";
             }
 
-            cout << players[i]->getName();
-            if (i == players.size() - 1)
-                cout << "." << endl;
-            else
-                cout << ", ";
+            for (auto it : deleteIndexes)
+                players.erase(players.begin() + it);
+
+            reinforcementPhase();
+            issueOrdersPhase();
+            executeOrdersPhase();
+
+            if (test)
+                break;
         }
+    }
+    else
+    {
+        while (turns != 0)
+        {
+            cout << "Players in the game:  ";
+            // if player territories list size is 0, they are removed from game
+            vector<int> deleteIndexes;
 
-        for (auto it : deleteIndexes)
-            players.erase(players.begin() + it);
+            for (int i = 0; i < players.size(); i++)
+            {
+                if (players[i]->getPlayerTerritories().empty())
+                {
+                    players[i]->setName(players[i]->getName() + " - Empty Territories, will be removed from the game");
+                    deleteIndexes.push_back(i);
+                }
 
-        reinforcementPhase();
-        issueOrdersPhase();
-        executeOrdersPhase();
+                cout << players[i]->getName();
+                if (i == players.size() - 1)
+                    cout << "." << endl;
+                else
+                    cout << ", ";
+            }
 
-        if (test)
-            break;
+            for (auto it : deleteIndexes)
+                players.erase(players.begin() + it);
+
+            reinforcementPhase();
+            issueOrdersPhase();
+            executeOrdersPhase();
+
+            if (test)
+                break;
+
+            turns--;
+        }
     }
 }
 
@@ -550,6 +596,7 @@ void GameEngine::issueOrdersPhase()
     string order;
     string answer;
 
+    // If game is in tournament mode, there is no user interaction and the orders are just issued based on the player's cards
     if (tournamentMode = false)
     {
         for (int i = 0; i < players.size(); i++)
@@ -716,6 +763,7 @@ void GameEngine::runTournament(vector<string> maps, vector<string> playerStrateg
             logFile << "Map " << map << ", Game " << game << ":" << std::endl;
             // this->runGame(map, players, turns);
             //  Add logic to record and output game results to the log file
+            mainGameLoop();
         }
     }
 
