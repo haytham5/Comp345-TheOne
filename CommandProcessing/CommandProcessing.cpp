@@ -13,7 +13,8 @@
 
 using namespace std;
 
-const string acceptedConsoleCommands[14][3] = {
+const string acceptedConsoleCommands[15][3] = {
+    {"tournament", "START", "WIN"},
     {"loadmap", "START", "MAP_LOADED"},
     {"loadmap", "MAP_LOADED", "MAP_LOADED"},
     {"validatemap", "MAP_LOADED", "MAP_VALIDATED"},
@@ -24,11 +25,10 @@ const string acceptedConsoleCommands[14][3] = {
     {"issueorder", "ISSUE_ORDERS", "ISSUE_ORDERS"},
     {"endissueorder", "ISSUE_ORDERS", "EXECUTE_ORDERS"},
     {"execorder", "EXECUTE_ORDERS", "EXECUTE_ORDERS"},
-    {"endexecorder", "EXECUTE_ORDERS", "ASSIGN_REINFORCEMENT"}, 
+    {"endexecorder", "EXECUTE_ORDERS", "ASSIGN_REINFORCEMENT"},
     {"win", "EXECUTE_ORDERS", "WIN"},
     {"replay", "WIN", "START"},
-    {"quit", "WIN", "END"}
-};
+    {"quit", "WIN", "END"}};
 
 const string acceptedPlayerCommands[7][2] = {
     {"Reinforce", "ASSIGN_REINFORCEMENT"},
@@ -37,8 +37,7 @@ const string acceptedPlayerCommands[7][2] = {
     {"Airlift", "ISSUE_ORDERS"},
     {"Bomb", "ISSUE_ORDERS"},
     {"Blockade", "ISSUE_ORDERS"},
-    {"Negotiate", "ISSUE_ORDERS"}
-};
+    {"Negotiate", "ISSUE_ORDERS"}};
 
 // FREE FUNCTION
 
@@ -46,7 +45,7 @@ void testCommandProcessor()
 {
     cout << "TESTING PLAYER COMMANDS: " << endl;
 
-    Player* p = new Player();
+    Player *p = new Player();
     p->setName("test");
 
     p->testState("ISSUE_ORDERS");
@@ -96,7 +95,7 @@ ostream &operator<<(ostream &out, const Command &object)
 void Command::saveEffect(string e)
 {
     effect = e;
-    //Notifies observers
+    // Notifies observers
     notify(this);
 }
 
@@ -110,28 +109,37 @@ string Command::getCommand()
     return command;
 }
 
-//For game log
+// For game log
 string Command::stringToLog()
 {
-    return "Commands Effect: "+ effect+" was just saved.";
+    return "Commands Effect: " + effect + " was just saved.";
 }
 
-//CONSOLE COMMAND PROCESSING
+// CONSOLE COMMAND PROCESSING
 
 CommandProcessor::CommandProcessor()
 {
     type = 'c';
     newCommand = false;
+    this->tournamentListOfMapFiles;
+    this->tournamentListOfPlayerStrategies;
+    this->tournamentNumberOfGames;
+    this->tournamentMaxNumberOfTurns;
 }
 
 CommandProcessor::CommandProcessor(char type)
 {
     this->type = type;
     newCommand = false;
+    this->tournamentListOfMapFiles;
+    this->tournamentListOfPlayerStrategies;
+    this->tournamentNumberOfGames;
+    this->tournamentMaxNumberOfTurns;
 }
 
 CommandProcessor::~CommandProcessor()
-{}
+{
+}
 
 CommandProcessor::CommandProcessor(const CommandProcessor &c)
 {
@@ -154,10 +162,12 @@ CommandProcessor &CommandProcessor::operator=(const CommandProcessor &c)
 Command CommandProcessor::getCommand()
 {
     Command c;
-    if(!commands.empty()){
+    if (!commands.empty())
+    {
         return commands.back();
     }
-    else return c;
+    else
+        return c;
 }
 
 void CommandProcessor::setState(string s)
@@ -181,29 +191,32 @@ ostream &operator<<(ostream &out, const CommandProcessor &object)
     return out;
 }
 
-//For game log
+// For game log
 string CommandProcessor::stringToLog()
 {
-    if(!commands.empty()) {
-        Command lastCommand= commands.back();
+    if (!commands.empty())
+    {
+        Command lastCommand = commands.back();
         string logString;
-        
-        logString= "Command: "+ lastCommand.getCommand() + " was just saved.";
+
+        logString = "Command: " + lastCommand.getCommand() + " was just saved.";
         return logString;
-    } else {
-        cout<< "No commands in the vector to log."<<endl;
+    }
+    else
+    {
+        cout << "No commands in the vector to log." << endl;
         return "No commands in the vector to log.";
     }
 }
 
 void CommandProcessor::testSaveCommand(string c, string e)
 {
-    saveCommand(c,e);
+    saveCommand(c, e);
 }
 
 istream &operator>>(istream &in, CommandProcessor &cproc)
 {
-    string s = ""; 
+    string s = "";
     in >> s;
 
     cproc.readCommmand(s);
@@ -219,22 +232,26 @@ void CommandProcessor::readCommmand(string s)
     saveCommand(s, validate(s));
 }
 
-//VALIDATE COMMANDS
+// VALIDATE COMMANDS
 string CommandProcessor::validate(string command)
 {
     cout << "VALIDATING COMMAND... " << endl;
 
-    //CONSOLE COMMAND VALIDATION
-    if(type == 'c') {
+    // CONSOLE COMMAND VALIDATION
+    if (type == 'c')
+    {
         cout << "Scanning console commands... ";
-        for(int i= 0; i < sizeof(acceptedConsoleCommands); i++) {
-        //Check if console level command or game level command
-            if(acceptedConsoleCommands[i][0] == command) {
+        for (int i = 0; i < sizeof(acceptedConsoleCommands); i++)
+        {
+            // Check if console level command or game level command
+            if (acceptedConsoleCommands[i][0] == command)
+            {
 
                 cout << "Correct Console command: " << command << "." << endl;
                 cout << state;
-                
-                if(acceptedConsoleCommands[i][1] == state) {
+
+                if (acceptedConsoleCommands[i][1] == state)
+                {
                     cout << "Correct state " << state << ". Validated." << endl;
                     return acceptedConsoleCommands[i][2];
                 }
@@ -242,16 +259,20 @@ string CommandProcessor::validate(string command)
         }
     }
 
-    //PLAYER COMMAND VALIDATION
-    else {
+    // PLAYER COMMAND VALIDATION
+    else
+    {
         cout << "Scanning player commands... ";
 
-        for(int i= 0; i < sizeof(acceptedPlayerCommands); i++) {
-            if(acceptedPlayerCommands[i][0] == command) {
+        for (int i = 0; i < sizeof(acceptedPlayerCommands); i++)
+        {
+            if (acceptedPlayerCommands[i][0] == command)
+            {
 
                 cout << "Correct Player command: " << command << "." << endl;
 
-                if(acceptedPlayerCommands[i][1] == state) {
+                if (acceptedPlayerCommands[i][1] == state)
+                {
                     cout << "Correct state " << state << ". Validated." << endl;
                     return acceptedPlayerCommands[i][0];
                 }
@@ -266,43 +287,47 @@ string CommandProcessor::validate(string command)
 
 void CommandProcessor::saveCommand(string command, string effect)
 {
-    
-    if(newCommand) cout << "true" << endl;
 
-    if(effect != "ERROR: Invalid Command") {
+    if (newCommand)
+        cout << "true" << endl;
+
+    if (effect != "ERROR: Invalid Command")
+    {
         cout << "SAVING COMMAND... " << endl;
         newCommand = true;
     }
 
-    else {
+    else
+    {
         cout << "SAVING ERROR... " << endl;
     }
 
-
     commands.push_back(Command(command, effect));
 
-    //Notifies observers
+    // Notifies observers
     notify(this);
 
     cout << "Saved Console command: " << commands.back() << endl;
 }
 
-//FILE COMMAND ADAPTER
+// FILE COMMAND ADAPTER
 
-FileCommandProcessorAdapter::FileCommandProcessorAdapter(const string& filename)
+FileCommandProcessorAdapter::FileCommandProcessorAdapter(const string &filename)
 {
     newCommand = false;
     fileEmptyFlag = false;
 
     ifstream file(".\\" + filename);
 
-    if (!file.is_open()) {
+    if (!file.is_open())
+    {
         throw runtime_error("Error: Unable to open file " + filename);
     }
 
     string line;
 
-    while(getline(file, line)) {
+    while (getline(file, line))
+    {
         fileCollection.push_back(line);
     }
 
@@ -347,24 +372,108 @@ ostream &operator<<(ostream &out, const FileCommandProcessorAdapter &object)
 
 istream &operator>>(istream &in, FileCommandProcessorAdapter &object)
 {
-    if(!object.fileEmptyFlag) cout << "Utilizing command from file..." << endl;
+    if (!object.fileEmptyFlag)
+        cout << "Utilizing command from file..." << endl;
     string s = "";
 
-    if(!object.fileCollection.empty()) {
+    if (!object.fileCollection.empty())
+    {
         s = *object.fileCollection.begin();
-        object.fileCollection.erase(object.fileCollection.begin());        
+        object.fileCollection.erase(object.fileCollection.begin());
     }
-    
-    else {
-        if(!object.fileEmptyFlag) {
+
+    else
+    {
+        if (!object.fileEmptyFlag)
+        {
             cout << "File empty. Commands will require console input from now on.\n Please enter one: ";
             object.fileEmptyFlag = true;
         }
         in >> s;
     }
 
-   object.readCommmand(s); 
+    object.readCommmand(s);
 
     return in;
 }
 
+vector<string> split(string s, string delimiter)
+{
+    size_t pos_start = 0, pos_end, delim_len = delimiter.length();
+    string token;
+    vector<string> res;
+
+    while ((pos_end = s.find(delimiter, pos_start)) != string::npos)
+    {
+        token = s.substr(pos_start, pos_end - pos_start);
+        pos_start = pos_end + delim_len;
+        res.push_back(token);
+    }
+
+    res.push_back(s.substr(pos_start));
+    return res;
+}
+
+vector<string> CommandProcessor::getTournamentListOfMapFiles()
+{
+    return tournamentListOfMapFiles;
+}
+
+vector<string> CommandProcessor::getTournamentListOfPlayerStrategies()
+{
+    return tournamentListOfPlayerStrategies;
+}
+
+int CommandProcessor::getTournamentNumberOfGames()
+{
+    return tournamentNumberOfGames;
+}
+
+int CommandProcessor::getTournamentMaxNumberOfTurns()
+{
+    return tournamentMaxNumberOfTurns;
+}
+
+// Command must be in format: tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>
+void CommandProcessor::processTournamentCommand(string input)
+{
+    vector<string> tournamentCommand = split(input, " ");
+    int i = 1;
+    while (i < tournamentCommand.size())
+    {
+        if (tournamentCommand[i] == "-M")
+        {
+            i++;
+            while (tournamentCommand[i] != "-P")
+            {
+                tournamentListOfMapFiles.push_back(tournamentCommand[i]);
+                i++;
+            }
+        }
+        else if (tournamentCommand[i] == "-P")
+        {
+            i++;
+            while (tournamentCommand[i] != "-G")
+            {
+                tournamentListOfPlayerStrategies.push_back(tournamentCommand[i]);
+                i++;
+            }
+        }
+        else if (tournamentCommand[i] == "-G")
+        {
+            i++;
+            tournamentNumberOfGames = stoi(tournamentCommand[i]);
+            i++;
+        }
+        else if (tournamentCommand[i] == "-D")
+        {
+            i++;
+            tournamentMaxNumberOfTurns = stoi(tournamentCommand[i]);
+            i++;
+        }
+        else
+        {
+            cout << "Something went wrong";
+        }
+    }
+}

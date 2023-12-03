@@ -9,106 +9,126 @@ using namespace std;
 
 void testCommandProcessor();
 
-class Command : public ILoggable, public Subject {
-    public:
-        //Constructor
-        Command();
+class Command : public ILoggable, public Subject
+{
+public:
+    // Constructor
+    Command();
 
-        Command(string c, string e);
+    Command(string c, string e);
 
-        //Destructor
-        ~Command();
+    // Destructor
+    ~Command();
 
-        // Copy Constructor
-        Command(const Command& c);
+    // Copy Constructor
+    Command(const Command &c);
 
-        // Operators
-        Command& operator=(const Command& c);
+    // Operators
+    Command &operator=(const Command &c);
 
-        friend ostream& operator<<(ostream& out, const Command& object);
+    friend ostream &operator<<(ostream &out, const Command &object);
 
-        void saveEffect(string e);
+    void saveEffect(string e);
 
-        string getEffect();
+    string getEffect();
 
-        string getCommand();
+    string getCommand();
 
-        virtual string stringToLog() override;
+    virtual string stringToLog() override;
 
-        
-
-    private:
-        string command;
-        string effect;
+private:
+    string command;
+    string effect;
 };
 
-class CommandProcessor : public ILoggable, public Subject {
-    public: 
-        //Constructor
-        CommandProcessor();
+class CommandProcessor : public ILoggable, public Subject
+{
+public:
+    // Constructor
+    CommandProcessor();
 
-        CommandProcessor(char type);
+    CommandProcessor(char type);
 
-        //Destructor
-        ~CommandProcessor();
+    // Destructor
+    ~CommandProcessor();
 
-        //Copy Constructor
-        CommandProcessor(const CommandProcessor& c);
+    // Copy Constructor
+    CommandProcessor(const CommandProcessor &c);
 
-        //Operators
-        CommandProcessor& operator=(const CommandProcessor& c);
+    // Operators
+    CommandProcessor &operator=(const CommandProcessor &c);
 
-        friend ostream& operator<<(ostream& out, const CommandProcessor& object);
+    friend ostream &operator<<(ostream &out, const CommandProcessor &object);
 
-        friend istream& operator>>(istream& in, CommandProcessor& object);
+    friend istream &operator>>(istream &in, CommandProcessor &object);
 
-        Command getCommand();
+    Command getCommand();
 
-        void setState(string s);
+    void setState(string s);
 
-        bool hasNew();
+    bool hasNew();
 
-        void removeNew();
+    void removeNew();
 
-        virtual string stringToLog() override;
+    virtual string stringToLog() override;
 
-        void testSaveCommand(string c, string e);
+    void testSaveCommand(string c, string e);
 
-    protected: 
-        char type;
+    void processTournamentCommand(string input);
 
-        vector<Command> commands;
+    vector<string> getTournamentListOfMapFiles();
 
-        string state;
+    vector<string> getTournamentListOfPlayerStrategies();
 
-        bool newCommand = false;
+    int getTournamentNumberOfGames();
 
-        void readCommmand(string s);
+    int getTournamentMaxNumberOfTurns();
 
-        void saveCommand(string command, string effect);
+protected:
+    char type;
 
-        string validate(string command);
+    vector<Command> commands;
+
+    string state;
+
+    bool newCommand = false;
+
+    void readCommmand(string s);
+
+    void saveCommand(string command, string effect);
+
+    string validate(string command);
+
+private:
+    vector<string> tournamentListOfMapFiles;
+
+    vector<string> tournamentListOfPlayerStrategies;
+
+    int tournamentNumberOfGames;
+
+    int tournamentMaxNumberOfTurns;
 };
 
-class FileCommandProcessorAdapter : public CommandProcessor {
-    public:
-        FileCommandProcessorAdapter(const string& filename);
+class FileCommandProcessorAdapter : public CommandProcessor
+{
+public:
+    FileCommandProcessorAdapter(const string &filename);
 
-        //Destructor
-        ~FileCommandProcessorAdapter();
+    // Destructor
+    ~FileCommandProcessorAdapter();
 
-        //Copy Constructor
-        FileCommandProcessorAdapter(const FileCommandProcessorAdapter& c);
+    // Copy Constructor
+    FileCommandProcessorAdapter(const FileCommandProcessorAdapter &c);
 
-        //Operators
-        FileCommandProcessorAdapter& operator=(const FileCommandProcessorAdapter& c);
+    // Operators
+    FileCommandProcessorAdapter &operator=(const FileCommandProcessorAdapter &c);
 
-        friend ostream& operator<<(ostream& out, const FileCommandProcessorAdapter& object);
+    friend ostream &operator<<(ostream &out, const FileCommandProcessorAdapter &object);
 
-        friend istream& operator>>(istream& in, FileCommandProcessorAdapter& object);
+    friend istream &operator>>(istream &in, FileCommandProcessorAdapter &object);
 
-    private: 
-        vector<string> fileCollection;
+private:
+    vector<string> fileCollection;
 
-        bool fileEmptyFlag;
+    bool fileEmptyFlag;
 };

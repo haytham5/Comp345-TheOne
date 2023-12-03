@@ -72,6 +72,15 @@ public:
     // Orders Execution Phase
     void executeOrdersPhase();
 
+    // Run a Single Game
+    void runGame(int map, int players, int turns);
+
+    // Validate the tournament parameters
+    void validateTournament();
+
+    // Run Tournament
+    void runTournament(vector<string> maps, vector<string> playerStrategies, int games, int turns);
+
     GameEngine &operator=(GameEngine &gameEngine);
 
     friend ostream &operator<<(ostream &os, GameEngine &gameEngine);
@@ -79,12 +88,14 @@ public:
     friend ostream &operator<<(ostream &os, GameEngine &gameEngine);
 
     virtual string stringToLog() override;
-    
+
     bool startupTest = false;
+
+    void testTournamentMode();
+
 private:
     // Game started
     bool gameStarted;
-
 
     // state of the game
     GameState state;
@@ -102,6 +113,8 @@ private:
     string currentMap;
 
     Map map;
+
+    bool tournamentMode;
 };
 
 // test for game engine in part 5 of assignment 1
