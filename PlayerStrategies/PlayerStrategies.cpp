@@ -1,4 +1,5 @@
 #include "PlayerStrategies.h"
+#include "../Player/Player.h"
 #include<random>
 using namespace std;
 
@@ -20,6 +21,7 @@ PlayerStrategy& PlayerStrategy::operator=(const PlayerStrategy& other) {
     }
     return *this;
 }
+
 
 ostream &operator<<(ostream &out, const PlayerStrategy &playerStrategy){
     //If p is not null, print information using Player's stream insertion operator
@@ -764,7 +766,62 @@ vector<Territory*> CheaterPlayer::toAttack(){
 }
 
 //Free function
-void testPlayerStrategies(){
-    //TODO
+    void testPlayerStrategies() {
+            //TODO
+    std::cout << "===== Testing Player Strategies =====" << std::endl;
+
+    // Create a map and players for testing
+    Map gameMap; // Assuming this is your game map
+    // Initialize territories for the map (example initialization)
+    gameMap.addTerritory("Territory1", 0, 0, "ContinentA");
+    gameMap.addTerritory("Territory2", 1, 1, "ContinentA");
+    gameMap.addTerritory("Territory3", 2, 2, "ContinentB");
+
+    Deck* sharedDeck = new Deck();
+
+    // Create players with different strategies
+    Player humanPlayer("Human", &gameMap, new Hand(sharedDeck), new OrdersList());
+    Player aggressivePlayer("Aggressive", &gameMap, new Hand(sharedDeck), new OrdersList());
+    Player benevolentPlayer("Benevolent", &gameMap, new Hand(sharedDeck), new OrdersList());
+    Player neutralPlayer("Neutral", &gameMap, new Hand(sharedDeck), new OrdersList());
+    Player cheaterPlayer("Cheater", &gameMap, new Hand(sharedDeck), new OrdersList());
+
+    // Assign strategies to players
+    humanPlayer.setPlayerStrategy(new HumanPlayer(&humanPlayer));
+    aggressivePlayer.setPlayerStrategy(new AggressivePlayer(&aggressivePlayer));
+    benevolentPlayer.setPlayerStrategy(new BenevolentPlayer(&benevolentPlayer));
+    neutralPlayer.setPlayerStrategy(new NeutralPlayer(&neutralPlayer));
+    cheaterPlayer.setPlayerStrategy(new CheaterPlayer(&cheaterPlayer));
+
+    // Demonstrate behavior of each player strategy
+    std::cout << "\nHuman Player issuing an order:" << std::endl;
+    humanPlayer.issueOrder("Deploy");
+
+    std::cout << "\nAggressive Player issuing an order:" << std::endl;
+    aggressivePlayer.issueOrder("Advance");
+
+    std::cout << "\nBenevolent Player issuing an order:" << std::endl;
+    benevolentPlayer.issueOrder("Deploy");
+
+    std::cout << "\nNeutral Player issuing an order:" << std::endl;
+    neutralPlayer.issueOrder("Advance");
+
+    std::cout << "\nCheater Player issuing an order:" << std::endl;
+    cheaterPlayer.issueOrder("Conquer");
+
+    // Dynamically change strategy of a player
+    std::cout << "\nChanging strategy of Neutral Player to Aggressive:" << std::endl;
+    neutralPlayer.setPlayerStrategy(new AggressivePlayer(&neutralPlayer));
+    neutralPlayer.issueOrder("Advance");
+
+    // Cleanup
+    delete humanPlayer.getPlayerStrategy();
+    delete aggressivePlayer.getPlayerStrategy();
+    delete benevolentPlayer.getPlayerStrategy();
+    delete neutralPlayer.getPlayerStrategy();
+    delete cheaterPlayer.getPlayerStrategy();
+
+    std::cout << "===== Testing Complete =====" << std::endl;
 }
+
 

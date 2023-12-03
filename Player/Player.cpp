@@ -125,6 +125,10 @@ void Player::setPlayerStrategy(PlayerStrategy *newStrategy)
     ps= newStrategy;
 }
 
+PlayerStrategy* Player::getPlayerStrategy() const {
+    return ps;
+}
+
 int Player::getReinforcementPool() const
 {
     return reinforcementPool;
@@ -189,6 +193,9 @@ void Player::addPlayerTerritories(Territory *territory)
 {
     playerTerritories.push_back(territory);
 }
+
+
+
 
 /*void Player::issueOrder(string type)
 {

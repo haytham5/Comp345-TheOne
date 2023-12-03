@@ -63,6 +63,9 @@ public:
 
   void setPlayerStrategy(PlayerStrategy* newStrategy);
 
+   // Method to get the player's strategy
+  PlayerStrategy* getPlayerStrategy() const;
+
   int getReinforcementPool() const;
 
   void setReinforcementPool(int reinforcementPool);
