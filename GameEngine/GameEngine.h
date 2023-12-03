@@ -91,6 +91,8 @@ public:
 
     bool startupTest = false;
 
+    void testTournamentMode();
+
 private:
     // Game started
     bool gameStarted;

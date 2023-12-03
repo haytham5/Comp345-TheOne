@@ -751,7 +751,7 @@ void GameEngine::runTournament(vector<string> maps, vector<string> playerStrateg
 
     for (int i = 0; i < players.size(); i++)
     {
-        // add logic to create a player with specific strategy and add to players
+        // TODO add logic to create a player with specific strategy and add to players
     }
 
     // Run the tournament
@@ -760,10 +760,20 @@ void GameEngine::runTournament(vector<string> maps, vector<string> playerStrateg
         mapLoader->loadMapFromFile(maps[map]);
         for (int game = 1; game <= games; ++game)
         {
-            logFile << "Map " << map << ", Game " << game << ":" << std::endl;
-            // this->runGame(map, players, turns);
-            //  Add logic to record and output game results to the log file
             mainGameLoop();
+            //  Winner is player with most territories
+            int maxTerritories = 0;
+            string winner;
+            for (int i = 0; i < players.size(); i++)
+            {
+                vector<Territory *> playerTerritories = players[i]->getPlayerTerritories();
+                if (playerTerritories.size() >= maxTerritories)
+                {
+                    maxTerritories = playerTerritories.size();
+                    winner = players[i]->getName();
+                }
+            }
+            logFile << "Map " << map << ", Game " << game << ": " << winner << std::endl;
         }
     }
 
@@ -813,4 +823,23 @@ void testMainGameLoop()
     player2.addPlayerTerritories(map->getTerritory("TerritoryD"));
 
     engine->mainGameLoop(true);
+}
+
+void GameEngine::testTournamentMode()
+{
+    cout << "Would you like to enable tournament mode? YES or NO\n"
+         << endl;
+
+    string tournamentModeAnswer = "";
+    cin >> tournamentModeAnswer;
+    if (tournamentModeAnswer == "YES")
+    {
+        tournamentMode = true;
+        string command;
+        cout << "Game is now in tournament mode \n";
+        cout << "Enter the tournament mode command in the format: tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>";
+        cin >> command;
+        processor->processTournamentCommand(command);
+        validateTournament();
+    }
 }
