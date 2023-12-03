@@ -223,6 +223,23 @@ vector<string> Map::getNeighbors(const string& territoryName) const {
   }
 }
 
+vector<Territory *> Map::getNeighborsPointers(const string &territoryName) const{
+  vector<Territory*> neighbors;
+
+    auto it = this->adjacencyList.find(territoryName);
+    if (it != this->adjacencyList.end()) {
+        for (const string& neighborName : it->second) {
+          Territory* neighborTerritory = getTerritory(neighborName);
+          if (neighborTerritory != nullptr) {
+              neighbors.push_back(neighborTerritory);
+          }
+        }
+    }
+
+  return neighbors;
+    
+}
+
 void Map::dfs(const string& territoryName, unordered_set<string>& visited) {
     visited.insert(territoryName);
     for (const auto& neighbor : adjacencyList[territoryName]) {
