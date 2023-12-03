@@ -8,6 +8,7 @@
 #include "../Orders/Order.h"
 #include "../Card/Card.h"
 #include "../CommandProcessing/CommandProcessing.h"
+#include "../PlayerStrategies/PlayerStrategies.h"
 
 
 using namespace std;
@@ -27,6 +28,9 @@ public:
   // Parameterized constructor with processor
   Player(const string &name, Map *gameMap, Hand *hand, OrdersList *orderList, CommandProcessor *processor);
 
+   // Parameterized constructor with processor and player strategy
+  Player(const string &name, Map *gameMap, Hand *hand, OrdersList *orderList, CommandProcessor *processor, PlayerStrategy* ps);
+
   // Copy constructor
   Player(const Player &other);
 
@@ -45,6 +49,8 @@ public:
   // Setter for playerName
   void setName(string name);
 
+  vector<Player*>  getAllPlayers();
+
   // Getter for playerHand
   Hand *getPlayerHand() const;
 
@@ -54,6 +60,11 @@ public:
 
   // Setter for playerHand
   void setPlayerHand(Hand *hand);
+
+  void setPlayerStrategy(PlayerStrategy* newStrategy);
+
+   // Method to get the player's strategy
+  PlayerStrategy* getPlayerStrategy() const;
 
   int getReinforcementPool() const;
 
@@ -69,6 +80,9 @@ public:
   // Getter for playerTerritories
   vector<Territory *> getPlayerTerritories() const;
 
+  Map* getPlayerMap() const;
+
+
   // toDefend() function declaration
   vector<Territory *> toDefend() const;
   
@@ -81,9 +95,16 @@ public:
   // toAttack() function declaration
   vector<Territory *> toAttack() const;
 
+  void attacked();  // Method to set the player as attacked
+  void resetAttackedStatus();  // Method to reset the attacked status at the end of the turn
+
+  bool getWasAttacked() const;
+  void setWasAttacked(bool status);
+
+
   void addPlayerTerritories(Territory *territory);
 
-  // issueOrder() function declaration
+   //issueOrder() function declaration
   void issueOrder(string type);
 
   // Test State
@@ -99,6 +120,8 @@ public:
   string getPhase();
 
 private:
+  PlayerStrategy* ps;
+  bool wasAttacked;  // New member to track if the player was attacked
   int reinforcementPool;
   vector<Territory *> playerTerritories;
   Hand *playerHand;

@@ -144,7 +144,7 @@ LogObserver::LogObserver(const LogObserver &other){
 
 //Destructor that closes the file
 LogObserver::~LogObserver(){
-cout<< "Destructor called"<<endl;
+cout<< "LogObserver Destructor called"<<endl;
 try{  
  //Detach this observer from the subject if the subject is not nullptr
  if (subject){
@@ -209,8 +209,9 @@ void testLoggingObserver(){
 
     cout<< "Testing LogObserver:"<<endl;
 
-    //Instantiating a Territory (will be used by one of the orders)
+    //Instantiating  Territories (will be used by the orders)
     Territory* terr= new Territory("Canada",0,1,"North America");
+    Territory* terr2= new Territory("America",0,2,"North America");
 
     //Instantiating concrete subjects
     Command* cmd= new Command();
@@ -234,6 +235,7 @@ void testLoggingObserver(){
 
     //Testing that gamelog successfully writes the information for GameEngine class
     game->executeStateChange("MAP_LOADED");
+    game->executeStateChange("GAME_START");
 
     //Testing that gamelog successfully writes the information for Order and OrdersList class
     oList->addOrder(blockOrder);
@@ -241,5 +243,5 @@ void testLoggingObserver(){
     blockOrder->execute();
 
     cout<<"Done testing, check gamelog.txt"<<endl;
-    
+
 }
