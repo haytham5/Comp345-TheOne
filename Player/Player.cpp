@@ -189,6 +189,23 @@ vector<Territory *> Player::toAttack() const
     }
 }
 
+void Player::attacked() {
+    this->wasAttacked = true;
+}
+
+void Player::resetAttackedStatus() {
+    this->wasAttacked = false;
+}
+
+bool Player::getWasAttacked() const {
+    return this->wasAttacked;
+}
+
+void Player::setWasAttacked(bool status) {
+    this->wasAttacked = status;
+}
+
+
 void Player::addPlayerTerritories(Territory *territory)
 {
     playerTerritories.push_back(territory);

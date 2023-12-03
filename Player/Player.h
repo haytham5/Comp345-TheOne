@@ -95,6 +95,13 @@ public:
   // toAttack() function declaration
   vector<Territory *> toAttack() const;
 
+  void attacked();  // Method to set the player as attacked
+  void resetAttackedStatus();  // Method to reset the attacked status at the end of the turn
+
+  bool getWasAttacked() const;
+  void setWasAttacked(bool status);
+
+
   void addPlayerTerritories(Territory *territory);
 
    //issueOrder() function declaration
@@ -114,6 +121,7 @@ public:
 
 private:
   PlayerStrategy* ps;
+  bool wasAttacked;  // New member to track if the player was attacked
   int reinforcementPool;
   vector<Territory *> playerTerritories;
   Hand *playerHand;

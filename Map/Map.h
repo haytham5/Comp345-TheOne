@@ -76,7 +76,7 @@ class Map {
     vector<Territory*> getTerritoriesByName(const string& name) const;
     Territory* getTerritory(const string& name) const;
     vector<string> getNeighbors(const string& name) const;
-    vector<Territory*> Map::getNeighborsPointers(const string& territoryName) const;
+    vector<Territory*> getNeighborsPointers(const string& territoryName) const;
 
     // Initialize a territory with player ownership and armies
     bool initializeTerritory(const string& name, const string& player, int armies);

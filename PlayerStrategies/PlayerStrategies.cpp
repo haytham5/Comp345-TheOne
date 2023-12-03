@@ -711,8 +711,15 @@ ostream &operator<<(ostream &out, const NeutralPlayer &neutralPlayer){
 }
 
 // NeutralPlayer Implementation
-void NeutralPlayer::issueOrder(string type){
-    cout << "Neutral player does not issue any orders." << endl;
+void NeutralPlayer::issueOrder(string type) {
+   if (p->getWasAttacked()) {
+    // Change the strategy to Aggressive
+    p->setPlayerStrategy(new AggressivePlayer(p));
+    std::cout << p->getName() << " is now Aggressive after being attacked." << std::endl;
+    p->setWasAttacked(false);  // Reset the attacked status
+    } else {
+    std::cout << "Neutral player does not issue any orders." << std::endl;
+    }
 }
 
 vector<Territory*> NeutralPlayer::toDefend(){
