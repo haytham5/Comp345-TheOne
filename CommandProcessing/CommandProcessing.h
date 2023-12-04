@@ -77,17 +77,28 @@ public:
     void processTournamentCommand(string input);
 
     vector<string> getTournamentListOfMapFiles();
+    void addMapFile(string s);
 
     vector<string> getTournamentListOfPlayerStrategies();
+    void addStrategy(string s);
+
+    vector<string> split(string s, char delimiter);
 
     int getTournamentNumberOfGames();
+    void setGames(int i);
 
     int getTournamentMaxNumberOfTurns();
+    void setTurns(int i);
 
 protected:
     char type;
 
     vector<Command> commands;
+    vector<string> tournamentListOfMapFiles;
+    vector<string> tournamentListOfPlayerStrategies;
+
+    int tournamentNumberOfGames;
+    int tournamentMaxNumberOfTurns;
 
     string state;
 
@@ -99,14 +110,6 @@ protected:
 
     string validate(string command);
 
-private:
-    vector<string> tournamentListOfMapFiles;
-
-    vector<string> tournamentListOfPlayerStrategies;
-
-    int tournamentNumberOfGames;
-
-    int tournamentMaxNumberOfTurns;
 };
 
 class FileCommandProcessorAdapter : public CommandProcessor

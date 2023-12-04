@@ -14,7 +14,8 @@
                 "${workspaceFolder}\\Map\\Map.cpp",
                 "${workspaceFolder}\\Orders\\Order.cpp",
                 "${workspaceFolder}\\Player\\Player.cpp",
-                "${fileDirname}\\**.cpp",
+                "${workspaceFolder}\\PlayerStrategies\\PlayerStrategies.cpp",
+                "${workspaceFolder}\\MainDriver.cpp",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],

@@ -22,6 +22,10 @@ PlayerStrategy& PlayerStrategy::operator=(const PlayerStrategy& other) {
     return *this;
 }
 
+string PlayerStrategy::getType()
+{
+    return type;
+}
 
 ostream &operator<<(ostream &out, const PlayerStrategy &playerStrategy){
     //If p is not null, print information using Player's stream insertion operator
@@ -34,9 +38,9 @@ ostream &operator<<(ostream &out, const PlayerStrategy &playerStrategy){
 }
 
 //HUMAN PLAYER
-HumanPlayer::HumanPlayer(Player *player) : PlayerStrategy(player){}
+HumanPlayer::HumanPlayer(Player *player) : PlayerStrategy(player){type = "human";}
 
-HumanPlayer::HumanPlayer(const HumanPlayer &other) : PlayerStrategy(other){}
+HumanPlayer::HumanPlayer(const HumanPlayer &other) : PlayerStrategy(other){type = "human";}
 
 HumanPlayer::~HumanPlayer(){
 
@@ -66,49 +70,49 @@ void HumanPlayer::issueOrder(string type){
     int reinforcementPool=p->getReinforcementPool();
     OrdersList* orderList=p->getOrderList();
     Map* map=p->getPlayerMap();
+
     if(type=="Deploy"){
         if(reinforcementPool> 0) {
             while (reinforcementPool > 0)
             {
-                cout << "Player: " << p->getName() << " has " << reinforcementPool << " army units available to deploy and has " << toDefendList.size() << " territories \n";
+                std::cout << "Player: " << p->getName() << " has " << reinforcementPool << " army units available to deploy and has " << toDefendList.size() << " territories \n";
 
                 for (int i = 0; i < toDefendList.size(); i++)
                 {
                     int deployAmount;
-                    cout << "How many units would you like to deploy to territory: " << toDefendList[i]->getName() << "?";
-                    cin >> deployAmount;
+                    std::cout << "How many units would you like to deploy to territory: " << toDefendList[i]->getName() << "? ";
+                    std::cin >> deployAmount;
                     order = new DeployOrder(toDefendList.at(i), deployAmount, p->getName());
                     reinforcementPool -= deployAmount;
-                    orderList->addOrder(order);//TODO: delete this line?
+                    std::cout << "Reinforcements after deployment: " << reinforcementPool;
+                    orderList->addOrder(order);
                 }
             }
         }
         else {
-            cout << "User has no reinforcements!" << endl;
+            std::cout << "User has no reinforcements!" << endl;
         }
     }
-        //orderList->addOrder(order);TODO Uncomment this?
-
-    if (type == "Advance")//TODO, check territory armies?
+    else if (type == "Advance")
     {
         string attackOrDefend;
-        cout << "Player: " << p->getName() << " would you like to move units to defend or attack teritories? Enter Defend or Attack: ";
-        cin >> attackOrDefend;
+        std::cout << "Player: " << p->getName() << " would you like to move units to defend or attack teritories? Enter Defend or Attack: ";
+        std::cin >> attackOrDefend;
         while (attackOrDefend != "")
         {
             if (attackOrDefend == "Defend")
             {
-                cout << "Player : " << p->getName() << " your territories are: ";
+                std::cout << "Player : " << p->getName() << " your territories are: ";
                 for (int i = 0; i < toDefendList.size(); i++)
                 {
-                    cout << toDefendList[i]->getName() << ": " << toDefendList[i]->getArmies() << " army units\n";
+                    std::cout << toDefendList[i]->getName() << ": " << toDefendList[i]->getArmies() << " army units\n";
                 }
                 string territory1;
                 int territory1Size;
                 string territory2;
                 int numToMove;
-                cout << "Which territory would you like to move army units from?";
-                cin >> territory1;
+                std::cout << "Which territory would you like to move army units from?";
+                std::cin >> territory1;
                 for (int i = 0; i < toDefendList.size(); i++)
                 {
                     if (territory1 == toDefendList[i]->getName())
@@ -116,18 +120,18 @@ void HumanPlayer::issueOrder(string type){
                         territory1Size = toDefendList.size();
                     }
                 }
-                cout << "Territory: " << territory1 << " currently has " << territory1Size << " army units\n";
-                cout << "How many army units would you like to move?";
-                cin >> numToMove;
-                cout << "To which territory would you like to send them to?";
-                cin >> territory2;
+                std::cout << "Territory: " << territory1 << " currently has " << territory1Size << " army units\n";
+                std::cout << "How many army units would you like to move?";
+                std::cin >> numToMove;
+                std::cout << "To which territory would you like to send them to?";
+                std::cin >> territory2;
                 for (int i = 0; i < toDefendList.size(); i++)
                 {
                     if (territory2 == toDefendList[i]->getName())
                     {
                         int armies = numToMove + toDefendList[i]->getArmies();
                         order = new DeployOrder(toDefendList[i], armies, "Player1");
-                        cout << "Territory: " << territory2 << " now has " << toDefendList[i]->getArmies() << " army units\n";
+                        std::cout << "Territory: " << territory2 << " now has " << toDefendList[i]->getArmies() << " army units\n";
                     }
                 }
                 for (int i = 0; i < toDefendList.size(); i++)
@@ -141,16 +145,16 @@ void HumanPlayer::issueOrder(string type){
             }
             else if (attackOrDefend == "Attack")
             {
-                cout << "Player : " << p->getName() << " your territories are: ";
+                std::cout << "Player : " << p->getName() << " your territories are: ";
                 for (int i = 0; i < toDefendList.size(); i++)
                 {
-                    cout << toDefendList[i]->getName() << ": " << toDefendList[i]->getArmies() << " army units\n";
+                    std::cout << toDefendList[i]->getName() << ": " << toDefendList[i]->getArmies() << " army units\n";
                 }
                 string territory1;
                 int numToMove;
                 string territory2;
-                cout << "From which territory would you like to move your army units from?";
-                cin >> territory1;
+                std::cout << "From which territory would you like to move your army units from?";
+                std::cin >> territory1;
                 Territory *sourceTeritory;
                 for (int i = 0; i < toDefendList.size(); i++)
                 {
@@ -159,14 +163,14 @@ void HumanPlayer::issueOrder(string type){
                         sourceTeritory = toDefendList[i];
                     }
                 }
-                cout << "How many army units from territory " << territory1 << " would you like to move?";
-                cin >> numToMove;
-                cout << "Which of the following neighboring territories would you like to attack? \n";
+                std::cout << "How many army units from territory " << territory1 << " would you like to move?";
+                std::cin >> numToMove;
+                std::cout << "Which of the following neighboring territories would you like to attack? \n";
                 for (int i = 0; i < toAttackList.size(); i++)
                 {
-                    cout << toAttackList[i]->getName() << "\n";
+                    std::cout << toAttackList[i]->getName() << "\n";
                 }
-                cin >> territory2;
+                std::cin >> territory2;
                 for (int i = 0; i < toAttackList.size(); i++)
                 {
                     if (territory2 == toAttackList[i]->getName())
@@ -174,38 +178,37 @@ void HumanPlayer::issueOrder(string type){
                         const string& c = "Player1";
                         if(sourceTeritory->getArmies()>0){
                             order = new AdvanceOrder(sourceTeritory, toAttackList[i], numToMove, map, c);
-                            cout << numToMove << " army units have been advanced to territory " << territory2 << "\n";
+                            std::cout << numToMove << " army units have been advanced to territory " << territory2 << "\n";
                         }
                         else{
-                            cout<<"Source territory has no armies"<<endl;
+                            std::cout<<"Source territory has no armies"<<endl;
                         }
                     }
                 }
             }
             else
             {
-                cout << "Invalid command. Try again";
-                cin >> attackOrDefend;
+                std::cout << "Invalid command. Try again";
+                std::cin >> attackOrDefend;
             }
         }
     }
-
-    if (type == "Bomb")
+    else if (type == "Bomb")
     {
-        cout << "Player " << p->getName() << ", you have chosen to play the Bomb order." << endl;
-        cout << "Select a territory to bomb:" << endl;
+        std::cout << "Player " << p->getName() << ", you have chosen to play the Bomb order." << endl;
+        std::cout << "Select a territory to bomb:" << endl;
 
         //Display the territories that can be targeted
         vector<Territory*> targetableTerritories = p->toAttack();
-        cout << "Available territories to bomb:" << endl;
+        std::cout << "Available territories to bomb:" << endl;
         for (int i = 0; i < targetableTerritories.size(); ++i) {
-            cout << i + 1 << ". " << targetableTerritories[i]->getName() << endl;
+            std::cout << i + 1 << ". " << targetableTerritories[i]->getName() << endl;
         }
 
         //Get user input for the territory to bomb
         int choice;
-        cout << "Enter the number of the territory to bomb: ";
-        cin >> choice;
+        std::cout << "Enter the number of the territory to bomb: ";
+        std::cin >> choice;
 
         // Check if the choice is valid
         if (choice >= 1 && choice <= targetableTerritories.size()) {
@@ -213,25 +216,25 @@ void HumanPlayer::issueOrder(string type){
             Order* order = new BombOrder(targetableTerritories[choice - 1],p->getName(),map);
             p->getOrderList()->addOrder(order);
         } else {
-            cout << "Invalid choice. Bomb order not issued." << endl;
+            std::cout << "Invalid choice. Bomb order not issued." << endl;
         }
     }
     else if (type == "Airlift")
     {
-        cout << "Player " << p->getName() << ", you have chosen to play the Airlift order." << endl;
+        std::cout << "Player " << p->getName() << ", you have chosen to play the Airlift order." << endl;
 
         //Display the territories that can be used as source
         vector<Territory*> sourceTerritories = p->toDefend();
 
-        cout << "Available source territories for airlift:" << endl;
+        std::cout << "Available source territories for airlift:" << endl;
         for (int i = 0; i < sourceTerritories.size(); ++i) {
-            cout << i + 1 << ". " << sourceTerritories[i]->getName() << endl;
+            std::cout << i + 1 << ". " << sourceTerritories[i]->getName() << endl;
         }
 
         //Get user input for the source territory
         int sourceChoice;
-        cout << "Enter the number of the source territory: ";
-        cin >> sourceChoice;
+        std::cout << "Enter the number of the source territory: ";
+        std::cin >> sourceChoice;
 
         // Check if the source choice is valid
         if (sourceChoice >= 1 && sourceChoice <= sourceTerritories.size()) {
@@ -241,49 +244,49 @@ void HumanPlayer::issueOrder(string type){
 
             allTargetTerritories.insert(allTargetTerritories.end(), enemyTargetTerritories.begin(), enemyTargetTerritories.end());
 
-            cout << "Available target territories for airlift:" << endl;
+            std::cout << "Available target territories for airlift:" << endl;
             for (int i = 0; i < allTargetTerritories.size(); ++i) {
-                cout << i + 1 << ". " << allTargetTerritories[i]->getName() << endl;
+                std::cout << i + 1 << ". " << allTargetTerritories[i]->getName() << endl;
             }
 
             //Get user input for the target territory
             int targetChoice;
-            cout << "Enter the number of the target territory: ";
-            cin >> targetChoice;
+            std::cout << "Enter the number of the target territory: ";
+            std::cin >> targetChoice;
 
             //Check if the target choice is valid
             if (targetChoice >= 1 && targetChoice <= allTargetTerritories.size()) {
                 //Get user input for the number of armies to airlift
                 int numArmies;
-                cout << "Enter the number of armies to airlift: ";
-                cin >> numArmies;
+                std::cout << "Enter the number of armies to airlift: ";
+                std::cin >> numArmies;
 
                 //Create and add the Airlift order to the player's order list
                 Order* order = new AirliftOrder(sourceTerritories[sourceChoice - 1], allTargetTerritories[targetChoice - 1], numArmies, p->getName());
                 p->getOrderList()->addOrder(order);
             } else {
-                cout << "Invalid target choice. Airlift order not issued." << endl;
+                std::cout << "Invalid target choice. Airlift order not issued." << endl;
             }
         } else {
-            cout << "Invalid source choice. Airlift order not issued." << endl;
+            std::cout << "Invalid source choice. Airlift order not issued." << endl;
         }
     }
     else if (type == "Blockade")
     {
-        cout << "Player " << p->getName() << ", you have chosen to play the Blockade order." << endl;
+        std::cout << "Player " << p->getName() << ", you have chosen to play the Blockade order." << endl;
 
         // Display the territories that can be blockaded
         vector<Territory*> territoriesToBlockade = p->toDefend();
 
-        cout << "Available territories to blockade:" << endl;
+        std::cout << "Available territories to blockade:" << endl;
         for (int i = 0; i < territoriesToBlockade.size(); ++i) {
-            cout << i + 1 << ". " << territoriesToBlockade[i]->getName() << endl;
+            std::cout << i + 1 << ". " << territoriesToBlockade[i]->getName() << endl;
         }
 
         // Get user input for the territory to blockade
         int blockadeChoice;
-        cout << "Enter the number of the territory to blockade: ";
-        cin >> blockadeChoice;
+        std::cout << "Enter the number of the territory to blockade: ";
+        std::cin >> blockadeChoice;
 
         // Check if the blockade choice is valid
         if (blockadeChoice >= 1 && blockadeChoice <= territoriesToBlockade.size()) {
@@ -291,26 +294,26 @@ void HumanPlayer::issueOrder(string type){
             Order* order = new BlockadeOrder(territoriesToBlockade[blockadeChoice - 1],p->getName());
             p->getOrderList()->addOrder(order);
         } else {
-            cout << "Invalid blockade choice. Blockade order not issued." << endl;
+            std::cout << "Invalid blockade choice. Blockade order not issued." << endl;
         }
     }
     else if(type=="Negotiate"){
-        cout << "Player " << p->getName() << ", you have chosen to play the Negotiate order." << endl;
+        std::cout << "Player " << p->getName() << ", you have chosen to play the Negotiate order." << endl;
 
         //Display the other players in the game
         vector<Player*> allPlayers = p->getAllPlayers();
 
-        cout << "Other players in the game:" << endl;
+        std::cout << "Other players in the game:" << endl;
         for (int i = 0; i < allPlayers.size(); ++i) {
             if (allPlayers[i] != p) {
-                cout << i + 1 << ". " << allPlayers[i]->getName() << endl;
+                std::cout << i + 1 << ". " << allPlayers[i]->getName() << endl;
             }
         }
 
         //Get user input for the player to negotiate with
         int negotiateChoice;
-        cout << "Enter the number of the player to negotiate with: ";
-        cin >> negotiateChoice;
+        std::cout << "Enter the number of the player to negotiate with: ";
+        std::cin >> negotiateChoice;
 
         //Check if the negotiate choice is valid
         if (negotiateChoice >= 1 && negotiateChoice <= allPlayers.size() - 1) {
@@ -320,11 +323,11 @@ void HumanPlayer::issueOrder(string type){
             Order* order = new NegotiateOrder(p->getName(),otherPlayer->getName());//Issuing player is first param, targetPlayer is second param
             p->getOrderList()->addOrder(order);
         } else {
-            cout << "Invalid negotiate choice. Negotiate order not issued." << endl;
+            std::cout << "Invalid negotiate choice. Negotiate order not issued." << endl;
         }
     }
     else{
-        cout<<"Invalid type in issueOrder(type), no order instance was created."<<endl;
+        std::cout<<"Invalid type in issueOrder(type), no order instance was created."<<endl;
         return;
     }
 }
@@ -361,9 +364,9 @@ vector<Territory *> HumanPlayer::toAttack(){
 }
 
 //AGGRESSIVE PLAYER
-AggressivePlayer::AggressivePlayer(Player *player) : PlayerStrategy(player){}
+AggressivePlayer::AggressivePlayer(Player *player) : PlayerStrategy(player){type = "aggressive";}
 
-AggressivePlayer::AggressivePlayer(const AggressivePlayer& other) : PlayerStrategy(other) {}
+AggressivePlayer::AggressivePlayer(const AggressivePlayer& other) : PlayerStrategy(other) {type = "aggressive";}
 
 AggressivePlayer::~AggressivePlayer(){
 
@@ -403,25 +406,25 @@ void AggressivePlayer::issueOrder(string type){
                 order = new DeployOrder(strongestTerritory, deployAmount, p->getName());
                 reinforcementPool -= deployAmount;
                 orderList->addOrder(order);
-            } 
+            } cout << "HERE" << endl;
         }
         else {
-        cout << "User has no reinforcements!" << endl;
+        std::cout << "User has no reinforcements!" << endl;
         }
     }
-
-    if(type=="Advance"){
+    else if(type=="Advance"){
         vector<Territory *> toAttackList = toAttack();
         vector<Territory *> toDefendList = toDefend();
-        //Aggressive player always advances to enemy territories until it cannot do so anymore
-        for (Territory *sourceTerritory : toDefendList) {
+        for (Territory *sourceTerritory : p->getPlayerTerritories()) {
             for (Territory *targetTerritory : toAttackList) {
+                cout << "Possible Target: " << *targetTerritory << endl;
                 if(sourceTerritory->getArmies()>0){
                     order = new AdvanceOrder(sourceTerritory, targetTerritory, sourceTerritory->getArmies(), map, p->getName());
                     orderList->addOrder(order);
+                    sourceTerritory->setArmies(0);
                 }
                 else{
-                    cout<<"Source territory has no armies"<<endl;
+                    std::cout<<"Source territory has no armies"<<endl;
                 }
             }
         }
@@ -444,7 +447,7 @@ void AggressivePlayer::issueOrder(string type){
             orderList->addOrder(order);
         } 
         else {
-            cout << "No enemy territories to bomb." << endl;
+            std::cout << "No enemy territories to bomb." << endl;
         }
     }
     else if(type=="Airlift"){//Armies are already checked in the execute() method, so no need to check armies here
@@ -471,7 +474,7 @@ void AggressivePlayer::issueOrder(string type){
             orderList->addOrder(order);
         } 
         else {
-            cout << "Blockade order is invalid. No territories to defend." << endl;
+            std::cout << "Blockade order is invalid. No territories to defend." << endl;
         }
     }
     else if(type=="Negotiate"){
@@ -533,9 +536,9 @@ vector<Territory *> AggressivePlayer::toAttack(){
 }
 
 //BENEVOLENT PLAYER
-BenevolentPlayer::BenevolentPlayer(Player *player) : PlayerStrategy(player){}
+BenevolentPlayer::BenevolentPlayer(Player *player) : PlayerStrategy(player){type = "benevolent";}
 
-BenevolentPlayer::BenevolentPlayer(const BenevolentPlayer& other) : PlayerStrategy(other) {}
+BenevolentPlayer::BenevolentPlayer(const BenevolentPlayer& other) : PlayerStrategy(other) {type = "benevolent";}
 
 BenevolentPlayer::~BenevolentPlayer(){
 
@@ -578,7 +581,7 @@ void BenevolentPlayer::issueOrder(string type){
             }
         }
         else {
-            cout << "User has no reinforcements!" << endl;
+            std::cout << "User has no reinforcements!" << endl;
         }
     }
 
@@ -606,14 +609,14 @@ void BenevolentPlayer::issueOrder(string type){
                 orderList->addOrder(order);
             }
             else{
-                cout<<"Source Territory has no armies"<<endl;
+                std::cout<<"Source Territory has no armies"<<endl;
             }
         }
         
     }
     else if(type=="Bomb"){
         //Benevolent player never bombs territories
-        cout << "Benevolent player does not bomb territories." << endl;
+        std::cout << "Benevolent player does not bomb territories." << endl;
     }
     else if(type=="Airlift"){//Armies are already checked in the execute() method, so no need to check armies here
         vector<Territory *> toDefendList = toDefend();
@@ -641,7 +644,7 @@ void BenevolentPlayer::issueOrder(string type){
             orderList->addOrder(order);
         } 
         else {
-            cout << "Blockade order is invalid. No territories to defend." << endl;
+            std::cout << "Blockade order is invalid. No territories to defend." << endl;
         }
     }
     else if(type=="Negotiate"){
@@ -690,9 +693,9 @@ vector<Territory *> BenevolentPlayer::toAttack(){
 }
 
 // NEUTRAL PLAYER
-NeutralPlayer::NeutralPlayer(Player *player) : PlayerStrategy(player){}
+NeutralPlayer::NeutralPlayer(Player *player) : PlayerStrategy(player){type = "neutral";}
 
-NeutralPlayer::NeutralPlayer(const NeutralPlayer& other) : PlayerStrategy(other) {}
+NeutralPlayer::NeutralPlayer(const NeutralPlayer& other) : PlayerStrategy(other) {type = "neutral";}
 
 NeutralPlayer::~NeutralPlayer(){
 
@@ -721,6 +724,9 @@ void NeutralPlayer::issueOrder(string type) {
     // Change the strategy to Aggressive
     p->setPlayerStrategy(new AggressivePlayer(p));
     std::cout << p->getName() << " is now Aggressive after being attacked." << std::endl;
+
+    p->issueOrder(type);
+
     p->setWasAttacked(false);  // Reset the attacked status
     } else {
     std::cout << "Neutral player does not issue any orders." << std::endl;
@@ -736,6 +742,16 @@ vector<Territory*> NeutralPlayer::toAttack(){
 }
 
 //CHEATER PLAYER
+CheaterPlayer::CheaterPlayer(Player *player) : PlayerStrategy(player){type = "cheater";}
+
+CheaterPlayer::CheaterPlayer(const CheaterPlayer& other) : PlayerStrategy(other) {type = "cheater";}
+
+CheaterPlayer::~CheaterPlayer(){
+
+}
+
+
+
 // CheaterPlayer Implementation
 void CheaterPlayer::issueOrder(string type){
     if (type == "Conquer") {
@@ -748,12 +764,12 @@ void CheaterPlayer::issueOrder(string type){
                 if (neighbor->getPlayer() != p->getName()) {
                     // Automatically conquer neighbor territory
                     neighbor->setPlayer(p->getName());
-                    cout << "Cheater player has conquered " << neighborName << endl;
+                    std::cout << "Cheater player has conquered " << neighborName << endl;
                 }
             }
         }
     } else {
-        cout << "Cheater player does not issue '" << type << "' orders." << endl;
+        std::cout << "Cheater player does not issue '" << type << "' orders." << endl;
     }
 }
 
@@ -778,16 +794,23 @@ vector<Territory*> CheaterPlayer::toAttack(){
 }
 
 //Free function
-    void testPlayerStrategies() {
-            //TODO
+void testPlayerStrategies() {
     std::cout << "===== Testing Player Strategies =====" << std::endl;
 
     // Create a map and players for testing
-    Map gameMap; // Assuming this is your game map
-    // Initialize territories for the map (example initialization)
+    Map gameMap; 
+    // Initialize territories for the map 
     gameMap.addTerritory("Territory1", 0, 0, "ContinentA");
-    gameMap.addTerritory("Territory2", 1, 1, "ContinentA");
-    gameMap.addTerritory("Territory3", 2, 2, "ContinentB");
+    gameMap.addTerritory("Territory2", 0, 1, "ContinentA");
+    gameMap.addTerritory("Territory3", 1, 0, "ContinentA");
+    gameMap.addTerritory("Territory4", 1, 1, "ContinentA");
+    gameMap.addTerritory("Territory5", 1, 2, "ContinentA");
+
+    gameMap.addEdge("Territory1", "Territory2");
+    gameMap.addEdge("Territory1", "Territory3");
+    gameMap.addEdge("Territory2", "Territory4");
+    gameMap.addEdge("Territory3", "Territory4");
+    gameMap.addEdge("Territory5", "Territory4");
 
     Deck* sharedDeck = new Deck();
 
@@ -797,6 +820,14 @@ vector<Territory*> CheaterPlayer::toAttack(){
     Player benevolentPlayer("Benevolent", &gameMap, new Hand(sharedDeck), new OrdersList());
     Player neutralPlayer("Neutral", &gameMap, new Hand(sharedDeck), new OrdersList());
     Player cheaterPlayer("Cheater", &gameMap, new Hand(sharedDeck), new OrdersList());
+
+    //Assign Territories to Players
+    humanPlayer.addPlayerTerritories(gameMap.getTerritory("Territory1"));
+    aggressivePlayer.addPlayerTerritories(gameMap.getTerritory("Territory2"));
+    benevolentPlayer.addPlayerTerritories(gameMap.getTerritory("Territory3"));
+    neutralPlayer.addPlayerTerritories(gameMap.getTerritory("Territory4"));
+    cheaterPlayer.addPlayerTerritories(gameMap.getTerritory("Territory5"));
+
 
     // Assign strategies to players
     humanPlayer.setPlayerStrategy(new HumanPlayer(&humanPlayer));
@@ -809,14 +840,29 @@ vector<Territory*> CheaterPlayer::toAttack(){
     std::cout << "\nHuman Player issuing an order:" << std::endl;
     humanPlayer.issueOrder("Deploy");
 
+    cout << "Issued Order for Human Player: ";
+    humanPlayer.printOrderList();
+
     std::cout << "\nAggressive Player issuing an order:" << std::endl;
+    aggressivePlayer.testTerritoryDeployment();
+
     aggressivePlayer.issueOrder("Advance");
+
+    cout << "Issued Order for Aggressive Player: ";
+    aggressivePlayer.printOrderList();
 
     std::cout << "\nBenevolent Player issuing an order:" << std::endl;
     benevolentPlayer.issueOrder("Deploy");
 
-    std::cout << "\nNeutral Player issuing an order:" << std::endl;
+    cout << "Issued Order for Benevolent Player: ";
+    benevolentPlayer.printOrderList();
+
+    std::cout << "\nNeutral Player issuing an order." << std::endl;
+    neutralPlayer.testTerritoryDeployment();
     neutralPlayer.issueOrder("Advance");
+
+    cout << "Issued Order for Neutral Player: ";
+    neutralPlayer.printOrderList();
 
     std::cout << "\nCheater Player issuing an order:" << std::endl;
     cheaterPlayer.issueOrder("Conquer");
@@ -825,13 +871,6 @@ vector<Territory*> CheaterPlayer::toAttack(){
     std::cout << "\nChanging strategy of Neutral Player to Aggressive:" << std::endl;
     neutralPlayer.setPlayerStrategy(new AggressivePlayer(&neutralPlayer));
     neutralPlayer.issueOrder("Advance");
-
-    // Cleanup
-    delete humanPlayer.getPlayerStrategy();
-    delete aggressivePlayer.getPlayerStrategy();
-    delete benevolentPlayer.getPlayerStrategy();
-    delete neutralPlayer.getPlayerStrategy();
-    delete cheaterPlayer.getPlayerStrategy();
 
     std::cout << "===== Testing Complete =====" << std::endl;
 }

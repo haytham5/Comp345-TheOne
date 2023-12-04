@@ -3,7 +3,7 @@
 
 //Free function
 void testPlayerStrategies();
-
+class Player;
 //Abstract Strategy Class
 class PlayerStrategy{
     public:
@@ -16,9 +16,11 @@ class PlayerStrategy{
         virtual void issueOrder(string type)=0;
         virtual vector<Territory *> toAttack()=0;
         virtual vector<Territory *> toDefend()=0;
-       
+        string getType();
     protected:
        Player* p;
+       string type;
+
        
 };
 

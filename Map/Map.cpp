@@ -205,6 +205,15 @@ vector<Territory*> Map::getTerritoriesByName(const string& name) const {
   return territoryNames;
 }
 
+vector<Territory *> Map::getAllTerritoriesByName()
+{
+  vector<Territory*> territoryNames;   
+  for (const auto& pair : territories) {
+      territoryNames.push_back(pair.second); // pair.first is the territory name
+  }
+  return territoryNames;
+}
+
 Territory* Map::getTerritory(const string& name) const {
   auto it = this->territories.find(name);
   if (it != this->territories.end()) {
@@ -352,6 +361,11 @@ Map MapLoader::loadMapFromFile(const string& filename) {
   }
   file.close();
   return map;
+}
+
+vector<Territory*> MapLoader::loadMapVectorFromFile(const string &filename)
+{
+    return loadMapFromFile(filename).getAllTerritoriesByName();
 }
 
 bool MapLoader::isValidMapFile(const string& filename) {

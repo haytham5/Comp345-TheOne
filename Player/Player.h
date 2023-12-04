@@ -15,6 +15,7 @@ using namespace std;
 
 void testPlayers();
 class OrdersList;
+class PlayerStrategy;
 
 class Player
 {
@@ -79,6 +80,10 @@ public:
 
   // Getter for playerTerritories
   vector<Territory *> getPlayerTerritories() const;
+
+  void testTerritoryDeployment();
+
+  Territory getPlayerTerritories(int i);
 
   Map* getPlayerMap() const;
 

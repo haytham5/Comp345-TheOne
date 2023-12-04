@@ -23,7 +23,7 @@ Player::Player(const string &name, Map *gameMap, Hand *hand, OrdersList *orderLi
     this->playerHand = hand;
     this->orderList = orderList;
     this->processor = new CommandProcessor('p');
-    this->reinforcementPool = 0;
+    this->reinforcementPool = 3;
     phase;
 }
 
@@ -35,7 +35,7 @@ Player::Player(const string &name, Map *gameMap, Hand *hand, OrdersList *orderLi
     this->playerHand = hand;
     this->orderList = orderList;
     this->processor = processor;
-    this->reinforcementPool = 0;
+    this->reinforcementPool = 3;
     phase;
 }
 
@@ -47,7 +47,7 @@ Player::Player(const string &name, Map *gameMap, Hand *hand, OrdersList *orderLi
     this->playerHand = hand;
     this->orderList = orderList;
     this->processor = processor;
-    this->reinforcementPool = 0;
+    this->reinforcementPool = 3;
     phase;
     this->ps=ps;
 }
@@ -75,11 +75,11 @@ Player &Player::operator=(const Player &other)
 // Destructor
 Player::~Player()
 {
-    cout << "Deleting Player: " << endl;
-    delete playerHand;
-    delete orderList;
-    delete ps;
-    cout << endl;
+    // cout << "Deleting Player: " << endl;
+    // delete playerHand;
+    // delete orderList;
+    // delete ps;
+    // cout << endl;
 }
 
 string Player::getName() const
@@ -119,9 +119,6 @@ void Player::setPlayerHand(Hand *hand)
 
 void Player::setPlayerStrategy(PlayerStrategy *newStrategy)
 {
-    if(ps!=nullptr){ 
-        delete ps; //Delete previous strategy
-    }
     ps= newStrategy;
 }
 
@@ -160,6 +157,18 @@ bool Player::ownAllTerritoryInContinent()
 vector<Territory *> Player::getPlayerTerritories() const
 {
     return playerTerritories;
+}
+
+void Player::testTerritoryDeployment()
+{
+    if(!playerTerritories.empty()) {
+        playerTerritories.at(0)->setArmies(3);
+    }
+}
+
+Territory Player::getPlayerTerritories(int i)
+{
+    return *playerTerritories.at(i);
 }
 
 Map *Player::getPlayerMap() const
@@ -369,7 +378,10 @@ void Player::addPlayerTerritories(Territory *territory)
 void Player::issueOrder(string type){
     //Checks to ensure that ps is not nullptr
     if(ps){
-        if(type=="Deploy"){
+        if(ps->getType() == "cheater"){
+            ps->issueOrder("Conquer");
+        }
+        else if(type=="Deploy"){
             ps->issueOrder("Deploy");
         }
         else if(type=="Advance"){

@@ -41,7 +41,7 @@ void Subject::detach(Observer *observer){
 
 //Allows subjects to notify observers of the necessary events
 void Subject::notify(ILoggable *loggable){
-     cout<< "Notifying..."<<endl;
+     cout<< "\nNotifying..."<<endl;
     for(auto elem : observers){
         elem->update(loggable);
     }

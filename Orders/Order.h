@@ -46,6 +46,8 @@ public:
 
     OrdersList &operator=(const OrdersList &other);
 
+    bool isEmpty();
+
     // Getters
     const std::vector<Order *> &getOrders() const;
     int getOrdersListSize();

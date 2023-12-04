@@ -63,6 +63,10 @@ int OrdersList::getOrdersListSize()
     return orders.size();
 }
 
+bool OrdersList::isEmpty() {
+    return orders.empty();
+}
+
 Order *OrdersList::getOrderAt(int i)
 {
     return orders.at(i);

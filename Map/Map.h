@@ -42,6 +42,8 @@ class Territory {
     int getArmies() const;
     void setArmies(const int armies);
 
+    void setNeighbours(string Territory1, string Territory2);
+
     // Assignment operator for Territory class
     Territory& operator=(const Territory& territory);
 
@@ -55,6 +57,7 @@ class Territory {
 class Map {
   private:
     unordered_map<string, Territory*> territories;
+    vector<Territory> territoryVector;
     unordered_map<string, vector<string> > adjacencyList;
     vector<vector<Territory*> > territoryGrid;
 
@@ -73,7 +76,9 @@ class Map {
 
     // Functions to retrieve information about territories and neighbors
     vector<Territory*> getTerritories() const;
+    Territory getTerritoryAt(int i);
     vector<Territory*> getTerritoriesByName(const string& name) const;
+    vector<Territory*> getAllTerritoriesByName();
     Territory* getTerritory(const string& name) const;
     vector<string> getNeighbors(const string& name) const;
     vector<Territory*> getNeighborsPointers(const string& territoryName) const;
@@ -99,6 +104,8 @@ class MapLoader {
   public:
     // Load a map from a file
     static Map loadMapFromFile(const string& filename);
+
+    vector<Territory*> loadMapVectorFromFile(const string& filename);
 
     // Check if a map file is valid
     static bool isValidMapFile(const string& filename);

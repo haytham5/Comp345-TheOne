@@ -8,5 +8,5 @@ using namespace std;
 int main()
 {
     GameEngine *engine = new GameEngine();
-    engine->testTournamentMode();
+    engine->testTournamentMode(true); 
 }

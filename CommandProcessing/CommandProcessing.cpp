@@ -121,20 +121,12 @@ CommandProcessor::CommandProcessor()
 {
     type = 'c';
     newCommand = false;
-    this->tournamentListOfMapFiles;
-    this->tournamentListOfPlayerStrategies;
-    this->tournamentNumberOfGames;
-    this->tournamentMaxNumberOfTurns;
 }
 
 CommandProcessor::CommandProcessor(char type)
 {
     this->type = type;
     newCommand = false;
-    this->tournamentListOfMapFiles;
-    this->tournamentListOfPlayerStrategies;
-    this->tournamentNumberOfGames;
-    this->tournamentMaxNumberOfTurns;
 }
 
 CommandProcessor::~CommandProcessor()
@@ -212,6 +204,28 @@ string CommandProcessor::stringToLog()
 void CommandProcessor::testSaveCommand(string c, string e)
 {
     saveCommand(c, e);
+}
+
+void CommandProcessor::processTournamentCommand(string input)
+{
+    vector<string> tournamentCommand = split(input, ' ');
+    vector<string> temp;
+    string directive = "";
+
+    for(int i = 1; i < tournamentCommand.size(); i++) {
+        if(tournamentCommand[i] == "-M" || tournamentCommand[i] == "-P" ||
+            tournamentCommand[i] == "-G" || tournamentCommand[i] == "-D") {
+                if(tournamentCommand[i] == "-P") tournamentListOfMapFiles = temp;
+                if(tournamentCommand[i] == "-G") tournamentListOfPlayerStrategies = temp;
+                if(tournamentCommand[i] == "-D") tournamentNumberOfGames = stoi(temp.at(0));
+
+                temp.clear();
+            }
+        
+        else temp.push_back(tournamentCommand.at(i));
+    }
+
+    tournamentMaxNumberOfTurns = stoi(temp.at(0));
 }
 
 istream &operator>>(istream &in, CommandProcessor &cproc)
@@ -397,20 +411,21 @@ istream &operator>>(istream &in, FileCommandProcessorAdapter &object)
     return in;
 }
 
-vector<string> split(string s, string delimiter)
+vector<string> CommandProcessor::split(string s, char delimiter)
 {
-    size_t pos_start = 0, pos_end, delim_len = delimiter.length();
-    string token;
     vector<string> res;
 
-    while ((pos_end = s.find(delimiter, pos_start)) != string::npos)
-    {
-        token = s.substr(pos_start, pos_end - pos_start);
-        pos_start = pos_end + delim_len;
-        res.push_back(token);
+    string temp = "";
+    for(auto i : s) {
+        if(i == delimiter) {
+            res.push_back(temp);
+            temp = "";
+        }
+        else temp += i;
     }
 
-    res.push_back(s.substr(pos_start));
+    res.push_back(temp);
+
     return res;
 }
 
@@ -419,9 +434,20 @@ vector<string> CommandProcessor::getTournamentListOfMapFiles()
     return tournamentListOfMapFiles;
 }
 
+void CommandProcessor::addMapFile(string s)
+{
+    tournamentListOfMapFiles.push_back(s);
+    cout << "works";
+}
+
 vector<string> CommandProcessor::getTournamentListOfPlayerStrategies()
 {
     return tournamentListOfPlayerStrategies;
+}
+
+void CommandProcessor::addStrategy(string s)
+{
+    tournamentListOfPlayerStrategies.push_back(s);
 }
 
 int CommandProcessor::getTournamentNumberOfGames()
@@ -429,51 +455,17 @@ int CommandProcessor::getTournamentNumberOfGames()
     return tournamentNumberOfGames;
 }
 
+void CommandProcessor::setGames(int i)
+{
+    tournamentNumberOfGames = i;
+}
+
 int CommandProcessor::getTournamentMaxNumberOfTurns()
 {
     return tournamentMaxNumberOfTurns;
 }
 
-// Command must be in format: tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>
-void CommandProcessor::processTournamentCommand(string input)
+void CommandProcessor::setTurns(int i)
 {
-    vector<string> tournamentCommand = split(input, " ");
-    int i = 1;
-    while (i < tournamentCommand.size())
-    {
-        if (tournamentCommand[i] == "-M")
-        {
-            i++;
-            while (tournamentCommand[i] != "-P")
-            {
-                tournamentListOfMapFiles.push_back(tournamentCommand[i]);
-                i++;
-            }
-        }
-        else if (tournamentCommand[i] == "-P")
-        {
-            i++;
-            while (tournamentCommand[i] != "-G")
-            {
-                tournamentListOfPlayerStrategies.push_back(tournamentCommand[i]);
-                i++;
-            }
-        }
-        else if (tournamentCommand[i] == "-G")
-        {
-            i++;
-            tournamentNumberOfGames = stoi(tournamentCommand[i]);
-            i++;
-        }
-        else if (tournamentCommand[i] == "-D")
-        {
-            i++;
-            tournamentMaxNumberOfTurns = stoi(tournamentCommand[i]);
-            i++;
-        }
-        else
-        {
-            cout << "Something went wrong";
-        }
-    }
+    tournamentMaxNumberOfTurns = i;
 }
